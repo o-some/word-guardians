@@ -78,8 +78,10 @@ async function runProfile(name, browserType, viewport, fullGameplay=false) {
 
     await page.evaluate(()=>{ gameOver(); });
     await page.locator('#endOv').waitFor({ state:'visible' });
-    const resultText = await page.locator('#result').innerText();
-    for (const expected of ['WÖRTER','ZEIT','STUFE','BESTE COMBO','XP','MUSCHELN']) if (!resultText.toUpperCase().includes(expected)) throw new Error(`${name}: result missing ${expected}`);
+    const resultText = await page.locator('#endOv').innerText();
+    for (const expected of ['WÖRTER','DURCHGEHALTEN','GEFAHRENSTUFE','BESTE COMBO','XP','MUSCHELN']) {
+      if (!resultText.toUpperCase().includes(expected)) throw new Error(`${name}: result missing ${expected}`);
+    }
     await page.locator('#againBtn').click();
   }
   if (pageErrors.length) throw new Error(`${name}: JS errors: ${pageErrors.join(' | ')}`);
@@ -90,6 +92,7 @@ async function runProfile(name, browserType, viewport, fullGameplay=false) {
 }
 
 await runProfile('desktop-chromium', chromium, {width:1440,height:900}, true);
+await runProfile('desktop-webkit', webkit, {width:1440,height:900}, false);
 await runProfile('android-like-chromium', chromium, {width:390,height:844}, false);
 await runProfile('iphone-like-webkit', webkit, {width:390,height:844}, false);
 console.log('ALL_QA_PASS');
