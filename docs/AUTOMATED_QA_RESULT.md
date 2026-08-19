@@ -1,15 +1,16 @@
 # Automated QA Result — Word Guardians
 
-Result: FAIL
-Tested Commit: `79098492f34ed4c2aab32ee004fdc68a6b7fe101`
-Date: 2026-08-19T21:45:47Z
+Result: PASS
+Tested Commit: `82d89ba7c836228effacdab478d7897d47510e35`
+Date: 2026-08-19T21:49:21Z
 Live URL: https://o-some.github.io/word-guardians/
 Build: success
 Browser install: success
-Gameplay QA: failure
+Gameplay QA: success
 
 Profiles attempted:
 - Desktop Chromium 1440×900
+- Desktop WebKit 1440×900
 - Android-like Chromium 390×844
 - iPhone-like WebKit 390×844
 
@@ -110,18 +111,9 @@ Webkit 26.0 (playwright build v2203) downloaded to /home/runner/.cache/ms-playwr
 
 ## Gameplay QA log
 ```
-node:internal/modules/run_main:123
-    triggerUncaughtException(
-    ^
-
-locator.innerText: Timeout 30000ms exceeded.
-Call log:
-  - waiting for locator('#result')
-
-    at runProfile (/home/runner/work/word-guardians/word-guardians/tests/qa.mjs:81:54)
-    at async file:///home/runner/work/word-guardians/word-guardians/tests/qa.mjs:92:1 {
-  name: 'TimeoutError'
-}
-
-Node.js v22.23.2
+PASS desktop-chromium
+PASS desktop-webkit
+PASS android-like-chromium
+PASS iphone-like-webkit
+ALL_QA_PASS
 ```
