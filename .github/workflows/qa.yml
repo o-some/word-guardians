@@ -1,12 +1,11 @@
 name: Migration QA
-# Persistent diagnostics; corrected result-screen assertions and desktop WebKit coverage.
+# Sprite-upgrade regression run for v1.1.0.
 
 on:
   push:
     branches: [main]
     paths:
       - '.github/workflows/qa.yml'
-      - 'tests/qa.mjs'
   workflow_dispatch:
 
 permissions:
