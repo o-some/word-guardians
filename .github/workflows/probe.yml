@@ -1,0 +1,67 @@
+name: Live Probe
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/probe.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Build and probe
+        shell: bash
+        run: |
+          set +e
+          npm run build > /tmp/build.log 2>&1
+          BUILD=$?
+          BASE='https://o-some.github.io/word-guardians/'
+          ROOT=$(curl -L -sS -o /tmp/root.html -w '%{http_code}' "$BASE")
+          A1=$(curl -L -sS -o /dev/null -w '%{http_code}' "${BASE}assets/creative/world_harbor.webp")
+          A2=$(curl -L -sS -o /dev/null -w '%{http_code}' "${BASE}assets/creative/mode_words_discover.webp")
+          A3=$(curl -L -sS -o /dev/null -w '%{http_code}' "${BASE}assets/creative/tula_profile.webp")
+          A4=$(curl -L -sS -o /dev/null -w '%{http_code}' "${BASE}assets/creative/tula_neutral_front.webp")
+          A5=$(curl -L -sS -o /dev/null -w '%{http_code}' "${BASE}assets/creative/tula_happy.webp")
+          VERSION=FAIL
+          grep -q 'v1.0.0-migrated' /tmp/root.html && VERSION=PASS
+          RESULT=PASS
+          test "$BUILD" = 0 || RESULT=FAIL
+          test "$ROOT" = 200 || RESULT=FAIL
+          for S in "$A1" "$A2" "$A3" "$A4" "$A5"; do test "$S" = 200 || RESULT=FAIL; done
+          test "$VERSION" = PASS || RESULT=FAIL
+          {
+            echo '# Live Probe — Word Guardians'
+            echo
+            echo "Result: $RESULT"
+            echo "Tested Commit: \`$GITHUB_SHA\`"
+            echo "Build Exit: $BUILD"
+            echo "Root HTTP: $ROOT"
+            echo "Version Marker: $VERSION"
+            echo "Assets HTTP: $A1 / $A2 / $A3 / $A4 / $A5"
+            echo "URL: $BASE"
+            echo
+            echo '## Build log'
+            echo '```'
+            cat /tmp/build.log
+            echo '```'
+          } > docs/LIVE_PROBE_RESULT.md
+      - name: Commit probe result
+        shell: bash
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add docs/LIVE_PROBE_RESULT.md
+          git commit -m "Record live migration probe"
+          git pull --rebase origin main
+          git push origin HEAD:main
