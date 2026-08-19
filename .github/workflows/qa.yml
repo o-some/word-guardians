@@ -1,4 +1,5 @@
 name: Migration QA
+# Re-run after Pages passed the live HTTP probe.
 
 on:
   push:
