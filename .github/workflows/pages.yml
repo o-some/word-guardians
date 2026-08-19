@@ -1,4 +1,5 @@
 name: Deploy GitHub Pages
+# Initial standalone deployment trigger after migration bootstrap.
 
 on:
   push:
