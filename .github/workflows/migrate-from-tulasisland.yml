@@ -1,0 +1,53 @@
+name: Bootstrap Word Guardians migration
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/migrate-from-tulasisland.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  migrate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Copy pinned source and assets
+        shell: bash
+        run: |
+          set -euo pipefail
+          SOURCE_REPO="o-some/tulasisland"
+          SOURCE_COMMIT="892f676fbcef77ab49373aef7865d60afba0ebb7"
+          RAW="https://raw.githubusercontent.com/${SOURCE_REPO}/${SOURCE_COMMIT}"
+          mkdir -p assets/creative
+          curl --fail --location --retry 3 "$RAW/public/word-guardians/index.html" -o source.html
+          test "$(git hash-object source.html)" = "11b0464930c7969e30a43a5d3b16229baca60f7b"
+          curl --fail --location --retry 3 "$RAW/assets/creative/world_harbor.webp" -o assets/creative/world_harbor.webp
+          curl --fail --location --retry 3 "$RAW/assets/creative/mode_words_discover.webp" -o assets/creative/mode_words_discover.webp
+          curl --fail --location --retry 3 "$RAW/assets/creative/tula_profile.webp" -o assets/creative/tula_profile.webp
+          curl --fail --location --retry 3 "$RAW/assets/creative/tula_neutral_front.webp" -o assets/creative/tula_neutral_front.webp
+          curl --fail --location --retry 3 "$RAW/assets/creative/tula_happy.webp" -o assets/creative/tula_happy.webp
+          test "$(git hash-object assets/creative/world_harbor.webp)" = "4eb9273c7bd152eb20c0dc1f72e51078aeb21322"
+          test "$(git hash-object assets/creative/mode_words_discover.webp)" = "0c0691d33892c23e6b8aa16a79b93837610e1168"
+          test "$(git hash-object assets/creative/tula_profile.webp)" = "4a1a67f37476ee74815ce571222b14439ba631a5"
+          test "$(git hash-object assets/creative/tula_neutral_front.webp)" = "1fc41e4e3cb85568e6c6e7b6d2df04725ea4afce"
+          test "$(git hash-object assets/creative/tula_happy.webp)" = "cd9ec4242fed35139d71d22bdf9ea979031c9702"
+          cp source.html index.html
+          sed -i "s#/tulasisland/assets/creative/#./assets/creative/#g" index.html
+          sed -i "s#v0.9.4 · MOTIVATION · 4×8#v1.0.0-migrated · 4×8#g" index.html
+          printf '%s\n' "$SOURCE_COMMIT" > .migration_complete
+      - name: Commit vendored game
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add index.html source.html assets .migration_complete
+          git diff --cached --quiet && exit 0
+          git commit -m "Migrate Word Guardians from tulasisland@892f676"
+          git pull --rebase origin main
+          git push origin HEAD:main
