@@ -1,0 +1,95 @@
+import { chromium, webkit } from 'playwright';
+
+const live = 'https://o-some.github.io/word-guardians/';
+const words = new Map([
+  ['Apfel','apple'],['Wasser','water'],['Haus','house'],['Fenster','window'],['Schule','school'],['Buch','book'],['Flughafen','airport'],['Zug','train'],['Strand','beach'],['Wald','forest'],['Sonne','sun'],['Freund','friend'],['laufen','run'],['essen','eat'],['trinken','drink'],['Familie','family'],['Straße','street'],['Stadt','city'],['Arzt','doctor'],['Meer','sea'],['Insel','island'],['Schiff','ship'],['Hotel','hotel'],['Brücke','bridge'],['Telefon','phone'],['Koffer','suitcase'],['Markt','market'],['schnell','fast'],['langsam','slow']
+]);
+const assetUrls = [
+  'assets/creative/world_harbor.webp',
+  'assets/creative/mode_words_discover.webp',
+  'assets/creative/tula_profile.webp',
+  'assets/creative/tula_neutral_front.webp',
+  'assets/creative/tula_happy.webp'
+];
+
+async function waitHttp(url, attempts=36) {
+  let last = 0;
+  for (let i=0;i<attempts;i++) {
+    try { const r = await fetch(url, { redirect:'follow', cache:'no-store' }); last=r.status; if (r.ok) return r; } catch {}
+    await new Promise(r=>setTimeout(r,5000));
+  }
+  throw new Error(`HTTP check failed for ${url}; last status ${last}`);
+}
+
+await waitHttp(live);
+for (const asset of assetUrls) await waitHttp(new URL(asset, live).href, 12);
+
+async function answerCorrect(page) {
+  const de = await page.locator('#word').textContent();
+  const en = words.get((de||'').trim());
+  if (!en) throw new Error(`Unknown word in QA: ${de}`);
+  await page.locator('.answer', { hasText: en }).click();
+  await page.waitForTimeout(380);
+}
+
+async function runProfile(name, browserType, viewport, fullGameplay=false) {
+  const browser = await browserType.launch({ headless:true });
+  const page = await browser.newPage({ viewport });
+  const pageErrors=[]; const failed=[];
+  page.on('pageerror', e=>pageErrors.push(String(e)));
+  page.on('response', r=>{ if(r.status()>=400) failed.push(`${r.status()} ${r.url()}`); });
+  await page.goto(live, { waitUntil:'networkidle', timeout:60000 });
+  if (!(await page.locator('body').innerText()).includes('v1.0.0-migrated')) throw new Error(`${name}: migration version not visible`);
+  await page.locator('#startBtn').click();
+  await page.locator('#intro').waitFor({ state:'hidden' });
+  if (await page.locator('.lane').count() !== 4) throw new Error(`${name}: lane count != 4`);
+  if (await page.locator('.cell').count() !== 32) throw new Error(`${name}: cell count != 32`);
+  if (await page.locator('.answer').count() !== 3) throw new Error(`${name}: answers != 3`);
+
+  await answerCorrect(page);
+  if (fullGameplay) {
+    await page.locator('.card[data-g="coral"]').click();
+    await page.locator('.lane').nth(0).locator('.cell').nth(1).click();
+    await page.locator('.lane').nth(0).locator('.cell').nth(1).locator('.guardianWrap').waitFor();
+    const before = await page.locator('.lane').nth(0).locator('.cell').nth(1).locator('.gHp i').getAttribute('style');
+    const de = (await page.locator('#word').textContent()||'').trim();
+    const correct = words.get(de);
+    const wrong = page.locator('.answer').filter({ hasNotText: correct }).first();
+    await wrong.click();
+    await page.waitForTimeout(380);
+    const after = await page.locator('.lane').nth(0).locator('.cell').nth(1).locator('.gHp i').getAttribute('style');
+    if (before === after || !String(after).includes('90')) throw new Error(`${name}: wrong-answer 10% guardian damage not observed (${before} -> ${after})`);
+
+    await page.locator('#moveBtn').click();
+    await page.locator('.lane').nth(0).locator('.cell').nth(1).click();
+    await page.locator('.lane').nth(0).locator('.cell').nth(2).click();
+    if (await page.locator('.lane').nth(0).locator('.cell').nth(2).locator('.guardianWrap').count() !== 1) throw new Error(`${name}: move tool failed`);
+
+    await page.locator('#infoBtn').click();
+    await page.locator('#infoOv').waitFor({ state:'visible' });
+    await page.locator('#infoClose').click();
+    await page.locator('#pauseBtn').click();
+    await page.locator('#pauseOv').waitFor({ state:'visible' });
+    await page.locator('#resumeBtn').click();
+
+    for (let i=0;i<24;i++) await answerCorrect(page);
+    const level = Number(await page.locator('#lvl').textContent());
+    if (level < 2) throw new Error(`${name}: endless danger progression did not advance`);
+
+    await page.evaluate(()=>{ gameOver(); });
+    await page.locator('#endOv').waitFor({ state:'visible' });
+    const resultText = await page.locator('#result').innerText();
+    for (const expected of ['WÖRTER','ZEIT','STUFE','BESTE COMBO','XP','MUSCHELN']) if (!resultText.toUpperCase().includes(expected)) throw new Error(`${name}: result missing ${expected}`);
+    await page.locator('#againBtn').click();
+  }
+  if (pageErrors.length) throw new Error(`${name}: JS errors: ${pageErrors.join(' | ')}`);
+  const relevantFailed = failed.filter(x=>!x.includes('favicon'));
+  if (relevantFailed.length) throw new Error(`${name}: HTTP failures: ${relevantFailed.join(' | ')}`);
+  await browser.close();
+  console.log(`PASS ${name}`);
+}
+
+await runProfile('desktop-chromium', chromium, {width:1440,height:900}, true);
+await runProfile('android-like-chromium', chromium, {width:390,height:844}, false);
+await runProfile('iphone-like-webkit', webkit, {width:390,height:844}, false);
+console.log('ALL_QA_PASS');
