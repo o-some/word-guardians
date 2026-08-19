@@ -1,11 +1,12 @@
 name: Migration QA
-# Persistent diagnostics; rerun after Pages passed the live probe.
+# Persistent diagnostics; corrected result-screen assertions and desktop WebKit coverage.
 
 on:
   push:
     branches: [main]
     paths:
       - '.github/workflows/qa.yml'
+      - 'tests/qa.mjs'
   workflow_dispatch:
 
 permissions:
@@ -66,6 +67,7 @@ jobs:
 
           Profiles attempted:
           - Desktop Chromium 1440×900
+          - Desktop WebKit 1440×900
           - Android-like Chromium 390×844
           - iPhone-like WebKit 390×844
 
