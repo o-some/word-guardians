@@ -2,7 +2,7 @@ import { chromium, webkit } from 'playwright';
 
 const live = 'https://o-some.github.io/word-guardians/';
 const words = new Map([
-  ['Apfel','apple'],['Wasser','water'],['Haus','house'],['Fenster','window'],['Schule','school'],['Buch','book'],['Flughafen','airport'],['Zug','train'],['Strand','beach'],['Wald','forest'],['Sonne','sun'],['Freund','friend'],['laufen','run'],['essen','eat'],['trinken','drink'],['Familie','family'],['Straße','street'],['Stadt','city'],['Arzt','doctor'],['Meer','sea'],['Insel','island'],['Schiff','ship'],['Hotel','hotel'],['Brücke','bridge'],['Telefon','phone'],['Koffer','suitcase'],['Markt','market'],['schnell','fast'],['langsam','slow']
+  ['Apfel','apple'],['Wasser','water'],['Haus','house'],['Fenster','window'],['Schule','school'],['Buch','book'],['Flughafen','airport'],['Zug','train'],['Strand','beach'],['Wald','forest'],['Sonne','sun'],['Freund','friend'],['laufen','run'],['essen','eat'],['trinken','drink'],['Familie','family'],['Straße','street'],['Stadt','city'],['Arzt','doctor'],['Meer','sea'],['Insel','island'],['Schiff','ship'],['Hotel','hotel'],['Brücke','bridge'],['Telefon','phone'],['Koffer','suitcase'],['Markt','market'],['schnell','fast'],['langsam','slow'],['Küche','kitchen'],['Garten','garden'],['Regen','rain'],['Wolke','cloud'],['glücklich','happy'],['müde','tired'],['arbeiten','work'],['spielen','play'],['fragen','ask'],['antworten','answer'],['lernen','learn']
 ]);
 const assetUrls = [
   'assets/creative/world_harbor.webp',
@@ -39,12 +39,13 @@ async function runProfile(name, browserType, viewport, fullGameplay=false) {
   page.on('pageerror', e=>pageErrors.push(String(e)));
   page.on('response', r=>{ if(r.status()>=400) failed.push(`${r.status()} ${r.url()}`); });
   await page.goto(live, { waitUntil:'networkidle', timeout:60000 });
-  if (!(await page.locator('body').innerText()).includes('v1.0.0-migrated')) throw new Error(`${name}: migration version not visible`);
+  if (!(await page.locator('body').innerText()).includes('v1.1.0 · TULA SPRITES')) throw new Error(`${name}: sprite-upgrade version not visible`);
   await page.locator('#startBtn').click();
   await page.locator('#intro').waitFor({ state:'hidden' });
   if (await page.locator('.lane').count() !== 4) throw new Error(`${name}: lane count != 4`);
   if (await page.locator('.cell').count() !== 32) throw new Error(`${name}: cell count != 32`);
   if (await page.locator('.answer').count() !== 3) throw new Error(`${name}: answers != 3`);
+  if (await page.locator('.card .guardianArt').count() !== 6) throw new Error(`${name}: helper sprites != 6`);
 
   await answerCorrect(page);
   if (fullGameplay) {
@@ -75,6 +76,7 @@ async function runProfile(name, browserType, viewport, fullGameplay=false) {
     for (let i=0;i<24;i++) await answerCorrect(page);
     const level = Number(await page.locator('#lvl').textContent());
     if (level < 2) throw new Error(`${name}: endless danger progression did not advance`);
+    if (await page.locator('.pirateArt').count() < 1) throw new Error(`${name}: animated pirate sprite not rendered`);
 
     await page.evaluate(()=>{ gameOver(); });
     await page.locator('#endOv').waitFor({ state:'visible' });
