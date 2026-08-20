@@ -19,15 +19,24 @@ async function run(name,browserType,viewport){
   await page.goto(live,{waitUntil:'networkidle',timeout:60000});
 
   const version=(await page.locator('.version').textContent()||'').trim();
-  if(!version.startsWith('v1.8.1'))throw new Error(`${name}: expected visible v1.8.1, got ${version}`);
+  if(!version.startsWith('v1.9.0'))throw new Error(`${name}: expected visible v1.9.0, got ${version}`);
 
   const intro=page.locator('#intro');
   await intro.waitFor({state:'visible'});
   const introText=(await intro.innerText()).toUpperCase();
-  for(const expected of ['INSEL-NOTRUF','60 SEK','AB MINUTE 3','WORTKORALLE','BLITZKORALLE','MINZQUALLE','STEINMUSCHEL','GEZEITENSTERN','ANKERKRABBE']){
+  for(const expected of ['INSEL-NOTRUF','60 SEK','AB MINUTE 2','100 %','AB MINUTE 3','WORTKORALLE','BLITZKORALLE','MINZQUALLE','STEINMUSCHEL','GEZEITENSTERN','ANKERKRABBE']){
     if(!introText.includes(expected))throw new Error(`${name}: start guide missing ${expected}`);
   }
   if(await page.locator('#intro .wgEmergencyDemo').count()!==1)throw new Error(`${name}: emergency button preview missing on start screen`);
+
+  if(viewport.width<=600){
+    const sizes=await page.evaluate(()=>({
+      rule:parseFloat(getComputedStyle(document.querySelector('#intro .wgGuideRule span')).fontSize),
+      helper:parseFloat(getComputedStyle(document.querySelector('#intro .wgGuideHelper small')).fontSize),
+      emergency:parseFloat(getComputedStyle(document.querySelector('#intro .wgGuideEmergency p')).fontSize)
+    }));
+    if(sizes.rule<7.5||sizes.helper<6||sizes.emergency<8.5)throw new Error(`${name}: onboarding text still too small: ${JSON.stringify(sizes)}`);
+  }
 
   const readyState=await page.locator('#emergencyBtn').evaluate(el=>({ready:el.classList.contains('ready'),animation:getComputedStyle(el).animationName}));
   if(!readyState.ready)throw new Error(`${name}: emergency button should start READY`);
@@ -43,7 +52,7 @@ async function run(name,browserType,viewport){
   await page.locator('#infoBtn').click();
   await page.locator('#infoOv').waitFor({state:'visible'});
   const info=(await page.locator('#infoOv').innerText()).toUpperCase();
-  for(const expected of ['INSEL-NOTRUF','60 SEKUNDEN','3:00','30 %','WORTKORALLE','BLITZKORALLE','MINZQUALLE','STEINMUSCHEL','GEZEITENSTERN','ANKERKRABBE']){
+  for(const expected of ['INSEL-NOTRUF','60 SEKUNDEN','2:00','100 %','3:00','30 %','WORTKORALLE','BLITZKORALLE','MINZQUALLE','STEINMUSCHEL','GEZEITENSTERN','ANKERKRABBE']){
     if(!info.includes(expected))throw new Error(`${name}: info guide missing ${expected}`);
   }
   await page.locator('#infoClose').click();
@@ -61,11 +70,11 @@ async function run(name,browserType,viewport){
 
   if(errors.length)throw new Error(`${name}: JS errors: ${errors.join(' | ')}`);
   await browser.close();
-  console.log(`PASS ${name} · v1.8.1 onboarding + morph + 60s Notruf`);
+  console.log(`PASS ${name} · v1.9.0 onboarding + readable guide + 60s Notruf`);
 }
 
 await waitHttp(new URL('assets/patches/onboarding-v180.js',live));
 await waitHttp(new URL('assets/patches/onboarding-v180.css',live));
 await run('desktop-chromium',chromium,{width:1440,height:900});
 await run('iphone-like-webkit',webkit,{width:390,height:844});
-console.log('ONBOARDING_V180_PASS');
+console.log('ONBOARDING_V190_PASS');
