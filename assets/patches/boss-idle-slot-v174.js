@@ -15,16 +15,29 @@
     return idle;
   }
 
-  function hasActiveBoss(){
-    return typeof S!=='undefined'&&S&&Array.isArray(S.e)&&S.e.some(e=>e&&e.hp>0&&typeof e.cl==='string'&&e.cl.includes('boss'));
+  function ensureActiveHead(stage){
+    let head=stage.querySelector('.wgBossActiveHead');
+    if(head)return head;
+    head=document.createElement('div');
+    head.className='wgBossActiveHead hidden';
+    head.setAttribute('aria-hidden','true');
+    head.innerHTML='<img alt="">';
+    stage.insertBefore(head,stage.firstChild);
+    return head;
   }
 
-  function moveEnergyAboveBoss(){
-    const stage=$('bossStage');
+  function activeBoss(){
+    if(typeof S==='undefined'||!S||!Array.isArray(S.e))return null;
+    return S.e.find(e=>e&&e.hp>0&&typeof e.cl==='string'&&e.cl.includes('boss'))||null;
+  }
+
+  function moveEnergyIntoQuestion(){
+    const question=document.querySelector('.question');
+    const tools=question?.querySelector('.tools');
     const energy=document.querySelector('.energy');
-    if(!stage||!energy||!stage.parentNode)return;
-    if(energy.nextElementSibling===stage)return;
-    stage.parentNode.insertBefore(energy,stage);
+    if(!question||!tools||!energy)return;
+    if(energy.parentElement===question&&energy.nextElementSibling===tools)return;
+    question.insertBefore(energy,tools);
   }
 
   function reorderDock(){
@@ -39,13 +52,21 @@
   }
 
   function sync(){
-    moveEnergyAboveBoss();
+    moveEnergyIntoQuestion();
     const stage=$('bossStage');
     if(stage){
       const idle=ensureIdleContent(stage);
-      const active=hasActiveBoss();
+      const head=ensureActiveHead(stage);
+      const boss=activeBoss();
+      const active=!!boss;
       stage.classList.toggle('wgBossIdle',!active);
       idle.classList.toggle('hidden',active);
+      head.classList.toggle('hidden',!active);
+      if(active){
+        const img=head.querySelector('img');
+        if(img&&boss.asset&&img.getAttribute('src')!==boss.asset)img.src=boss.asset;
+        if(img)img.alt=boss.n||'Boss';
+      }
     }
     reorderDock();
   }
