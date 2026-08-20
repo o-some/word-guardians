@@ -7,12 +7,14 @@ const source = await readFile('index.html', 'utf8');
 const cssTags = [
   '<link rel="stylesheet" href="./assets/patches/boss-overlay-v131.css">',
   '<link rel="stylesheet" href="./assets/patches/lane-rescue-v140.css">',
-  '<link rel="stylesheet" href="./assets/patches/emergency-v150.css">'
+  '<link rel="stylesheet" href="./assets/patches/emergency-v150.css">',
+  '<link rel="stylesheet" href="./assets/patches/top-pause-v160.css">'
 ];
 const jsTags = [
   '<script src="./assets/patches/boss-overlay-v131.js"></script>',
   '<script src="./assets/patches/lane-rescue-v140.js"></script>',
-  '<script src="./assets/patches/emergency-v150.js"></script>'
+  '<script src="./assets/patches/emergency-v150.js"></script>',
+  '<script src="./assets/patches/top-pause-v160.js"></script>'
 ];
 
 let built = source;
@@ -28,4 +30,4 @@ for (const tag of jsTags) {
 await writeFile('dist/index.html', built);
 await writeFile('dist/404.html', built);
 await cp('assets', 'dist/assets', { recursive: true });
-console.log('Word Guardians build complete · boss overlay v1.3.1 + lane rescue v1.4.0 + Insel-Notruf v1.5.0 injected');
+console.log('Word Guardians build complete · boss overlay v1.3.1 + lane rescue v1.4.0 + Insel-Notruf v1.5.0 + top pause v1.6.0 injected');
