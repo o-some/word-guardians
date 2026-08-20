@@ -10,7 +10,7 @@ const assetUrls = [
   'assets/bosses/boss-01-pirat-kai.png','assets/bosses/boss-02-kapitaen-brax.png','assets/bosses/boss-03-blackfinn.png','assets/bosses/boss-04-alt-kapitaen-roderick.png','assets/bosses/boss-05-piratenbaron-vargas.png','assets/bosses/boss-06-kapitaen-ironhook.png','assets/bosses/boss-07-admiral-thorne.png','assets/bosses/boss-08-kartenmeister-corvin.png','assets/bosses/boss-09-schattenfuerst-azrak.png','assets/bosses/boss-10-piratenkoenig-varkos.png',
   'assets/guardians/guardian-01-wortkoralle.png','assets/guardians/guardian-02-steinmuschel.png','assets/guardians/guardian-03-minzqualle.png','assets/guardians/guardian-04-gezeitenstern.png','assets/guardians/guardian-05-blitzkoralle.png','assets/guardians/guardian-06-ankerkrabbe.png',
   'assets/ui/ui-01-muschel-schatztruhe.png','assets/ui/ui-02-boss-rahmen.png',
-  'assets/patches/boss-overlay-v131.css','assets/patches/boss-overlay-v131.js','assets/patches/lane-rescue-v140.css','assets/patches/lane-rescue-v140.js','assets/patches/emergency-v150.css','assets/patches/emergency-v150.js','assets/patches/top-pause-v160.css','assets/patches/top-pause-v160.js','assets/patches/compact-dnd-v171.css','assets/patches/compact-dnd-v171.js','assets/patches/boss-idle-slot-v174.css','assets/patches/boss-idle-slot-v174.js','assets/patches/answer-heal-v178.css','assets/patches/answer-heal-v178.js','assets/patches/onboarding-v180.css','assets/patches/onboarding-v180.js'
+  'assets/patches/boss-overlay-v131.css','assets/patches/boss-overlay-v131.js','assets/patches/lane-rescue-v140.css','assets/patches/lane-rescue-v140.js','assets/patches/emergency-v150.css','assets/patches/emergency-v150.js','assets/patches/top-pause-v160.css','assets/patches/top-pause-v160.js','assets/patches/compact-dnd-v171.css','assets/patches/compact-dnd-v171.js','assets/patches/boss-idle-slot-v174.css','assets/patches/boss-idle-slot-v174.js','assets/patches/answer-heal-v178.css','assets/patches/answer-heal-v178.js','assets/patches/answer-damage-v190.css','assets/patches/answer-damage-v190.js','assets/patches/onboarding-v180.css','assets/patches/onboarding-v180.js'
 ];
 
 async function waitHttp(url, attempts=36) {
@@ -65,8 +65,8 @@ async function runProfile(name, browserType, viewport, fullGameplay=false) {
   page.on('pageerror', e=>pageErrors.push(String(e)));
   page.on('response', r=>{ if(r.status()>=400) failed.push(`${r.status()} ${r.url()}`); });
   await page.goto(live, { waitUntil:'networkidle', timeout:60000 });
-  const expectedVersion='v1.8.1 · ONBOARDING + NOTRUF 60';
-  if (!(await page.locator('body').innerText()).includes(expectedVersion)) throw new Error(`${name}: v1.8.1 version not visible`);
+  const expectedVersion='v1.9.0 · DAMAGE SCALE + READABLE UI';
+  if (!(await page.locator('body').innerText()).includes(expectedVersion)) throw new Error(`${name}: v1.9.0 version not visible`);
   await page.waitForTimeout(1300);
   if (!(await page.locator('body').innerText()).includes(expectedVersion)) throw new Error(`${name}: version display is still fluctuating`);
   if (await page.locator('#bossOverlayV131').count() !== 1) throw new Error(`${name}: boss overlay layer missing`);
