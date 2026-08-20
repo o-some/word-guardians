@@ -1,7 +1,7 @@
 (()=>{
   'use strict';
 
-  const VERSION='v1.8.0 · ONBOARDING + NOTRUF 60 · 4×8';
+  const VERSION='v1.8.1 · ONBOARDING + NOTRUF 60 · 4×8';
   const state={mode:null,id:null,card:null,startX:0,startY:0,active:false,ghost:null,hot:null,suppressClick:false};
   const qsa=s=>[...document.querySelectorAll(s)];
 
