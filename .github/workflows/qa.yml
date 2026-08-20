@@ -1,5 +1,5 @@
 name: Migration QA
-# Final stable regression run for v1.2.0 real enemies + original bosses.
+# Regression run for Word Guardians v1.5.0: premium guardians, glowing boss overlay, lane rescue rock and Insel-Notruf.
 
 on:
   push:
@@ -70,10 +70,13 @@ jobs:
           - Android-like Chromium 390×844
           - iPhone-like WebKit 390×844
 
-          Assets checked:
+          Assets/features checked:
           - 8 generated regular enemy PNGs
           - 10 original freigestellte boss PNGs
-          - core Tula creative assets
+          - 6 premium guardian PNGs + Tula/UI assets
+          - glowing lane-bound boss overlay
+          - one free lane rescue rock per lane
+          - Insel-Notruf READY state, 100% field wipe and 3-minute cooldown start
 
           Note: WebKit mobile emulation is not a physical iPhone Safari device test.
 
