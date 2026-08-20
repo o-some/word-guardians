@@ -1,12 +1,12 @@
 # Automated QA Result — Word Guardians
 
 Result: FAIL
-Tested Commit: `5aaab7b019de2b7970e7a2686e6dd241cd52c5e6`
-Date: 2026-08-20T13:10:23Z
+Tested Commit: `394224c28dc3a9f5f972395445ce7a1884fc8207`
+Date: 2026-08-20T13:19:00Z
 Live URL: https://o-some.github.io/word-guardians/
 Build: success
 Browser install: success
-Gameplay QA: cancelled
+Gameplay QA: failure
 
 Profiles attempted:
 - Desktop Chromium 1440×900
@@ -121,5 +121,13 @@ Webkit 26.0 (playwright build v2203) downloaded to /home/runner/.cache/ms-playwr
 
 ## Gameplay QA log
 ```
+file:///home/runner/work/word-guardians/word-guardians/tests/qa.mjs:59
+  if (!(await page.locator('body').innerText()).includes('v1.7.1 · COMPACT + DRAG & DROP')) throw new Error(`${name}: v1.7.1 version not visible`);
+                                                                                                  ^
 
+Error: desktop-chromium: v1.7.1 version not visible
+    at runProfile (file:///home/runner/work/word-guardians/word-guardians/tests/qa.mjs:59:99)
+    at async file:///home/runner/work/word-guardians/word-guardians/tests/qa.mjs:153:1
+
+Node.js v22.23.2
 ```
