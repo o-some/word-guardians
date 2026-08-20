@@ -80,9 +80,8 @@
 
       const x = lane.offsetLeft + lane.offsetWidth * (Math.max(0, Math.min(100, Number(boss.x || 0))) / 100);
       const y = lane.offsetTop + lane.offsetHeight / 2;
-      node.style.transform = `translate3d(${x}px,${y}px,0)`;
-      node.style.left = '0';
-      node.style.top = '0';
+      node.style.left = `${x}px`;
+      node.style.top = `${y}px`;
       node.style.setProperty('--bossScale', String(Math.min(1.16, 1 + Number(boss.rank || 1) * 0.016)));
     });
   }
