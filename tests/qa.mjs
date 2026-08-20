@@ -10,7 +10,7 @@ const assetUrls = [
   'assets/bosses/boss-01-pirat-kai.png','assets/bosses/boss-02-kapitaen-brax.png','assets/bosses/boss-03-blackfinn.png','assets/bosses/boss-04-alt-kapitaen-roderick.png','assets/bosses/boss-05-piratenbaron-vargas.png','assets/bosses/boss-06-kapitaen-ironhook.png','assets/bosses/boss-07-admiral-thorne.png','assets/bosses/boss-08-kartenmeister-corvin.png','assets/bosses/boss-09-schattenfuerst-azrak.png','assets/bosses/boss-10-piratenkoenig-varkos.png',
   'assets/guardians/guardian-01-wortkoralle.png','assets/guardians/guardian-02-steinmuschel.png','assets/guardians/guardian-03-minzqualle.png','assets/guardians/guardian-04-gezeitenstern.png','assets/guardians/guardian-05-blitzkoralle.png','assets/guardians/guardian-06-ankerkrabbe.png',
   'assets/ui/ui-01-muschel-schatztruhe.png','assets/ui/ui-02-boss-rahmen.png',
-  'assets/patches/boss-overlay-v131.css','assets/patches/boss-overlay-v131.js','assets/patches/lane-rescue-v140.css','assets/patches/lane-rescue-v140.js','assets/patches/emergency-v150.css','assets/patches/emergency-v150.js','assets/patches/top-pause-v160.css','assets/patches/top-pause-v160.js','assets/patches/compact-dnd-v171.css','assets/patches/compact-dnd-v171.js','assets/patches/boss-idle-slot-v174.css','assets/patches/boss-idle-slot-v174.js'
+  'assets/patches/boss-overlay-v131.css','assets/patches/boss-overlay-v131.js','assets/patches/lane-rescue-v140.css','assets/patches/lane-rescue-v140.js','assets/patches/emergency-v150.css','assets/patches/emergency-v150.js','assets/patches/top-pause-v160.css','assets/patches/top-pause-v160.js','assets/patches/compact-dnd-v171.css','assets/patches/compact-dnd-v171.js','assets/patches/boss-idle-slot-v174.css','assets/patches/boss-idle-slot-v174.js','assets/patches/answer-heal-v178.css','assets/patches/answer-heal-v178.js','assets/patches/onboarding-v180.css','assets/patches/onboarding-v180.js'
 ];
 
 async function waitHttp(url, attempts=36) {
@@ -29,7 +29,7 @@ async function answerCorrect(page) {
   const de = await page.locator('#word').textContent();
   const en = words.get((de||'').trim());
   if (!en) throw new Error(`Unknown word in QA: ${de}`);
-  await page.locator('.answer', { hasText: en }).click();
+  await page.locator('#answers').getByRole('button', { name: en, exact: true }).click();
   await page.waitForTimeout(380);
 }
 
@@ -65,8 +65,8 @@ async function runProfile(name, browserType, viewport, fullGameplay=false) {
   page.on('pageerror', e=>pageErrors.push(String(e)));
   page.on('response', r=>{ if(r.status()>=400) failed.push(`${r.status()} ${r.url()}`); });
   await page.goto(live, { waitUntil:'networkidle', timeout:60000 });
-  const expectedVersion='v1.7.3 · TOUCH DND FIX';
-  if (!(await page.locator('body').innerText()).includes(expectedVersion)) throw new Error(`${name}: v1.7.3 version not visible`);
+  const expectedVersion='v1.8.0 · ONBOARDING + NOTRUF 60';
+  if (!(await page.locator('body').innerText()).includes(expectedVersion)) throw new Error(`${name}: v1.8.0 version not visible`);
   await page.waitForTimeout(1300);
   if (!(await page.locator('body').innerText()).includes(expectedVersion)) throw new Error(`${name}: version display is still fluctuating`);
   if (await page.locator('#bossOverlayV131').count() !== 1) throw new Error(`${name}: boss overlay layer missing`);
@@ -91,7 +91,7 @@ async function runProfile(name, browserType, viewport, fullGameplay=false) {
   }
 
   await page.locator('#startBtn').click();
-  await page.locator('#intro').waitFor({ state:'hidden' });
+  await page.locator('#intro').waitFor({ state:'hidden', timeout:2500 });
   await assertIdleBossSlot(page,name);
   if (await page.locator('.lane').count() !== 4) throw new Error(`${name}: lane count != 4`);
   if (await page.locator('.cell').count() !== 32) throw new Error(`${name}: cell count != 32`);
@@ -110,7 +110,7 @@ async function runProfile(name, browserType, viewport, fullGameplay=false) {
     await page.waitForTimeout(120);
     const cooldownText=(await page.locator('#emergencyTimer').textContent())?.trim()||'';
     if (cooldownText === 'READY') throw new Error(`${name}: Insel-Notruf cooldown did not start`);
-    if (!/^01:(2[89]|30)$/.test(cooldownText)) throw new Error(`${name}: expected about 01:30 cooldown, got ${cooldownText}`);
+    if (!/^(01:00|00:59)$/.test(cooldownText)) throw new Error(`${name}: expected about 01:00 cooldown, got ${cooldownText}`);
     if (!(await page.locator('#emergencyBtn').isDisabled())) throw new Error(`${name}: Insel-Notruf should be disabled during cooldown`);
     if (await page.locator('.emergencyWave').count() < 1) throw new Error(`${name}: Insel-Notruf field animation missing`);
     if (!(await page.evaluate(()=>S.e.every(e=>e.hp<=0)))) throw new Error(`${name}: Insel-Notruf did not deal 100 percent damage`);
