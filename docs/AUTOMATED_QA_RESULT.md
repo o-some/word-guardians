@@ -1,12 +1,12 @@
 # Automated QA Result — Word Guardians
 
-Result: PASS
-Tested Commit: `8539ceded244e5e9ae96ae137d16af76f76b30de`
-Date: 2026-08-20T11:47:58Z
+Result: FAIL
+Tested Commit: `ee549270e808f5a1ffa973f611ed78ffa3e63d7b`
+Date: 2026-08-20T12:58:20Z
 Live URL: https://o-some.github.io/word-guardians/
 Build: success
 Browser install: success
-Gameplay QA: success
+Gameplay QA: failure
 
 Profiles attempted:
 - Desktop Chromium 1440×900
@@ -15,14 +15,14 @@ Profiles attempted:
 - iPhone-like WebKit 390×844
 
 Assets/features checked:
-- 8 generated regular enemy PNGs
-- 10 original freigestellte boss PNGs
-- 6 premium guardian PNGs + Tula/UI assets
+- regular enemy PNGs and original boss PNGs
+- premium guardians and Tula/UI assets
 - glowing lane-bound boss overlay
 - one free lane rescue rock per lane
-- red Insel-Notruf mounted in the header between branding and HUD
-- Insel-Notruf READY state, 100% field wipe and 3-minute cooldown
-- no duplicate header pause button; 3× pause remains in the action row
+- red Insel-Notruf in the header
+- 3× pause in the action row
+- mobile performance profile
+- premium endscreen additions
 
 Note: WebKit mobile emulation is not a physical iPhone Safari device test.
 
@@ -121,9 +121,13 @@ Webkit 26.0 (playwright build v2203) downloaded to /home/runner/.cache/ms-playwr
 
 ## Gameplay QA log
 ```
-PASS desktop-chromium
-PASS desktop-webkit
-PASS android-like-chromium
-PASS iphone-like-webkit
-ALL_QA_PASS
+file:///home/runner/work/word-guardians/word-guardians/tests/qa.mjs:76
+  if (!(await page.locator('body').innerText()).includes('v1.6.2 · HEADER NOTRUF')) throw new Error(`${name}: v1.6.2 header Notruf version not visible`);
+                                                                                          ^
+
+Error: desktop-chromium: v1.6.2 header Notruf version not visible
+    at runProfile (file:///home/runner/work/word-guardians/word-guardians/tests/qa.mjs:76:91)
+    at async file:///home/runner/work/word-guardians/word-guardians/tests/qa.mjs:150:1
+
+Node.js v22.23.2
 ```
