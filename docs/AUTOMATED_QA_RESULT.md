@@ -1,8 +1,8 @@
 # Automated QA Result — Word Guardians
 
 Result: FAIL
-Tested Commit: `51196e00e467370037c94e34d6145b455e2a6a7f`
-Date: 2026-08-20T18:16:05Z
+Tested Commit: `e1b48b76a66462bb99ef1a525a9a455689cf9228`
+Date: 2026-08-20T18:19:27Z
 Live URL: https://o-some.github.io/word-guardians/
 Build: success
 Browser install: success
@@ -124,20 +124,21 @@ Webkit 26.0 (playwright build v2203) downloaded to /home/runner/.cache/ms-playwr
 
 ## Gameplay QA log
 ```
-node:internal/modules/run_main:123
-    triggerUncaughtException(
-    ^
+PASS desktop-chromium
+PASS desktop-webkit
+PASS android-like-chromium
+PASS iphone-like-webkit
+ALL_QA_PASS
+PASS desktop-chromium · embedded energy · readable boss HP · visible lane sprites
+PASS iphone-like-webkit · embedded energy · readable boss HP · visible lane sprites
+LAYOUT_REGRESSION_V177_PASS
+file:///home/runner/work/word-guardians/word-guardians/tests/healing-v178.mjs:75
+  if(Math.abs(hp[0]-50.4)>.02||Math.abs(hp[1]-156.8)>.02)throw new Error(`${name}: 6% healing wrong: ${hp.join(',')}`);
+                                                               ^
 
-locator.click: Error: strict mode violation: locator('.answer').filter({ hasText: 'rain' }) resolved to 2 elements:
-    1) <button class="answer">train</button> aka getByRole('button', { name: 'train' })
-    2) <button class="answer">rain</button> aka getByRole('button', { name: 'rain', exact: true })
-
-Call log:
-  - waiting for locator('.answer').filter({ hasText: 'rain' })
-
-    at answerCorrect (/home/runner/work/word-guardians/word-guardians/tests/qa.mjs:32:50)
-    at async runProfile (/home/runner/work/word-guardians/word-guardians/tests/qa.mjs:145:28)
-    at async file:///home/runner/work/word-guardians/word-guardians/tests/qa.mjs:170:1
+Error: desktop-chromium: 6% healing wrong: 45,140
+    at run (file:///home/runner/work/word-guardians/word-guardians/tests/healing-v178.mjs:75:64)
+    at async file:///home/runner/work/word-guardians/word-guardians/tests/healing-v178.mjs:94:1
 
 Node.js v22.23.2
 ```
