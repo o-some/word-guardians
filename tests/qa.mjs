@@ -46,7 +46,7 @@ async function dragGuardian(page, cardSelector, cellSelector, pointerType='mouse
     document.dispatchEvent(init('pointermove',end.x,end.y));
     document.dispatchEvent(init('pointerup',end.x,end.y));
   },{cardSelector,cellSelector,pointerType});
-  await page.waitForTimeout(120);
+  await page.waitForTimeout(160);
 }
 
 async function runProfile(name, browserType, viewport, fullGameplay=false) {
@@ -56,7 +56,10 @@ async function runProfile(name, browserType, viewport, fullGameplay=false) {
   page.on('pageerror', e=>pageErrors.push(String(e)));
   page.on('response', r=>{ if(r.status()>=400) failed.push(`${r.status()} ${r.url()}`); });
   await page.goto(live, { waitUntil:'networkidle', timeout:60000 });
-  if (!(await page.locator('body').innerText()).includes('v1.7.1 · COMPACT + DRAG & DROP')) throw new Error(`${name}: v1.7.1 version not visible`);
+  const expectedVersion='v1.7.2 · STABLE DND';
+  if (!(await page.locator('body').innerText()).includes(expectedVersion)) throw new Error(`${name}: v1.7.2 version not visible`);
+  await page.waitForTimeout(1300);
+  if (!(await page.locator('body').innerText()).includes(expectedVersion)) throw new Error(`${name}: version display is still fluctuating`);
   if (await page.locator('#bossOverlayV131').count() !== 1) throw new Error(`${name}: boss overlay layer missing`);
   if (await page.locator('#bossStage .bossVisual').evaluateAll(nodes=>nodes.some(n=>getComputedStyle(n).display!=='none'))) throw new Error(`${name}: duplicate boss portrait still visible in boss info strip`);
   if (await page.locator('#emergencyBtn').count() !== 1) throw new Error(`${name}: Insel-Notruf button missing`);
@@ -94,7 +97,9 @@ async function runProfile(name, browserType, viewport, fullGameplay=false) {
     await page.waitForTimeout(80);
     await page.locator('#emergencyBtn').click();
     await page.waitForTimeout(120);
-    if ((await page.locator('#emergencyTimer').textContent())?.trim() === 'READY') throw new Error(`${name}: Insel-Notruf cooldown did not start`);
+    const cooldownText=(await page.locator('#emergencyTimer').textContent())?.trim()||'';
+    if (cooldownText === 'READY') throw new Error(`${name}: Insel-Notruf cooldown did not start`);
+    if (!/^01:(2[89]|30)$/.test(cooldownText)) throw new Error(`${name}: expected about 01:30 cooldown, got ${cooldownText}`);
     if (!(await page.locator('#emergencyBtn').isDisabled())) throw new Error(`${name}: Insel-Notruf should be disabled during cooldown`);
     if (await page.locator('.emergencyWave').count() < 1) throw new Error(`${name}: Insel-Notruf field animation missing`);
     if (!(await page.evaluate(()=>S.e.every(e=>e.hp<=0)))) throw new Error(`${name}: Insel-Notruf did not deal 100 percent damage`);
