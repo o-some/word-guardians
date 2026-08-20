@@ -65,8 +65,8 @@ async function runProfile(name, browserType, viewport, fullGameplay=false) {
   page.on('pageerror', e=>pageErrors.push(String(e)));
   page.on('response', r=>{ if(r.status()>=400) failed.push(`${r.status()} ${r.url()}`); });
   await page.goto(live, { waitUntil:'networkidle', timeout:60000 });
-  const expectedVersion='v1.9.0 · DAMAGE SCALE + READABLE UI';
-  if (!(await page.locator('body').innerText()).includes(expectedVersion)) throw new Error(`${name}: v1.9.0 version not visible`);
+  const expectedVersion='v1.9.1 · DAMAGE SCALE + READABLE UI';
+  if (!(await page.locator('body').innerText()).includes(expectedVersion)) throw new Error(`${name}: v1.9.1 version not visible`);
   await page.waitForTimeout(1300);
   if (!(await page.locator('body').innerText()).includes(expectedVersion)) throw new Error(`${name}: version display is still fluctuating`);
   if (await page.locator('#bossOverlayV131').count() !== 1) throw new Error(`${name}: boss overlay layer missing`);
