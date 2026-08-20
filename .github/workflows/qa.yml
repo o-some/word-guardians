@@ -1,5 +1,5 @@
 name: Migration QA
-# Sprite-upgrade regression run for v1.1.0.
+# Real enemy + original boss sprite regression run for v1.2.0.
 
 on:
   push:
@@ -69,6 +69,11 @@ jobs:
           - Desktop WebKit 1440×900
           - Android-like Chromium 390×844
           - iPhone-like WebKit 390×844
+
+          Assets checked:
+          - 8 generated regular enemy PNGs
+          - 10 original freigestellte boss PNGs
+          - core Tula creative assets
 
           Note: WebKit mobile emulation is not a physical iPhone Safari device test.
 
