@@ -1,10 +1,15 @@
 name: Migration QA
-# Regression run for Word Guardians v1.6.2: clean actions, red header Insel-Notruf, glowing boss overlay and lane rescue rock.
+# Regression run for Word Guardians gameplay, mobile performance and endscreen changes.
 
 on:
   push:
     branches: [main]
     paths:
+      - 'index.html'
+      - 'assets/**'
+      - 'scripts/**'
+      - 'tests/**'
+      - 'package.json'
       - '.github/workflows/qa.yml'
   workflow_dispatch:
 
@@ -71,14 +76,14 @@ jobs:
           - iPhone-like WebKit 390×844
 
           Assets/features checked:
-          - 8 generated regular enemy PNGs
-          - 10 original freigestellte boss PNGs
-          - 6 premium guardian PNGs + Tula/UI assets
+          - regular enemy PNGs and original boss PNGs
+          - premium guardians and Tula/UI assets
           - glowing lane-bound boss overlay
           - one free lane rescue rock per lane
-          - red Insel-Notruf mounted in the header between branding and HUD
-          - Insel-Notruf READY state, 100% field wipe and 3-minute cooldown
-          - no duplicate header pause button; 3× pause remains in the action row
+          - red Insel-Notruf in the header
+          - 3× pause in the action row
+          - mobile performance profile
+          - premium endscreen additions
 
           Note: WebKit mobile emulation is not a physical iPhone Safari device test.
 
