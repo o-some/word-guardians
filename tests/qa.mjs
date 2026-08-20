@@ -9,7 +9,25 @@ const assetUrls = [
   'assets/creative/mode_words_discover.webp',
   'assets/creative/tula_profile.webp',
   'assets/creative/tula_neutral_front.webp',
-  'assets/creative/tula_happy.webp'
+  'assets/creative/tula_happy.webp',
+  'assets/enemies/enemy-01-deckhand-niko.png',
+  'assets/enemies/enemy-02-hook-scout-lio.png',
+  'assets/enemies/enemy-03-barrel-raider-mako.png',
+  'assets/enemies/enemy-04-shield-buccaneer-taro.png',
+  'assets/enemies/enemy-05-wave-skater-piko.png',
+  'assets/enemies/enemy-06-anchor-brute-koda.png',
+  'assets/enemies/enemy-07-tidecaller-yara.png',
+  'assets/enemies/enemy-08-cannon-corsair-riven.png',
+  'assets/bosses/boss-01-pirat-kai.png',
+  'assets/bosses/boss-02-kapitaen-brax.png',
+  'assets/bosses/boss-03-blackfinn.png',
+  'assets/bosses/boss-04-alt-kapitaen-roderick.png',
+  'assets/bosses/boss-05-piratenbaron-vargas.png',
+  'assets/bosses/boss-06-kapitaen-ironhook.png',
+  'assets/bosses/boss-07-admiral-thorne.png',
+  'assets/bosses/boss-08-kartenmeister-corvin.png',
+  'assets/bosses/boss-09-schattenfuerst-azrak.png',
+  'assets/bosses/boss-10-piratenkoenig-varkos.png'
 ];
 
 async function waitHttp(url, attempts=36) {
@@ -39,7 +57,7 @@ async function runProfile(name, browserType, viewport, fullGameplay=false) {
   page.on('pageerror', e=>pageErrors.push(String(e)));
   page.on('response', r=>{ if(r.status()>=400) failed.push(`${r.status()} ${r.url()}`); });
   await page.goto(live, { waitUntil:'networkidle', timeout:60000 });
-  if (!(await page.locator('body').innerText()).includes('v1.1.0 · TULA SPRITES')) throw new Error(`${name}: sprite-upgrade version not visible`);
+  if (!(await page.locator('body').innerText()).includes('v1.2.0 · REAL PIRATES')) throw new Error(`${name}: real-sprite version not visible`);
   await page.locator('#startBtn').click();
   await page.locator('#intro').waitFor({ state:'hidden' });
   if (await page.locator('.lane').count() !== 4) throw new Error(`${name}: lane count != 4`);
@@ -76,7 +94,7 @@ async function runProfile(name, browserType, viewport, fullGameplay=false) {
     for (let i=0;i<24;i++) await answerCorrect(page);
     const level = Number(await page.locator('#lvl').textContent());
     if (level < 2) throw new Error(`${name}: endless danger progression did not advance`);
-    if (await page.locator('.pirateArt').count() < 1) throw new Error(`${name}: animated pirate sprite not rendered`);
+    if (await page.locator('.pirateArt').count() < 1) throw new Error(`${name}: real pirate image sprite not rendered`);
 
     await page.evaluate(()=>{ gameOver(); });
     await page.locator('#endOv').waitFor({ state:'visible' });
