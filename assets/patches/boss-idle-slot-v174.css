@@ -1,4 +1,4 @@
-/* Word Guardians v1.7.5 — compact persistent boss slot */
+/* Word Guardians v1.7.6 — compact boss slot + readable lane sprites */
 #bossStage:not(.hidden),#bossStage.wgBossIdle.hidden{
   display:grid!important;
   grid-template-columns:minmax(150px,.82fr) minmax(0,1.18fr)!important;
@@ -41,6 +41,12 @@
 .wgBossIdleText{text-align:left;min-width:0}
 .wgBossIdleText b{display:block;color:#c9d4d8;font:900 .68rem/1.02 Georgia,serif;letter-spacing:.015em}
 .wgBossIdleText small{display:block;margin-top:2px;color:#7f959f;font-size:.39rem;font-weight:800;letter-spacing:.025em}
+
+/* Regular enemies stay logically assigned to their lane, but their art may paint over the lane edge. */
+.lane{overflow:visible!important}
+.enemy:not(.boss){top:46%!important;z-index:24!important}
+.enemy:not(.boss) .pirateArt{overflow:visible!important}
+
 @media(max-width:600px){
   #bossStage:not(.hidden),#bossStage.wgBossIdle.hidden{grid-template-columns:minmax(100px,.82fr) minmax(0,1.18fr)!important;min-height:38px!important;max-height:42px!important;margin:3px 0!important;padding:4px 7px!important;border-radius:11px!important;gap:5px!important}
   #bossStage .bossName{font-size:.64rem!important}
@@ -49,4 +55,5 @@
   .wgBossIdleMark{width:24px;height:24px;font-size:.78rem}
   .wgBossIdleText b{font-size:.55rem}
   .wgBossIdleText small{font-size:.31rem;margin-top:1px}
+  .enemy:not(.boss){top:45%!important}
 }
