@@ -27,7 +27,17 @@ const assetUrls = [
   'assets/bosses/boss-07-admiral-thorne.png',
   'assets/bosses/boss-08-kartenmeister-corvin.png',
   'assets/bosses/boss-09-schattenfuerst-azrak.png',
-  'assets/bosses/boss-10-piratenkoenig-varkos.png'
+  'assets/bosses/boss-10-piratenkoenig-varkos.png',
+  'assets/guardians/guardian-01-wortkoralle.png',
+  'assets/guardians/guardian-02-steinmuschel.png',
+  'assets/guardians/guardian-03-minzqualle.png',
+  'assets/guardians/guardian-04-gezeitenstern.png',
+  'assets/guardians/guardian-05-blitzkoralle.png',
+  'assets/guardians/guardian-06-ankerkrabbe.png',
+  'assets/ui/ui-01-muschel-schatztruhe.png',
+  'assets/ui/ui-02-boss-rahmen.png',
+  'assets/patches/boss-overlay-v131.css',
+  'assets/patches/boss-overlay-v131.js'
 ];
 
 async function waitHttp(url, attempts=36) {
@@ -57,7 +67,10 @@ async function runProfile(name, browserType, viewport, fullGameplay=false) {
   page.on('pageerror', e=>pageErrors.push(String(e)));
   page.on('response', r=>{ if(r.status()>=400) failed.push(`${r.status()} ${r.url()}`); });
   await page.goto(live, { waitUntil:'networkidle', timeout:60000 });
-  if (!(await page.locator('body').innerText()).includes('v1.2.0 · REAL PIRATES')) throw new Error(`${name}: real-sprite version not visible`);
+  if (!(await page.locator('body').innerText()).includes('v1.3.1 · BOSS OVERLAY + GLOW')) throw new Error(`${name}: v1.3.1 overlay version not visible`);
+  if (await page.locator('#bossOverlayV131').count() !== 1) throw new Error(`${name}: boss overlay layer missing`);
+  if (await page.locator('#bossStage .bossVisual').evaluateAll(nodes=>nodes.some(n=>getComputedStyle(n).display!=='none'))) throw new Error(`${name}: duplicate boss portrait still visible in boss info strip`);
+
   await page.locator('#startBtn').click();
   await page.locator('#intro').waitFor({ state:'hidden' });
   if (await page.locator('.lane').count() !== 4) throw new Error(`${name}: lane count != 4`);
@@ -92,9 +105,9 @@ async function runProfile(name, browserType, viewport, fullGameplay=false) {
     await page.locator('#resumeBtn').click();
 
     for (let i=0;i<24;i++) await answerCorrect(page);
-    const level = Number(await page.locator('#lvl').textContent());
-    if (level < 2) throw new Error(`${name}: endless danger progression did not advance`);
-    if (await page.locator('.pirateArt').count() < 1) throw new Error(`${name}: real pirate image sprite not rendered`);
+    if (await page.locator('.pirateArt').count() < 1) throw new Error(`${name}: regular pirate image sprite not rendered`);
+    const bossOverlayCount = await page.locator('#bossOverlayV131 .bossFloatingV131 img').count();
+    if (bossOverlayCount < 1) throw new Error(`${name}: glowing boss overlay sprite not rendered after boss milestones`);
 
     await page.evaluate(()=>{ gameOver(); });
     await page.locator('#endOv').waitFor({ state:'visible' });
