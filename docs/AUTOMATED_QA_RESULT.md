@@ -1,12 +1,12 @@
 # Automated QA Result — Word Guardians
 
-Result: PASS
-Tested Commit: `0d1ea01d0c1c3ba16dc24efd2699ea15a30a1f7d`
-Date: 2026-08-20T18:22:31Z
+Result: FAIL
+Tested Commit: `abee3389328a6ec469f3107766e7f5572f2f9b5b`
+Date: 2026-08-20T18:47:42Z
 Live URL: https://o-some.github.io/word-guardians/
 Build: success
 Browser install: success
-Gameplay QA: success
+Gameplay QA: failure
 
 Profiles attempted:
 - Desktop Chromium 1440×900
@@ -23,19 +23,20 @@ Assets/features checked:
 - 3× pause in the action row
 - mobile performance profile
 - premium endscreen additions
-- energy bar directly above the boss slot
+- energy bar between answers and action buttons
 - regular enemy sprites may paint outside their lane without changing lane logic
 - 3:00 answer-healing milestone popup and scaling heal percentages
+- v1.8.0 start guide, start-to-info morph and 60-second Insel-Notruf
 
 Note: WebKit mobile emulation is not a physical iPhone Safari device test.
 
 ## Build log
 ```
 
-> word-guardians@1.0.0-migrated build
+> word-guardians@1.8.0 build
 > node scripts/build.mjs
 
-Word Guardians build complete · three-minute answer healing milestone
+Word Guardians build complete · v1.8.0 onboarding + 60s Insel-Notruf
 ```
 
 ## Browser install log (tail)
@@ -129,10 +130,16 @@ PASS desktop-webkit
 PASS android-like-chromium
 PASS iphone-like-webkit
 ALL_QA_PASS
-PASS desktop-chromium · embedded energy · readable boss HP · visible lane sprites
-PASS iphone-like-webkit · embedded energy · readable boss HP · visible lane sprites
-LAYOUT_REGRESSION_V177_PASS
-PASS desktop-chromium · 3:00 healing popup + scaled healing
-PASS iphone-like-webkit · 3:00 healing popup + scaled healing
-HEALING_V178_PASS
+file:///home/runner/work/word-guardians/word-guardians/tests/layout-regression-v176.mjs:51
+  if(!enemyStyle.top)throw new Error(`${name}: regular enemy positioning missing`);
+                           ^
+
+Error: desktop-chromium: regular enemy positioning missing
+    at run (file:///home/runner/work/word-guardians/word-guardians/tests/layout-regression-v176.mjs:51:28)
+    at runNextTicks (node:internal/process/task_queues:64:5)
+    at process.processImmediate (node:internal/timers:452:9)
+    at process.callbackTrampoline (node:internal/async_hooks:130:17)
+    at async file:///home/runner/work/word-guardians/word-guardians/tests/layout-regression-v176.mjs:73:1
+
+Node.js v22.23.2
 ```
