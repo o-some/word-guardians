@@ -42,6 +42,12 @@ async function run(name,browserType,viewport){
   ]);
   if(schedule.join(',')!=='0,3,6,10,13,30,30')throw new Error(`${name}: healing schedule wrong: ${schedule.join(',')}`);
 
+  // In a real run the minute-two damage milestone has already been acknowledged before minute three.
+  await page.evaluate(()=>{S.time=119.96;S.pause=false;S.last=performance.now();});
+  await page.locator('.wgDamageMilestone').waitFor({state:'visible',timeout:3000});
+  await page.locator('#wgDamageContinue').click();
+  await page.locator('.wgDamageMilestone').waitFor({state:'detached'});
+
   await page.evaluate(()=>{S.time=179.96;S.pause=false;S.last=performance.now();});
   await page.locator('.wgHealMilestone').waitFor({state:'visible',timeout:3000});
   const pausedAt=await page.evaluate(()=>({pause:S.pause,time:S.time}));
@@ -101,4 +107,4 @@ await waitHttp(new URL('assets/patches/answer-heal-v178.js',live));
 await waitHttp(new URL('assets/patches/answer-heal-v178.css',live));
 await run('desktop-chromium',chromium,{width:1440,height:900});
 await run('iphone-like-webkit',webkit,{width:390,height:844});
-console.log('HEALING_V190_PASS');
+console.log('HEALING_V192_PASS');
