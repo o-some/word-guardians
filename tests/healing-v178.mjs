@@ -18,7 +18,7 @@ async function answerCorrect(page){
   const de=(await page.locator('#word').textContent()||'').trim();
   const en=words.get(de);
   if(!en)throw new Error(`Unknown word: ${de}`);
-  await page.locator('.answer',{hasText:en}).click();
+  await page.locator('#answers').getByRole('button',{name:en,exact:true}).click();
   await page.waitForTimeout(80);
 }
 
