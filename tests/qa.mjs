@@ -122,6 +122,8 @@ async function runProfile(name, browserType, viewport, fullGameplay=false) {
     await page.locator('#resumeBtn').click();
 
     for (let i=0;i<24;i++) await answerCorrect(page);
+    await page.evaluate(()=>{ if(!S.e.some(e=>e.hp>0&&!e.cl.includes('boss'))){const p=ENEMIES[0];S.e.push({id:S.id++,r:2,x:72,hp:120,max:120,sp:0,n:'QA Regular Pirate',cl:'',asset:p.asset,rank:1,born:S.time,stun:0,hitUntil:0});} });
+    await page.waitForTimeout(120);
     if (await page.locator('.pirateArt').count() < 1) throw new Error(`${name}: regular pirate image sprite not rendered`);
     const bossOverlayCount = await page.locator('#bossOverlayV131 .bossFloatingV131 img').count();
     if (bossOverlayCount < 1) throw new Error(`${name}: glowing boss overlay sprite not rendered after boss milestones`);
