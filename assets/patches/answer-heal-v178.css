@@ -1,0 +1,15 @@
+/* Word Guardians — 3:00 answer-healing milestone */
+.wgHealMilestone{position:fixed;inset:0;z-index:120;display:flex;align-items:flex-start;justify-content:center;padding:max(16px,env(safe-area-inset-top)) 14px 14px;background:#00111d66;backdrop-filter:blur(3px)}
+.wgHealCard{width:min(420px,100%);display:grid;grid-template-columns:auto 1fr;gap:12px;margin-top:14px;padding:14px;border:1px solid #efc766b8;border-radius:18px;background:linear-gradient(145deg,#073b55f7,#04273cf7 62%,#052036f8);box-shadow:0 18px 40px #0009,inset 0 1px #ffffff18;color:#fff7df}
+.wgHealBadge{width:46px;height:46px;display:grid;place-items:center;border-radius:14px;border:1px solid #8ff0c4aa;background:radial-gradient(circle at 35% 30%,#8ff0c433,#0c604a 55%,#07372d);color:#b9ffd9;font:900 1.5rem/1 Georgia;text-shadow:0 0 12px #7df0bd99;box-shadow:inset 0 1px #ffffff20,0 6px 14px #0006}
+.wgHealCopy{min-width:0}
+.wgHealCopy small{display:block;color:#ffe18a;font-size:.5rem;font-weight:950;letter-spacing:.08em}
+.wgHealCopy h2{margin:3px 0 5px;font:900 1.12rem/1.05 Georgia,serif;color:#fff0bd}
+.wgHealCopy p{margin:0;color:#d8eeee;font-size:.68rem;line-height:1.35}
+.wgHealCopy p b{color:#b9ffd9}
+.wgHealScale{display:grid;grid-template-columns:repeat(4,1fr);gap:5px;margin:10px 0 8px}
+.wgHealScale span{display:block;padding:6px 4px;border:1px solid #ffffff22;border-radius:9px;background:#ffffff0b;text-align:center;color:#b9ffd9;font-size:.6rem;font-weight:900}
+.wgHealScale b{display:block;color:#ffe18a;font-size:.48rem}
+.wgHealFine{font-size:.56rem!important;color:#9fc8ca!important}
+#wgHealContinue{width:100%;min-height:40px;margin-top:10px;border:1px solid #fff0a8;border-radius:11px;background:linear-gradient(#ffe18a,#d7a23f);color:#082f4b;font-weight:950;box-shadow:0 6px 14px #0005}
+@media(max-width:600px){.wgHealMilestone{padding-top:max(10px,env(safe-area-inset-top));background:#00111d55;backdrop-filter:blur(2px)}.wgHealCard{margin-top:4px;gap:9px;padding:10px;border-radius:15px}.wgHealBadge{width:38px;height:38px;border-radius:11px;font-size:1.2rem}.wgHealCopy h2{font-size:.96rem}.wgHealCopy p{font-size:.6rem}.wgHealScale{gap:3px;margin:7px 0 6px}.wgHealScale span{padding:5px 2px;font-size:.53rem}.wgHealScale b{font-size:.42rem}.wgHealFine{font-size:.49rem!important}#wgHealContinue{min-height:38px;margin-top:8px}}
