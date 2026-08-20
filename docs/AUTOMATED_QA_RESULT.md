@@ -1,12 +1,12 @@
 # Automated QA Result — Word Guardians
 
-Result: FAIL
-Tested Commit: `097af0a15027de76df243c8eafa2d78fe16c0d64`
-Date: 2026-08-20T13:27:56Z
+Result: PASS
+Tested Commit: `0627daaa5ba81b3cad332c5e581f03f8dedea043`
+Date: 2026-08-20T13:30:20Z
 Live URL: https://o-some.github.io/word-guardians/
 Build: success
 Browser install: success
-Gameplay QA: cancelled
+Gameplay QA: success
 
 Profiles attempted:
 - Desktop Chromium 1440×900
@@ -121,5 +121,9 @@ Webkit 26.0 (playwright build v2203) downloaded to /home/runner/.cache/ms-playwr
 
 ## Gameplay QA log
 ```
-
+PASS desktop-chromium
+PASS desktop-webkit
+PASS android-like-chromium
+PASS iphone-like-webkit
+ALL_QA_PASS
 ```
