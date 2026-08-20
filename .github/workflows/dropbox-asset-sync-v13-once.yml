@@ -1,0 +1,79 @@
+name: Dropbox Asset Sync V13 Once
+
+on:
+  push:
+    branches: [main]
+    paths: ['.github/workflows/dropbox-asset-sync-v13-once.yml']
+
+permissions:
+  contents: write
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with: {fetch-depth: 0}
+      - uses: actions/setup-node@v4
+        with: {node-version: 22}
+      - name: Install Playwright Chromium
+        run: |
+          npm install --no-save playwright@1.55.0
+          npx playwright install --with-deps chromium
+      - name: Upload sprites through Dropbox file requests
+        shell: bash
+        run: |
+          node <<'JS'
+          const { chromium } = require('playwright');
+          const path = require('path');
+          const fs = require('fs');
+          const sets = [
+            {name:'Gegner', url:'https://www.dropbox.com/request/1x6l4u9f0k4694z9jxli', files:[
+              'assets/enemies/enemy-01-deckhand-niko.png','assets/enemies/enemy-02-hook-scout-lio.png','assets/enemies/enemy-03-barrel-raider-mako.png','assets/enemies/enemy-04-shield-buccaneer-taro.png','assets/enemies/enemy-05-wave-skater-piko.png','assets/enemies/enemy-06-anchor-brute-koda.png','assets/enemies/enemy-07-tidecaller-yara.png','assets/enemies/enemy-08-cannon-corsair-riven.png']},
+            {name:'Helfer', url:'https://www.dropbox.com/request/imhekqryxy4exv5ayke9', files:[
+              'assets/guardians/guardian-01-wortkoralle.png','assets/guardians/guardian-02-steinmuschel.png','assets/guardians/guardian-03-minzqualle.png','assets/guardians/guardian-04-gezeitenstern.png','assets/guardians/guardian-05-blitzkoralle.png','assets/guardians/guardian-06-ankerkrabbe.png']},
+            {name:'UI', url:'https://www.dropbox.com/request/fj5ork2f9n1f28njvqgi', files:[
+              'assets/ui/ui-01-muschel-schatztruhe.png','assets/ui/ui-02-boss-rahmen.png']}
+          ];
+          const abs = files => files.map(f=>path.resolve(f));
+          for (const s of sets) for(const f of s.files) if(!fs.existsSync(f)) throw new Error('Missing '+f);
+          const browser = await chromium.launch({headless:true});
+          async function upload(set){
+            const page=await browser.newPage();
+            console.log('Opening',set.name,set.url);
+            await page.goto(set.url,{waitUntil:'domcontentloaded',timeout:60000});
+            await page.waitForTimeout(2500);
+            let input=page.locator('input[type=file]').first();
+            if(await input.count()===0){
+              const add=page.getByRole('button',{name:/add files|dateien hinzufügen|choose files|dateien auswählen/i}).first();
+              if(await add.count()){const chooser=page.waitForEvent('filechooser');await add.click();const fc=await chooser;await fc.setFiles(abs(set.files));}
+              else throw new Error(set.name+': no file input/button found');
+            }else await input.setInputFiles(abs(set.files));
+            await page.waitForTimeout(1800);
+            const nameInputs=page.locator('input[type=text]');
+            for(let i=0;i<await nameInputs.count();i++){const el=nameInputs.nth(i);if(await el.isVisible().catch(()=>false)){const ph=(await el.getAttribute('placeholder')||'').toLowerCase();if(ph.includes('name')||ph.includes('name')) await el.fill('Word Guardians Build').catch(()=>{});}}
+            const email=page.locator('input[type=email]').first();
+            if(await email.count() && await email.isVisible().catch(()=>false)) await email.fill('41898282+github-actions[bot]@users.noreply.github.com').catch(()=>{});
+            const upload=page.getByRole('button',{name:/^upload$|hochladen|submit|send|fertig/i}).last();
+            if(await upload.count()===0) throw new Error(set.name+': upload button not found');
+            await upload.click();
+            await page.waitForTimeout(8000);
+            const body=(await page.locator('body').innerText()).toLowerCase();
+            console.log(set.name,'result:',body.slice(-1200));
+            if(!/uploaded|hochgeladen|thank|danke|success|complete|fertig/.test(body)) throw new Error(set.name+': success message not detected');
+            await page.close();
+          }
+          try{for(const set of sets) await upload(set);}finally{await browser.close();}
+          JS
+      - name: Remove one-time workflow
+        shell: bash
+        run: |
+          set -euo pipefail
+          rm -f .github/workflows/dropbox-asset-sync-v13-once.yml
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add -A
+          git commit -m 'Complete Dropbox Word Guardians asset sync'
+          git pull --rebase origin main
+          git push origin HEAD:main
