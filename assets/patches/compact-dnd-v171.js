@@ -38,7 +38,7 @@
   }
 
   function start(card,x,y,mode,id){
-    if(!card||card.disabled)return false;
+    if(!card||card.disabled||state.card)return false;
     if(typeof S!=='undefined'&&S&&(S.pause||S.end))return false;
     state.mode=mode;state.id=id;state.card=card;state.startX=x;state.startY=y;state.active=false;
     return true;
@@ -104,13 +104,12 @@
     }else cleanup();
   }
 
-  // Mouse / pen: pointer events are reliable and avoid duplicate mouse handlers.
+  // Pointer Events: mouse, pen and modern mobile browsers.
   document.addEventListener('pointerdown',event=>{
-    if(event.pointerType==='touch')return;
     const card=event.target.closest?.('.dock .card');
     if(!card||event.button!==0)return;
-    start(card,event.clientX,event.clientY,'pointer',event.pointerId);
-  },{passive:true});
+    if(start(card,event.clientX,event.clientY,'pointer',event.pointerId))event.preventDefault();
+  },{passive:false});
   document.addEventListener('pointermove',event=>{
     if(state.mode!=='pointer'||event.pointerId!==state.id)return;
     move(event.clientX,event.clientY,event);
@@ -121,7 +120,7 @@
   },{passive:false});
   document.addEventListener('pointercancel',event=>{if(state.mode==='pointer'&&event.pointerId===state.id)cleanup();},{passive:true});
 
-  // iPhone / Android: explicit touch fallback. This is intentionally separate from pointer events.
+  // Fallback for iOS/WebViews that expose Touch Events instead of usable Pointer Events.
   document.addEventListener('touchstart',event=>{
     if(state.card)return;
     const card=event.target.closest?.('.dock .card');
@@ -131,17 +130,18 @@
   },{passive:false});
   document.addEventListener('touchmove',event=>{
     if(state.mode!=='touch')return;
-    const touch=[...event.changedTouches].find(t=>t.identifier===state.id)||[...event.touches].find(t=>t.identifier===state.id);
+    const changed=Array.from(event.changedTouches||[]),all=Array.from(event.touches||[]);
+    const touch=changed.find(t=>t.identifier===state.id)||all.find(t=>t.identifier===state.id);
     if(!touch)return;
     move(touch.clientX,touch.clientY,event);
   },{passive:false});
   document.addEventListener('touchend',event=>{
     if(state.mode!=='touch')return;
-    const touch=[...event.changedTouches].find(t=>t.identifier===state.id);
+    const touch=Array.from(event.changedTouches||[]).find(t=>t.identifier===state.id);
     if(!touch)return;
     finish(touch.clientX,touch.clientY,event);
   },{passive:false});
-  document.addEventListener('touchcancel',event=>{if(state.mode==='touch')cleanup();},{passive:true});
+  document.addEventListener('touchcancel',()=>{if(state.mode==='touch')cleanup();},{passive:true});
 
   document.addEventListener('click',event=>{
     if(state.suppressClick&&event.target.closest?.('.dock .card')){event.preventDefault();event.stopImmediatePropagation();}
