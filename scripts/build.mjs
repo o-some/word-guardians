@@ -30,4 +30,4 @@ for (const tag of jsTags) {
 await writeFile('dist/index.html', built);
 await writeFile('dist/404.html', built);
 await cp('assets', 'dist/assets', { recursive: true });
-console.log('Word Guardians build complete · boss overlay v1.3.1 + lane rescue v1.4.0 + Insel-Notruf v1.5.0 + clean action UI v1.6.1 injected');
+console.log('Word Guardians build complete · boss overlay v1.3.1 + lane rescue v1.4.0 + red header Insel-Notruf v1.6.2 + clean actions injected');
