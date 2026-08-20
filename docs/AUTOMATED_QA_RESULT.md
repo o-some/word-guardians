@@ -1,12 +1,12 @@
 # Automated QA Result — Word Guardians
 
-Result: PASS
-Tested Commit: `32a1a29fcc67c30a2b777adfcf6279b590e06fa0`
-Date: 2026-08-20T20:24:12Z
+Result: FAIL
+Tested Commit: `00e62d79471cdf84f4bfafe2319dcc78a6dee30e`
+Date: 2026-08-20T20:34:18Z
 Live URL: https://o-some.github.io/word-guardians/
 Build: success
 Browser install: success
-Gameplay QA: success
+Gameplay QA: failure
 
 Profiles attempted:
 - Desktop Chromium 1440×900
@@ -28,7 +28,8 @@ Assets/features checked:
 - larger typography across standard overlay windows
 - larger 3:00 healing milestone popup and scaling heal percentages
 - larger 2:00 answer-damage milestone and +1 percent per second up to +100 percent
-- premium guardian sprites on the streamlined v1.9.5 start guide
+- premium guardian sprites on the streamlined start guide
+- larger v1.9.6 mobile question/answer area and six guardian cards/sprites
 - start-to-info morph and 60-second Insel-Notruf
 
 Note: WebKit mobile emulation is not a physical iPhone Safari device test.
@@ -36,10 +37,10 @@ Note: WebKit mobile emulation is not a physical iPhone Safari device test.
 ## Build log
 ```
 
-> word-guardians@1.9.5 build
+> word-guardians@1.9.6 build
 > node scripts/build.mjs
 
-Word Guardians build complete · v1.9.5 larger overlays + premium start sprites
+Word Guardians build complete · v1.9.6 larger mobile question + guardian dock
 ```
 
 ## Browser install log (tail)
@@ -128,21 +129,13 @@ Webkit 26.0 (playwright build v2203) downloaded to /home/runner/.cache/ms-playwr
 
 ## Gameplay QA log
 ```
-PASS desktop-chromium
-PASS desktop-webkit
-PASS android-like-chromium
-PASS iphone-like-webkit
-ALL_QA_PASS
-PASS desktop-chromium · embedded energy · readable boss HP · visible lane sprites
-PASS iphone-like-webkit · embedded energy · readable boss HP · visible lane sprites
-LAYOUT_REGRESSION_V191_PASS
-PASS desktop-chromium · v1.9.5 larger 3:00 healing popup + scaled healing
-PASS iphone-like-webkit · v1.9.5 larger 3:00 healing popup + scaled healing
-HEALING_V195_PASS
-PASS desktop-chromium · v1.9.5 larger overlays + premium start sprites + 60s Notruf
-PASS iphone-like-webkit · v1.9.5 larger overlays + premium start sprites + 60s Notruf
-ONBOARDING_V195_PASS
-PASS desktop-chromium · v1.9.5 larger 2:00 damage popup + 1%/sec scaling + 2x cap
-PASS iphone-like-webkit · v1.9.5 larger 2:00 damage popup + 1%/sec scaling + 2x cap
-DAMAGE_V195_PASS
+file:///home/runner/work/word-guardians/word-guardians/tests/qa.mjs:69
+  if (!(await page.locator('body').innerText()).includes(expectedVersion)) throw new Error(`${name}: v1.9.5 version not visible`);
+                                                                                 ^
+
+Error: desktop-chromium: v1.9.5 version not visible
+    at runProfile (file:///home/runner/work/word-guardians/word-guardians/tests/qa.mjs:69:82)
+    at async file:///home/runner/work/word-guardians/word-guardians/tests/qa.mjs:170:1
+
+Node.js v22.23.2
 ```
