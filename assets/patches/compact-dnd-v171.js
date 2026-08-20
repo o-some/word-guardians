@@ -1,10 +1,9 @@
 (()=>{
   'use strict';
 
-  const VERSION='v1.7.2 · STABLE DND · 4×8';
-  const state={pointerId:null,card:null,startX:0,startY:0,active:false,ghost:null,hot:null,suppressClick:false};
+  const VERSION='v1.7.3 · TOUCH DND FIX · 4×8';
+  const state={mode:null,id:null,card:null,startX:0,startY:0,active:false,ghost:null,hot:null,suppressClick:false};
   const qsa=s=>[...document.querySelectorAll(s)];
-  const dock=()=>document.getElementById('dock')||document.querySelector('.dock');
 
   function setVersion(){
     const version=document.querySelector('.version');
@@ -38,13 +37,31 @@
     state.hot?.classList.add('wgDropHot');
   }
 
-  function beginDrag(event){
+  function start(card,x,y,mode,id){
+    if(!card||card.disabled)return false;
+    if(typeof S!=='undefined'&&S&&(S.pause||S.end))return false;
+    state.mode=mode;state.id=id;state.card=card;state.startX=x;state.startY=y;state.active=false;
+    return true;
+  }
+
+  function begin(x,y){
+    if(state.active||!state.card)return;
     state.active=true;
     state.card.classList.add('wgDragSource');
     document.body.classList.add('wgDraggingGuardian');
     qsa('.cell:not(.home)').forEach(cell=>cell.classList.add('wgDropReady'));
     state.ghost=ghostFor(state.card);
-    moveGhost(event.clientX,event.clientY);
+    moveGhost(x,y);
+  }
+
+  function move(x,y,event){
+    if(!state.card)return;
+    const dx=x-state.startX,dy=y-state.startY;
+    if(!state.active&&Math.hypot(dx,dy)>=6)begin(x,y);
+    if(!state.active)return;
+    event?.preventDefault?.();
+    moveGhost(x,y);
+    setHot(targetCellAt(x,y));
   }
 
   function cleanup(){
@@ -52,29 +69,7 @@
     qsa('.cell.wgDropReady,.cell.wgDropHot').forEach(cell=>cell.classList.remove('wgDropReady','wgDropHot'));
     document.body.classList.remove('wgDraggingGuardian');
     state.ghost?.remove();
-    state.pointerId=null;state.card=null;state.active=false;state.ghost=null;state.hot=null;
-  }
-
-  function onPointerDown(event){
-    const card=event.target.closest?.('.dock .card');
-    if(!card)return;
-    if(event.button!==undefined&&event.button!==0)return;
-    if(card.disabled)return;
-    if(typeof S!=='undefined'&&S&&(S.pause||S.end))return;
-    state.pointerId=event.pointerId;
-    state.card=card;
-    state.startX=event.clientX;state.startY=event.clientY;
-    state.active=false;
-  }
-
-  function onPointerMove(event){
-    if(state.pointerId===null||event.pointerId!==state.pointerId||!state.card)return;
-    const dx=event.clientX-state.startX,dy=event.clientY-state.startY;
-    if(!state.active&&Math.hypot(dx,dy)>=8)beginDrag(event);
-    if(!state.active)return;
-    event.preventDefault();
-    moveGhost(event.clientX,event.clientY);
-    setHot(targetCellAt(event.clientX,event.clientY));
+    state.mode=null;state.id=null;state.card=null;state.active=false;state.ghost=null;state.hot=null;
   }
 
   function placeFromDrag(card,target){
@@ -85,35 +80,72 @@
     if(S.g?.some(g=>g.r===r&&g.c===c))return false;
     const cfg=typeof G!=='undefined'?G[type]:null;
     if(!cfg||S.en<cfg.cost)return false;
-
-    // Use the game's own placement function directly so energy, HP and render logic stay authoritative.
+    const before=Array.isArray(S.g)?S.g.length:0;
     S.sel=type;S.move=false;S.src=null;
-    if(typeof tapCell==='function')tapCell(r,c);else return false;
-    return !!target.querySelector('.guardianWrap');
+    if(typeof tapCell!=='function')return false;
+    tapCell(r,c);
+    return Array.isArray(S.g)&&S.g.length===before+1&&S.g.some(g=>g.r===r&&g.c===c&&g.type===type);
   }
 
-  function onPointerUp(event){
-    if(state.pointerId===null||event.pointerId!==state.pointerId||!state.card)return;
-    const card=state.card,wasActive=state.active,target=wasActive?targetCellAt(event.clientX,event.clientY):null;
+  function finish(x,y,event){
+    if(!state.card)return;
+    const card=state.card,wasActive=state.active,target=wasActive?targetCellAt(x,y):null;
     if(wasActive){
-      event.preventDefault();
+      event?.preventDefault?.();
       state.suppressClick=true;
       const placed=placeFromDrag(card,target);
-      cleanup();
       const fb=document.getElementById('fb');
-      if(placed&&fb)fb.textContent='✨ Helfer platziert – Drag & Drop funktioniert mit Maus und Finger.';
-      setTimeout(()=>{state.suppressClick=false},50);
+      cleanup();
+      if(fb){
+        if(placed)fb.textContent='✨ Helfer platziert – Drag & Drop funktioniert mit Maus und Finger.';
+        else if(target)fb.textContent='Dieses Feld ist belegt oder du hast nicht genug Energie.';
+      }
+      setTimeout(()=>{state.suppressClick=false},120);
     }else cleanup();
   }
 
-  function onPointerCancel(event){if(state.pointerId!==null&&event.pointerId===state.pointerId)cleanup();}
-  function onClickCapture(event){if(state.suppressClick&&event.target.closest?.('.dock .card')){event.preventDefault();event.stopImmediatePropagation();}}
+  // Mouse / pen: pointer events are reliable and avoid duplicate mouse handlers.
+  document.addEventListener('pointerdown',event=>{
+    if(event.pointerType==='touch')return;
+    const card=event.target.closest?.('.dock .card');
+    if(!card||event.button!==0)return;
+    start(card,event.clientX,event.clientY,'pointer',event.pointerId);
+  },{passive:true});
+  document.addEventListener('pointermove',event=>{
+    if(state.mode!=='pointer'||event.pointerId!==state.id)return;
+    move(event.clientX,event.clientY,event);
+  },{passive:false});
+  document.addEventListener('pointerup',event=>{
+    if(state.mode!=='pointer'||event.pointerId!==state.id)return;
+    finish(event.clientX,event.clientY,event);
+  },{passive:false});
+  document.addEventListener('pointercancel',event=>{if(state.mode==='pointer'&&event.pointerId===state.id)cleanup();},{passive:true});
 
-  document.addEventListener('pointerdown',onPointerDown,{passive:true});
-  document.addEventListener('pointermove',onPointerMove,{passive:false});
-  document.addEventListener('pointerup',onPointerUp,{passive:false});
-  document.addEventListener('pointercancel',onPointerCancel,{passive:true});
-  document.addEventListener('click',onClickCapture,true);
+  // iPhone / Android: explicit touch fallback. This is intentionally separate from pointer events.
+  document.addEventListener('touchstart',event=>{
+    if(state.card)return;
+    const card=event.target.closest?.('.dock .card');
+    const touch=event.changedTouches?.[0];
+    if(!card||!touch)return;
+    if(start(card,touch.clientX,touch.clientY,'touch',touch.identifier))event.preventDefault();
+  },{passive:false});
+  document.addEventListener('touchmove',event=>{
+    if(state.mode!=='touch')return;
+    const touch=[...event.changedTouches].find(t=>t.identifier===state.id)||[...event.touches].find(t=>t.identifier===state.id);
+    if(!touch)return;
+    move(touch.clientX,touch.clientY,event);
+  },{passive:false});
+  document.addEventListener('touchend',event=>{
+    if(state.mode!=='touch')return;
+    const touch=[...event.changedTouches].find(t=>t.identifier===state.id);
+    if(!touch)return;
+    finish(touch.clientX,touch.clientY,event);
+  },{passive:false});
+  document.addEventListener('touchcancel',event=>{if(state.mode==='touch')cleanup();},{passive:true});
+
+  document.addEventListener('click',event=>{
+    if(state.suppressClick&&event.target.closest?.('.dock .card')){event.preventDefault();event.stopImmediatePropagation();}
+  },true);
 
   function mount(){setVersion();decorate();}
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',mount,{once:true});else mount();
