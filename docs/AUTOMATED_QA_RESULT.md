@@ -1,12 +1,12 @@
 # Automated QA Result — Word Guardians
 
-Result: FAIL
-Tested Commit: `abee3389328a6ec469f3107766e7f5572f2f9b5b`
-Date: 2026-08-20T18:47:42Z
+Result: PASS
+Tested Commit: `71c86c2a46a743c696faab6729a2124a2bca4182`
+Date: 2026-08-20T18:55:13Z
 Live URL: https://o-some.github.io/word-guardians/
 Build: success
 Browser install: success
-Gameplay QA: failure
+Gameplay QA: success
 
 Profiles attempted:
 - Desktop Chromium 1440×900
@@ -26,17 +26,17 @@ Assets/features checked:
 - energy bar between answers and action buttons
 - regular enemy sprites may paint outside their lane without changing lane logic
 - 3:00 answer-healing milestone popup and scaling heal percentages
-- v1.8.0 start guide, start-to-info morph and 60-second Insel-Notruf
+- v1.8.1 start guide, start-to-info morph and 60-second Insel-Notruf
 
 Note: WebKit mobile emulation is not a physical iPhone Safari device test.
 
 ## Build log
 ```
 
-> word-guardians@1.8.0 build
+> word-guardians@1.8.1 build
 > node scripts/build.mjs
 
-Word Guardians build complete · v1.8.0 onboarding + 60s Insel-Notruf
+Word Guardians build complete · v1.8.1 onboarding + 60s Insel-Notruf
 ```
 
 ## Browser install log (tail)
@@ -130,16 +130,13 @@ PASS desktop-webkit
 PASS android-like-chromium
 PASS iphone-like-webkit
 ALL_QA_PASS
-file:///home/runner/work/word-guardians/word-guardians/tests/layout-regression-v176.mjs:51
-  if(!enemyStyle.top)throw new Error(`${name}: regular enemy positioning missing`);
-                           ^
-
-Error: desktop-chromium: regular enemy positioning missing
-    at run (file:///home/runner/work/word-guardians/word-guardians/tests/layout-regression-v176.mjs:51:28)
-    at runNextTicks (node:internal/process/task_queues:64:5)
-    at process.processImmediate (node:internal/timers:452:9)
-    at process.callbackTrampoline (node:internal/async_hooks:130:17)
-    at async file:///home/runner/work/word-guardians/word-guardians/tests/layout-regression-v176.mjs:73:1
-
-Node.js v22.23.2
+PASS desktop-chromium · embedded energy · readable boss HP · visible lane sprites
+PASS iphone-like-webkit · embedded energy · readable boss HP · visible lane sprites
+LAYOUT_REGRESSION_V177_PASS
+PASS desktop-chromium · 3:00 healing popup + scaled healing
+PASS iphone-like-webkit · 3:00 healing popup + scaled healing
+HEALING_V178_PASS
+PASS desktop-chromium · v1.8.1 onboarding + morph + 60s Notruf
+PASS iphone-like-webkit · v1.8.1 onboarding + morph + 60s Notruf
+ONBOARDING_V180_PASS
 ```
