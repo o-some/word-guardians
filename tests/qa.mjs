@@ -37,7 +37,11 @@ const assetUrls = [
   'assets/ui/ui-01-muschel-schatztruhe.png',
   'assets/ui/ui-02-boss-rahmen.png',
   'assets/patches/boss-overlay-v131.css',
-  'assets/patches/boss-overlay-v131.js'
+  'assets/patches/boss-overlay-v131.js',
+  'assets/patches/lane-rescue-v140.css',
+  'assets/patches/lane-rescue-v140.js',
+  'assets/patches/emergency-v150.css',
+  'assets/patches/emergency-v150.js'
 ];
 
 async function waitHttp(url, attempts=36) {
@@ -67,9 +71,11 @@ async function runProfile(name, browserType, viewport, fullGameplay=false) {
   page.on('pageerror', e=>pageErrors.push(String(e)));
   page.on('response', r=>{ if(r.status()>=400) failed.push(`${r.status()} ${r.url()}`); });
   await page.goto(live, { waitUntil:'networkidle', timeout:60000 });
-  if (!(await page.locator('body').innerText()).includes('v1.3.1 · BOSS OVERLAY + GLOW')) throw new Error(`${name}: v1.3.1 overlay version not visible`);
+  if (!(await page.locator('body').innerText()).includes('v1.5.0 · INSEL-NOTRUF')) throw new Error(`${name}: v1.5.0 Insel-Notruf version not visible`);
   if (await page.locator('#bossOverlayV131').count() !== 1) throw new Error(`${name}: boss overlay layer missing`);
   if (await page.locator('#bossStage .bossVisual').evaluateAll(nodes=>nodes.some(n=>getComputedStyle(n).display!=='none'))) throw new Error(`${name}: duplicate boss portrait still visible in boss info strip`);
+  if (await page.locator('#emergencyBtn').count() !== 1) throw new Error(`${name}: Insel-Notruf button missing`);
+  if ((await page.locator('#emergencyTimer').textContent())?.trim() !== 'READY') throw new Error(`${name}: Insel-Notruf must start READY`);
 
   await page.locator('#startBtn').click();
   await page.locator('#intro').waitFor({ state:'hidden' });
@@ -80,6 +86,15 @@ async function runProfile(name, browserType, viewport, fullGameplay=false) {
 
   await answerCorrect(page);
   if (fullGameplay) {
+    await page.evaluate(()=>{ const p=ENEMIES[0]; S.e.push({id:S.id++,r:1,x:62,hp:999,max:999,sp:0,n:'QA Emergency Target',cl:'',asset:p.asset,rank:1,born:S.time,stun:0,hitUntil:0}); });
+    await page.waitForTimeout(80);
+    await page.locator('#emergencyBtn').click();
+    await page.waitForTimeout(100);
+    if ((await page.locator('#emergencyTimer').textContent())?.trim() === 'READY') throw new Error(`${name}: Insel-Notruf cooldown did not start`);
+    if (!(await page.locator('#emergencyBtn').isDisabled())) throw new Error(`${name}: Insel-Notruf should be disabled during cooldown`);
+    if (await page.locator('.emergencyWave').count() < 1) throw new Error(`${name}: Insel-Notruf field animation missing`);
+    if (!(await page.evaluate(()=>S.e.every(e=>e.hp<=0)))) throw new Error(`${name}: Insel-Notruf did not deal 100 percent damage`);
+
     await page.locator('.card[data-g="coral"]').click();
     await page.locator('.lane').nth(0).locator('.cell').nth(1).click();
     await page.locator('.lane').nth(0).locator('.cell').nth(1).locator('.guardianWrap').waitFor();
@@ -99,6 +114,8 @@ async function runProfile(name, browserType, viewport, fullGameplay=false) {
 
     await page.locator('#infoBtn').click();
     await page.locator('#infoOv').waitFor({ state:'visible' });
+    const guideText=(await page.locator('#guide').innerText()).toUpperCase();
+    if(!guideText.includes('INSEL-NOTRUF')) throw new Error(`${name}: Insel-Notruf missing from info`);
     await page.locator('#infoClose').click();
     await page.locator('#pauseBtn').click();
     await page.locator('#pauseOv').waitFor({ state:'visible' });
