@@ -39,7 +39,12 @@
 
   function stepRock(rock,dt){
     rock.x+=dt*72;rock.rot+=dt*760;
-    if(rock.el&&rock.el.isConnected){rock.el.style.transform=`translate3d(${rock.x}%,0,0)`;const core=rock.el.querySelector('.rescueRockCore');if(core)core.style.transform='rotate('+rock.rot+'deg)';}
+    if(rock.el&&rock.el.isConnected){
+      /* Keep the CSS translate(-50%,-50%) intact. Overwriting transform here broke
+         the breakthrough animation and vertical centering, especially on mobile. */
+      rock.el.style.left=rock.x+'%';
+      const core=rock.el.querySelector('.rescueRockCore');if(core)core.style.transform='rotate('+rock.rot+'deg)';
+    }
     if(typeof S!=='undefined'&&S&&Array.isArray(S.e))for(const e of S.e){if(e&&e.hp>0&&e.r===rock.r&&e.x<=rock.x+5){e.hp=0;e.hitUntil=performance.now()+250;}}
     if(rock.x>=108){rock.active=false;const lane=qsa('.lane')[rock.r];if(lane)lane.classList.remove('rescueActive');if(rock.el){rock.el.classList.add('fadeOut');setTimeout(()=>rock.el&&rock.el.remove(),190);}}
   }
