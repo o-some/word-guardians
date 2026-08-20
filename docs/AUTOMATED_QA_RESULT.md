@@ -1,8 +1,8 @@
 # Automated QA Result — Word Guardians
 
 Result: FAIL
-Tested Commit: `7e39d8d4be75cf8b27dc9c1d3e4b48bfcac2085d`
-Date: 2026-08-20T13:49:43Z
+Tested Commit: `7b5265bfeedb4a8dc26abe55fb2ff8cde88c7508`
+Date: 2026-08-20T13:51:14Z
 Live URL: https://o-some.github.io/word-guardians/
 Build: success
 Browser install: success
@@ -32,7 +32,7 @@ Note: WebKit mobile emulation is not a physical iPhone Safari device test.
 > word-guardians@1.0.0-migrated build
 > node scripts/build.mjs
 
-Word Guardians build complete · v1.7.4 persistent boss idle slot
+Word Guardians build complete · v1.7.4 persistent boss idle slot · deploy
 ```
 
 ## Browser install log (tail)
