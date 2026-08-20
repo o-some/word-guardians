@@ -1,7 +1,6 @@
 (() => {
   'use strict';
 
-  const VERSION = 'v1.7.0 · MOBILE FLOW + ENDGAME · 4×8';
   const stats = window.WGRunStats = window.WGRunStats || { bossesDefeated:0, laneRescues:0, emergencyUses:0 };
   const seenBosses = new Map();
   const mobile = matchMedia('(max-width: 600px), (pointer: coarse)').matches;
@@ -22,9 +21,7 @@
     return overlay;
   }
 
-  function updateVersionAndCopy() {
-    const version = document.querySelector('.version');
-    if (version) version.textContent = VERSION;
+  function updateCopy() {
     const intro = document.querySelector('#intro .modal p');
     if (intro) intro.textContent = 'Premium-Wächter, Muschel-Depots und Boss-Sprites direkt über ihrer eigenen Spur: Der Boss bleibt spielerisch lane-gebunden, wird aber vollständig mit Glow über den Lane-Grenzen angezeigt.';
   }
@@ -95,7 +92,7 @@
   }
 
   function start() {
-    updateVersionAndCopy();
+    updateCopy();
     ensureOverlay();
     requestAnimationFrame(frame);
   }
