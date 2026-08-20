@@ -1,12 +1,12 @@
 # Automated QA Result — Word Guardians
 
-Result: FAIL
-Tested Commit: `2a396e4befbba6d5e16cdc54595a4234ffad10d9`
-Date: 2026-08-20T15:42:44Z
+Result: PASS
+Tested Commit: `2abd2f751c13d38b32733c2ef07660e6c4f8e6d8`
+Date: 2026-08-20T17:57:50Z
 Live URL: https://o-some.github.io/word-guardians/
 Build: success
 Browser install: success
-Gameplay QA: cancelled
+Gameplay QA: success
 
 Profiles attempted:
 - Desktop Chromium 1440×900
@@ -34,7 +34,7 @@ Note: WebKit mobile emulation is not a physical iPhone Safari device test.
 > word-guardians@1.0.0-migrated build
 > node scripts/build.mjs
 
-Word Guardians build complete · v1.7.4 persistent boss idle slot · deploy
+Word Guardians build complete · v1.7.6 energy above boss + unclipped lane sprites
 ```
 
 ## Browser install log (tail)
@@ -128,7 +128,7 @@ PASS desktop-webkit
 PASS android-like-chromium
 PASS iphone-like-webkit
 ALL_QA_PASS
-PASS desktop-chromium · energy above boss · visible lane sprites
-PASS iphone-like-webkit · energy above boss · visible lane sprites
-LAYOUT_REGRESSION_V176_PASS
+PASS desktop-chromium · embedded energy · readable boss HP · visible lane sprites
+PASS iphone-like-webkit · embedded energy · readable boss HP · visible lane sprites
+LAYOUT_REGRESSION_V177_PASS
 ```
