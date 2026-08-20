@@ -47,8 +47,8 @@ async function run(name,browserType,viewport){
   });
   await page.waitForTimeout(160);
   if(await page.locator('.lane').nth(0).locator('.enemy').count()<1)throw new Error(`${name}: regular enemy did not render in its lane`);
-  const enemyStyle=await page.locator('.lane').nth(0).locator('.enemy').first().evaluate(el=>({top:getComputedStyle(el).top,z:getComputedStyle(el).zIndex}));
-  if(!enemyStyle.top)throw new Error(`${name}: regular enemy positioning missing`);
+  const enemyMetrics=await page.locator('.lane').nth(0).locator('.enemy').first().evaluate(el=>{const r=el.getBoundingClientRect();return {width:r.width,height:r.height,z:getComputedStyle(el).zIndex};});
+  if(enemyMetrics.width<=0||enemyMetrics.height<=0)throw new Error(`${name}: regular enemy sprite has no visible box`);
 
   if(await page.locator('#bossStage .wgBossActiveHead:not(.hidden) img').count()!==1)throw new Error(`${name}: active boss portrait missing`);
   if(await page.locator('#bossStage .wgBossIdleContent:not(.hidden)').count()!==0)throw new Error(`${name}: idle skull must disappear during boss fight`);
