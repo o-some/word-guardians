@@ -1,5 +1,5 @@
 (()=>{
-  const ability={duration:90,remaining:0,last:performance.now(),mounted:false,firing:false};
+  const ability={duration:60,remaining:0,last:performance.now(),mounted:false,firing:false};
   const stats=window.WGRunStats=window.WGRunStats||{bossesDefeated:0,laneRescues:0,emergencyUses:0};
   const mobile=matchMedia('(max-width: 600px), (pointer: coarse)').matches;
   const tickMs=mobile?180:100;
@@ -16,7 +16,7 @@
     const wrap=document.createElement('div');wrap.className='emergencyWrap emergencyHeader';
     wrap.innerHTML=`<button id="emergencyBtn" class="emergencyBtn emergencyNuke glass ready" type="button" style="--charge:100%">${iconSvg()}<span class="emergencyCopy"><b>INSEL-NOTRUF</b><small id="emergencyTimer" class="emergencyTimer ready">READY</small></span><span class="emergencyCharge"><i></i></span></button>`;
     slot.appendChild(wrap);$('emergencyBtn').addEventListener('click',fire);
-    const guide=$('guide');if(guide&&!guide.querySelector('[data-emergency-info]')){const item=document.createElement('div');item.className='gitem';item.dataset.emergencyInfo='1';item.innerHTML='🚨 <b>Insel-Notruf</b> – der rote Alarmknopf startet READY. Er besiegt alle aktuell sichtbaren Gegner unabhängig von ihren HP. Danach lädt er 1:30 Minuten nach.';guide.appendChild(item);}
+    const guide=$('guide');if(guide&&!guide.querySelector('[data-emergency-info]')){const item=document.createElement('div');item.className='gitem';item.dataset.emergencyInfo='1';item.innerHTML='🚨 <b>Insel-Notruf</b> – der rote Alarmknopf startet READY. Er besiegt alle aktuell sichtbaren Gegner unabhängig von ihren HP. Danach lädt er 60 Sekunden nach.';guide.appendChild(item);}
     ability.mounted=true;updateUi();
   }
 
