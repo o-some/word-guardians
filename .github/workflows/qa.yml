@@ -1,5 +1,5 @@
 name: Migration QA
-# Regression run for Word Guardians v1.5.0: premium guardians, glowing boss overlay, lane rescue rock and Insel-Notruf.
+# Regression run for Word Guardians v1.6.2: clean actions, red header Insel-Notruf, glowing boss overlay and lane rescue rock.
 
 on:
   push:
@@ -76,7 +76,9 @@ jobs:
           - 6 premium guardian PNGs + Tula/UI assets
           - glowing lane-bound boss overlay
           - one free lane rescue rock per lane
-          - Insel-Notruf READY state, 100% field wipe and 3-minute cooldown start
+          - red Insel-Notruf mounted in the header between branding and HUD
+          - Insel-Notruf READY state, 100% field wipe and 3-minute cooldown
+          - no duplicate header pause button; 3× pause remains in the action row
 
           Note: WebKit mobile emulation is not a physical iPhone Safari device test.
 
