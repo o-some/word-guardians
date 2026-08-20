@@ -11,7 +11,8 @@ const cssTags = [
   '<link rel="stylesheet" href="./assets/patches/top-pause-v160.css">',
   '<link rel="stylesheet" href="./assets/patches/compact-dnd-v171.css">',
   '<link rel="stylesheet" href="./assets/patches/boss-idle-slot-v174.css">',
-  '<link rel="stylesheet" href="./assets/patches/answer-heal-v178.css">'
+  '<link rel="stylesheet" href="./assets/patches/answer-heal-v178.css">',
+  '<link rel="stylesheet" href="./assets/patches/onboarding-v180.css">'
 ];
 const jsTags = [
   '<script src="./assets/patches/boss-overlay-v131.js"></script>',
@@ -20,7 +21,8 @@ const jsTags = [
   '<script src="./assets/patches/top-pause-v160.js"></script>',
   '<script src="./assets/patches/compact-dnd-v171.js"></script>',
   '<script src="./assets/patches/boss-idle-slot-v174.js"></script>',
-  '<script src="./assets/patches/answer-heal-v178.js"></script>'
+  '<script src="./assets/patches/answer-heal-v178.js"></script>',
+  '<script src="./assets/patches/onboarding-v180.js"></script>'
 ];
 
 let built = source;
@@ -36,4 +38,4 @@ for (const tag of jsTags) {
 await writeFile('dist/index.html', built);
 await writeFile('dist/404.html', built);
 await cp('assets', 'dist/assets', { recursive: true });
-console.log('Word Guardians build complete · three-minute answer healing milestone');
+console.log('Word Guardians build complete · v1.8.0 onboarding + 60s Insel-Notruf');
