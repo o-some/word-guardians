@@ -1,8 +1,8 @@
 # Automated QA Result — Word Guardians
 
 Result: FAIL
-Tested Commit: `9cb59821e6cfec1ca816f8aff1f7974340b80c7c`
-Date: 2026-08-20T15:36:44Z
+Tested Commit: `2a396e4befbba6d5e16cdc54595a4234ffad10d9`
+Date: 2026-08-20T15:42:44Z
 Live URL: https://o-some.github.io/word-guardians/
 Build: success
 Browser install: success
@@ -23,6 +23,8 @@ Assets/features checked:
 - 3× pause in the action row
 - mobile performance profile
 - premium endscreen additions
+- energy bar directly above the boss slot
+- regular enemy sprites may paint outside their lane without changing lane logic
 
 Note: WebKit mobile emulation is not a physical iPhone Safari device test.
 
@@ -121,5 +123,12 @@ Webkit 26.0 (playwright build v2203) downloaded to /home/runner/.cache/ms-playwr
 
 ## Gameplay QA log
 ```
-
+PASS desktop-chromium
+PASS desktop-webkit
+PASS android-like-chromium
+PASS iphone-like-webkit
+ALL_QA_PASS
+PASS desktop-chromium · energy above boss · visible lane sprites
+PASS iphone-like-webkit · energy above boss · visible lane sprites
+LAYOUT_REGRESSION_V176_PASS
 ```
