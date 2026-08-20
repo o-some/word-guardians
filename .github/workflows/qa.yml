@@ -94,7 +94,7 @@ jobs:
           - larger onboarding and 3:00 healing milestone typography
           - 3:00 answer-healing milestone popup and scaling heal percentages
           - 2:00 answer-damage milestone and +1 percent per second up to +100 percent
-          - v1.9.2 start guide, start-to-info morph and 60-second Insel-Notruf
+          - v1.9.3 start guide, start-to-info morph and 60-second Insel-Notruf
 
           Note: WebKit mobile emulation is not a physical iPhone Safari device test.
 
