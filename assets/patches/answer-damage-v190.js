@@ -69,7 +69,10 @@
     const baseDamage=18+(S.co+1)*2;
     const targets=Array.isArray(S.e)?S.e.filter(enemy=>enemy&&enemy.hp>0):[];
 
-    queueMicrotask(()=>{
+    // Run after the game's original answer handler so the base word-wave
+    // damage lands first and the bonus is added on top without touching
+    // guardian attacks or any other combat logic.
+    setTimeout(()=>{
       if(typeof S==='undefined'||!S||S.end||S.qc<=beforeQc)return;
       const bonus=bonusPercentForTime(answerTime);
       if(bonus<=0)return;
@@ -81,7 +84,7 @@
         touched=true;
       }
       if(touched&&typeof render==='function')render();
-    });
+    },0);
   },true);
 
   window.WGAnswerDamage={bonusPercentForTime,damageMultiplierForTime};
