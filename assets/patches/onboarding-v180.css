@@ -1,55 +1,87 @@
-/* Word Guardians v1.9.0 — readable onboarding + start morph */
-.wgStartModal{width:min(500px,100%)!important;padding:18px!important}
-.wgStartModal>img{width:82px!important;height:82px!important;object-fit:contain;margin-bottom:2px}
-.wgStartModal h2{margin:.2rem 0 .6rem!important}
-.wgStartGuide{margin:0 0 12px}
-.wgGuideCore{display:grid;gap:9px;text-align:left}
-.wgGuideEmergency{display:grid;grid-template-columns:minmax(132px,.78fr) minmax(0,1.22fr);align-items:center;gap:10px;border:1px solid #ff777b66;border-radius:14px;padding:9px;background:linear-gradient(100deg,#5d0c13a8,#180c16a8)}
-.wgGuideEmergency p{margin:0!important;color:#f2dbd8!important;font-size:.68rem!important;line-height:1.4!important}
-.wgEmergencyDemo{display:grid;grid-template-columns:36px minmax(0,1fr);align-items:center;gap:6px;min-height:46px;border:1px solid #ffd16d9c;border-radius:12px;padding:6px 8px;background:linear-gradient(180deg,#8b1017,#c9272f 48%,#6d0a11);box-shadow:inset 0 1px #ffffff28,0 0 14px #ff3b4a4d;color:#fff2ce}
-.wgEmergencyDemoIcon{font-size:1.28rem;filter:drop-shadow(0 2px 3px #210206)}
-.wgEmergencyDemo b{display:block;font:950 .58rem/1 Georgia,serif;white-space:nowrap}
-.wgEmergencyDemo small{display:block;margin-top:3px;color:#fff1a8;font-size:.47rem;font-weight:950;letter-spacing:.04em}
-.wgGuideRule{border:1px solid #ffffff1d;border-radius:11px;padding:8px 9px;background:#ffffff0a}
-.wgGuideRule b{display:block;color:#ffe18a;font-size:.66rem;line-height:1.18}
-.wgGuideRule span{display:block;margin-top:4px;color:#d7eeee;font-size:.59rem;line-height:1.4}
-.wgGuideHelpers{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px}
-.wgGuideHelper{display:grid;grid-template-columns:22px minmax(0,1fr);grid-template-rows:auto auto;column-gap:6px;align-items:center;border:1px solid #ffffff18;border-radius:10px;padding:6px 7px;background:#ffffff08}
-.wgGuideHelper>span{grid-row:1/3;font-size:.98rem;text-align:center}
-.wgGuideHelper b{color:#fff0bd;font-size:.56rem;line-height:1.12}
-.wgGuideHelper small{color:#bfe5e7;font-size:.45rem;line-height:1.28}
-.wgGuideCoreCompact .wgGuideRule{padding:7px 8px}
-.wgGuideCoreCompact .wgGuideHelpers{gap:5px}
-.wgStartRunBtn{margin-top:3px!important;box-shadow:0 8px 20px #00152266,0 0 14px #ffe18a24}
-.wgFullGuide{display:block;margin-bottom:4px}
-.wgFullGuide+.gitem{margin-top:3px}
+/* Word Guardians v1.9.5 — larger overlay typography + premium start sprites */
+.wgStartModal{width:min(540px,100%)!important;padding:20px!important}
+.wgStartModal>img{width:86px!important;height:86px!important;object-fit:contain;margin-bottom:2px}
+.wgStartModal h2{font-size:1.72rem!important;margin:.2rem 0 .7rem!important}
+.wgStartGuide{margin:0 0 14px}
+.wgGuideCore{display:grid;gap:10px;text-align:left}
+.wgGuideEmergency{display:grid;grid-template-columns:minmax(145px,.78fr) minmax(0,1.22fr);align-items:center;gap:12px;border:1px solid #ff777b66;border-radius:14px;padding:10px;background:linear-gradient(100deg,#5d0c13a8,#180c16a8)}
+.wgGuideEmergency p{margin:0!important;color:#f2dbd8!important;font-size:.78rem!important;line-height:1.46!important}
+.wgEmergencyDemo{display:grid;grid-template-columns:40px minmax(0,1fr);align-items:center;gap:7px;min-height:50px;border:1px solid #ffd16d9c;border-radius:12px;padding:7px 9px;background:linear-gradient(180deg,#8b1017,#c9272f 48%,#6d0a11);box-shadow:inset 0 1px #ffffff28,0 0 14px #ff3b4a4d;color:#fff2ce}
+.wgEmergencyDemoIcon{font-size:1.38rem;filter:drop-shadow(0 2px 3px #210206)}
+.wgEmergencyDemo b{display:block;font:950 .66rem/1 Georgia,serif;white-space:nowrap}
+.wgEmergencyDemo small{display:block;margin-top:3px;color:#fff1a8;font-size:.54rem;font-weight:950;letter-spacing:.04em}
+.wgGuideRule{border:1px solid #ffffff1d;border-radius:11px;padding:9px 10px;background:#ffffff0a}
+.wgGuideRule b{display:block;color:#ffe18a;font-size:.74rem;line-height:1.2}
+.wgGuideRule span{display:block;margin-top:4px;color:#d7eeee;font-size:.68rem;line-height:1.44}
+.wgGuideHelpers{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px}
+.wgGuideHelper{display:grid;grid-template-columns:26px minmax(0,1fr);grid-template-rows:auto auto;column-gap:7px;align-items:center;border:1px solid #ffffff18;border-radius:10px;padding:7px 8px;background:#ffffff08}
+.wgGuideHelper>span{grid-row:1/3;font-size:1.05rem;text-align:center}
+.wgGuideHelperSprite{grid-row:1/3;width:48px;height:48px;object-fit:contain;justify-self:center;filter:drop-shadow(0 5px 5px #00152299) drop-shadow(0 0 5px #7de9df55)}
+.wgGuideHelper:has(.wgGuideHelperSprite){grid-template-columns:54px minmax(0,1fr);min-height:62px;padding:6px 8px}
+.wgGuideHelper b{color:#fff0bd;font-size:.64rem;line-height:1.15}
+.wgGuideHelper small{color:#bfe5e7;font-size:.54rem;line-height:1.32}
+.wgGuideCoreCompact .wgGuideRule{padding:8px 9px}
+.wgGuideCoreCompact .wgGuideHelpers{gap:6px}
+.wgStartRunBtn{margin-top:4px!important;min-height:52px!important;font-size:1.04rem!important;box-shadow:0 8px 20px #00152266,0 0 14px #ffe18a24}
+.wgFullGuide{display:block;margin-bottom:6px}
+.wgFullGuide+.gitem{margin-top:4px}
 .wgMorphSource{opacity:0!important;pointer-events:none!important}
 .wgIntroMorphGhost{position:fixed;z-index:99999;margin:0!important;transform-origin:top left;pointer-events:none;overflow:hidden;transition:transform .42s cubic-bezier(.2,.78,.18,1),opacity .36s ease,border-radius .42s ease;will-change:transform,opacity;box-shadow:0 15px 40px #000a!important}
 .tool.wgInfoArrival{animation:wgInfoArrival .5s ease}
 @keyframes wgInfoArrival{0%{box-shadow:0 0 0 0 #ffe18a00;transform:scale(1)}42%{box-shadow:0 0 0 4px #ffe18a55,0 0 18px #55d5c866;transform:scale(1.035)}100%{box-shadow:none;transform:scale(1)}}
+
+/* Make every standard overlay window easier to read without changing its behavior. */
+.overlay:not(#intro) .modal{width:min(520px,100%)!important;max-height:92svh!important;padding:22px!important}
+.overlay:not(#intro) .modal h2{font-size:1.85rem!important;line-height:1.12!important}
+.overlay:not(#intro) .modal p{font-size:.98rem!important;line-height:1.55!important}
+.overlay:not(#intro) .guide{gap:10px!important}
+.overlay:not(#intro) .gitem{padding:12px!important;font-size:.9rem!important;line-height:1.46!important}
+.overlay:not(#intro) .modal button{min-height:52px!important;font-size:1rem!important}
+.overlay:not(#intro) .wow{font-size:1.28rem!important}
+.overlay:not(#intro) .resultCard strong{font-size:1.48rem!important}
+.overlay:not(#intro) .resultCard span{font-size:.74rem!important;line-height:1.35!important}
+.overlay:not(#intro) .rewardChip{font-size:.82rem!important}
+.overlay:not(#intro) .motivate{font-size:.92rem!important;line-height:1.45!important}
+.overlay:not(#intro) .best{font-size:.78rem!important}
+
 @media(max-width:600px){
-  .wgStartModal{padding:14px!important;max-height:94svh!important;overflow:auto!important}
-  .wgStartModal>img{width:64px!important;height:64px!important}
-  .wgStartModal h2{font-size:1.42rem!important;margin:.1rem 0 .5rem!important}
-  .wgGuideCore{gap:7px}
-  .wgGuideEmergency{grid-template-columns:124px minmax(0,1fr);gap:8px;padding:8px}
-  .wgGuideEmergency p{font-size:.60rem!important;line-height:1.36!important}
-  .wgEmergencyDemo{grid-template-columns:31px minmax(0,1fr);min-height:42px;padding:5px 6px}
-  .wgEmergencyDemoIcon{font-size:1.08rem}
-  .wgEmergencyDemo b{font-size:.50rem}
-  .wgEmergencyDemo small{font-size:.42rem}
-  .wgGuideRule{padding:7px 8px}
-  .wgGuideRule b{font-size:.58rem}
-  .wgGuideRule span{font-size:.52rem;line-height:1.36}
-  .wgGuideHelper{padding:5px 6px;grid-template-columns:19px minmax(0,1fr)}
-  .wgGuideHelper>span{font-size:.84rem}
-  .wgGuideHelper b{font-size:.50rem}
-  .wgGuideHelper small{font-size:.40rem;line-height:1.25}
-  .wgStartRunBtn{min-height:46px!important;font-size:.92rem!important}
+  .wgStartModal{padding:15px!important;max-height:94svh!important;overflow:auto!important}
+  .wgStartModal>img{width:68px!important;height:68px!important}
+  .wgStartModal h2{font-size:1.58rem!important;margin:.1rem 0 .58rem!important}
+  .wgGuideCore{gap:8px}
+  .wgGuideEmergency{grid-template-columns:130px minmax(0,1fr);gap:9px;padding:9px}
+  .wgGuideEmergency p{font-size:.72rem!important;line-height:1.42!important}
+  .wgEmergencyDemo{grid-template-columns:33px minmax(0,1fr);min-height:46px;padding:6px 7px}
+  .wgEmergencyDemoIcon{font-size:1.16rem}
+  .wgEmergencyDemo b{font-size:.58rem}
+  .wgEmergencyDemo small{font-size:.48rem}
+  .wgGuideRule{padding:8px 9px}
+  .wgGuideRule b{font-size:.68rem}
+  .wgGuideRule span{font-size:.62rem;line-height:1.4}
+  .wgGuideHelper{padding:6px 7px;grid-template-columns:22px minmax(0,1fr)}
+  .wgGuideHelper>span{font-size:.94rem}
+  .wgGuideHelper:has(.wgGuideHelperSprite){grid-template-columns:48px minmax(0,1fr);min-height:56px;padding:5px 7px}
+  .wgGuideHelperSprite{width:42px;height:42px}
+  .wgGuideHelper b{font-size:.64rem}
+  .wgGuideHelper small{font-size:.58rem;line-height:1.3}
+  .wgStartRunBtn{min-height:50px!important;font-size:1rem!important}
+
+  .overlay:not(#intro){padding:10px!important}
+  .overlay:not(#intro) .modal{width:min(520px,100%)!important;max-height:94svh!important;padding:18px!important}
+  .overlay:not(#intro) .modal h2{font-size:1.65rem!important}
+  .overlay:not(#intro) .modal p{font-size:.9rem!important;line-height:1.5!important}
+  .overlay:not(#intro) .gitem{padding:11px!important;font-size:.84rem!important;line-height:1.45!important}
+  .overlay:not(#intro) .modal button{min-height:50px!important;font-size:.98rem!important}
+  .overlay:not(#intro) .wow{font-size:1.18rem!important}
+  .overlay:not(#intro) .resultCard strong{font-size:1.38rem!important}
+  .overlay:not(#intro) .resultCard span{font-size:.72rem!important}
+  .overlay:not(#intro) .rewardChip{font-size:.78rem!important}
+  .overlay:not(#intro) .motivate{font-size:.86rem!important}
+  .overlay:not(#intro) .best{font-size:.74rem!important}
 }
 @media(max-width:390px){
-  .wgGuideEmergency{grid-template-columns:112px minmax(0,1fr)}
-  .wgGuideEmergency p{font-size:.57rem!important}
-  .wgGuideRule span{font-size:.49rem}
-  .wgGuideHelper small{font-size:.38rem}
+  .wgGuideEmergency{grid-template-columns:118px minmax(0,1fr)}
+  .wgGuideEmergency p{font-size:.69rem!important}
+  .wgGuideRule span{font-size:.60rem}
+  .wgGuideHelper small{font-size:.56rem}
 }
