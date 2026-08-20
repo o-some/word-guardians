@@ -19,7 +19,7 @@ async function run(name,browserType,viewport){
   await page.goto(live,{waitUntil:'networkidle',timeout:60000});
 
   const version=(await page.locator('.version').textContent()||'').trim();
-  if(!version.startsWith('v1.8.0'))throw new Error(`${name}: expected visible v1.8.0, got ${version}`);
+  if(!version.startsWith('v1.8.1'))throw new Error(`${name}: expected visible v1.8.1, got ${version}`);
 
   const intro=page.locator('#intro');
   await intro.waitFor({state:'visible'});
@@ -61,7 +61,7 @@ async function run(name,browserType,viewport){
 
   if(errors.length)throw new Error(`${name}: JS errors: ${errors.join(' | ')}`);
   await browser.close();
-  console.log(`PASS ${name} · v1.8.0 onboarding + morph + 60s Notruf`);
+  console.log(`PASS ${name} · v1.8.1 onboarding + morph + 60s Notruf`);
 }
 
 await waitHttp(new URL('assets/patches/onboarding-v180.js',live));
