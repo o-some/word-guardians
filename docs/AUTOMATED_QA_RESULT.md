@@ -1,12 +1,12 @@
 # Automated QA Result — Word Guardians
 
-Result: PASS
-Tested Commit: `d134ba65dca361b8d61397ca220c4cc24f0fdf6b`
-Date: 2026-08-20T08:16:51Z
+Result: FAIL
+Tested Commit: `a81f86d05d3d1d0987070efbd661da9d2280456c`
+Date: 2026-08-20T11:14:58Z
 Live URL: https://o-some.github.io/word-guardians/
 Build: success
 Browser install: success
-Gameplay QA: success
+Gameplay QA: failure
 
 Profiles attempted:
 - Desktop Chromium 1440×900
@@ -14,10 +14,13 @@ Profiles attempted:
 - Android-like Chromium 390×844
 - iPhone-like WebKit 390×844
 
-Assets checked:
+Assets/features checked:
 - 8 generated regular enemy PNGs
 - 10 original freigestellte boss PNGs
-- core Tula creative assets
+- 6 premium guardian PNGs + Tula/UI assets
+- glowing lane-bound boss overlay
+- one free lane rescue rock per lane
+- Insel-Notruf READY state, 100% field wipe and 3-minute cooldown start
 
 Note: WebKit mobile emulation is not a physical iPhone Safari device test.
 
@@ -27,7 +30,7 @@ Note: WebKit mobile emulation is not a physical iPhone Safari device test.
 > word-guardians@1.0.0-migrated build
 > node scripts/build.mjs
 
-Word Guardians build complete
+Word Guardians build complete · boss overlay v1.3.1 + lane rescue v1.4.0 + Insel-Notruf v1.5.0 injected
 ```
 
 ## Browser install log (tail)
@@ -116,9 +119,13 @@ Webkit 26.0 (playwright build v2203) downloaded to /home/runner/.cache/ms-playwr
 
 ## Gameplay QA log
 ```
-PASS desktop-chromium
-PASS desktop-webkit
-PASS android-like-chromium
-PASS iphone-like-webkit
-ALL_QA_PASS
+file:///home/runner/work/word-guardians/word-guardians/tests/qa.mjs:125
+    if (await page.locator('.pirateArt').count() < 1) throw new Error(`${name}: regular pirate image sprite not rendered`);
+                                                            ^
+
+Error: desktop-chromium: regular pirate image sprite not rendered
+    at runProfile (file:///home/runner/work/word-guardians/word-guardians/tests/qa.mjs:125:61)
+    at async file:///home/runner/work/word-guardians/word-guardians/tests/qa.mjs:144:1
+
+Node.js v22.23.2
 ```
