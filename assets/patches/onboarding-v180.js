@@ -16,6 +16,9 @@
 
   function guideMarkup(compact=false){
     const helpers=helperRows.map(([icon,name,text])=>`<div class="wgGuideHelper"><span>${icon}</span><b>${name}</b><small>${text}</small></div>`).join('');
+    const progression=compact?'':`
+        <div class="wgGuideRule"><b>💥 Ab Minute 2 wird deine Wortwelle stärker</b><span>Ab 2:00 steigt der Schaden richtiger Antworten jede Sekunde um 1 % deines Grundschadens. Nach 100 Sekunden ist bei +100 % das Maximum erreicht: doppelter Schaden.</span></div>
+        <div class="wgGuideRule"><b>✚ Ab Minute 3 heilen richtige Antworten</b><span>3:00 = 3 %, 3:30 = 6 %, 4:00 = 10 %. Danach steigt die Heilung alle 30 Sekunden um 3 % bis maximal 30 % der maximalen HP.</span></div>`;
     return `
       <section class="wgGuideCore${compact?' wgGuideCoreCompact':''}">
         <div class="wgGuideEmergency">
@@ -23,8 +26,7 @@
           <p><b>Notfallknopf oben:</b> Ist er READY, beseitigt er alle aktuell sichtbaren Gegner. Danach lädt er <b>60 Sekunden</b> nach. Wenn er bereit ist, pulsiert er leicht rot.</p>
         </div>
         <div class="wgGuideRule"><b>🧠 Wörter sind deine stärkste Waffe</b><span>Richtige Antworten geben Energie und beschädigen Piraten. Falsche Antworten kosten jeden Helfer 10 % seiner maximalen HP.</span></div>
-        <div class="wgGuideRule"><b>💥 Ab Minute 2 wird deine Wortwelle stärker</b><span>Ab 2:00 steigt der Schaden richtiger Antworten jede Sekunde um 1 % deines Grundschadens. Nach 100 Sekunden ist bei +100 % das Maximum erreicht: doppelter Schaden.</span></div>
-        <div class="wgGuideRule"><b>✚ Ab Minute 3 heilen richtige Antworten</b><span>3:00 = 3 %, 3:30 = 6 %, 4:00 = 10 %. Danach steigt die Heilung alle 30 Sekunden um 3 % bis maximal 30 % der maximalen HP.</span></div>
+        ${progression}
         <div class="wgGuideRule"><b>👆 Helfer platzieren</b><span>Helfer antippen oder per Drag & Drop auf ein freies Feld ziehen. „Umsetzen“ verschiebt bereits platzierte Helfer.</span></div>
         <div class="wgGuideHelpers">${helpers}</div>
       </section>`;
