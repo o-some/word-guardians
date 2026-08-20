@@ -4,7 +4,6 @@
   const $=id=>document.getElementById(id);
 
   function updateUi(){
-    const version=document.querySelector('.version');if(version)version.textContent='v1.7.0 · MOBILE FLOW + ENDGAME · 4×8';
     const lower=$('pauseBtn');const paused=typeof S!=='undefined'&&S&&S.pause;const ended=typeof S!=='undefined'&&S&&S.end;
     document.body.classList.toggle('wgFullPause',!!paused&&!ended);
     const obsoleteTop=$('topPauseBtn');if(obsoleteTop)obsoleteTop.remove();
