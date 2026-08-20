@@ -1,12 +1,12 @@
 # Automated QA Result — Word Guardians
 
-Result: FAIL
-Tested Commit: `a81f86d05d3d1d0987070efbd661da9d2280456c`
-Date: 2026-08-20T11:14:58Z
+Result: PASS
+Tested Commit: `8539ceded244e5e9ae96ae137d16af76f76b30de`
+Date: 2026-08-20T11:47:58Z
 Live URL: https://o-some.github.io/word-guardians/
 Build: success
 Browser install: success
-Gameplay QA: failure
+Gameplay QA: success
 
 Profiles attempted:
 - Desktop Chromium 1440×900
@@ -20,7 +20,9 @@ Assets/features checked:
 - 6 premium guardian PNGs + Tula/UI assets
 - glowing lane-bound boss overlay
 - one free lane rescue rock per lane
-- Insel-Notruf READY state, 100% field wipe and 3-minute cooldown start
+- red Insel-Notruf mounted in the header between branding and HUD
+- Insel-Notruf READY state, 100% field wipe and 3-minute cooldown
+- no duplicate header pause button; 3× pause remains in the action row
 
 Note: WebKit mobile emulation is not a physical iPhone Safari device test.
 
@@ -30,7 +32,7 @@ Note: WebKit mobile emulation is not a physical iPhone Safari device test.
 > word-guardians@1.0.0-migrated build
 > node scripts/build.mjs
 
-Word Guardians build complete · boss overlay v1.3.1 + lane rescue v1.4.0 + Insel-Notruf v1.5.0 injected
+Word Guardians build complete · boss overlay v1.3.1 + lane rescue v1.4.0 + red header Insel-Notruf v1.6.2 + clean actions injected
 ```
 
 ## Browser install log (tail)
@@ -119,13 +121,9 @@ Webkit 26.0 (playwright build v2203) downloaded to /home/runner/.cache/ms-playwr
 
 ## Gameplay QA log
 ```
-file:///home/runner/work/word-guardians/word-guardians/tests/qa.mjs:125
-    if (await page.locator('.pirateArt').count() < 1) throw new Error(`${name}: regular pirate image sprite not rendered`);
-                                                            ^
-
-Error: desktop-chromium: regular pirate image sprite not rendered
-    at runProfile (file:///home/runner/work/word-guardians/word-guardians/tests/qa.mjs:125:61)
-    at async file:///home/runner/work/word-guardians/word-guardians/tests/qa.mjs:144:1
-
-Node.js v22.23.2
+PASS desktop-chromium
+PASS desktop-webkit
+PASS android-like-chromium
+PASS iphone-like-webkit
+ALL_QA_PASS
 ```
