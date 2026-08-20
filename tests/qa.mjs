@@ -41,7 +41,9 @@ const assetUrls = [
   'assets/patches/lane-rescue-v140.css',
   'assets/patches/lane-rescue-v140.js',
   'assets/patches/emergency-v150.css',
-  'assets/patches/emergency-v150.js'
+  'assets/patches/emergency-v150.js',
+  'assets/patches/top-pause-v160.css',
+  'assets/patches/top-pause-v160.js'
 ];
 
 async function waitHttp(url, attempts=36) {
@@ -71,10 +73,12 @@ async function runProfile(name, browserType, viewport, fullGameplay=false) {
   page.on('pageerror', e=>pageErrors.push(String(e)));
   page.on('response', r=>{ if(r.status()>=400) failed.push(`${r.status()} ${r.url()}`); });
   await page.goto(live, { waitUntil:'networkidle', timeout:60000 });
-  if (!(await page.locator('body').innerText()).includes('v1.5.0 · INSEL-NOTRUF')) throw new Error(`${name}: v1.5.0 Insel-Notruf version not visible`);
+  if (!(await page.locator('body').innerText()).includes('v1.6.2 · HEADER NOTRUF')) throw new Error(`${name}: v1.6.2 header Notruf version not visible`);
   if (await page.locator('#bossOverlayV131').count() !== 1) throw new Error(`${name}: boss overlay layer missing`);
   if (await page.locator('#bossStage .bossVisual').evaluateAll(nodes=>nodes.some(n=>getComputedStyle(n).display!=='none'))) throw new Error(`${name}: duplicate boss portrait still visible in boss info strip`);
   if (await page.locator('#emergencyBtn').count() !== 1) throw new Error(`${name}: Insel-Notruf button missing`);
+  if (await page.locator('.top #emergencyHeaderSlot #emergencyBtn').count() !== 1) throw new Error(`${name}: Insel-Notruf not mounted in header between brand and HUD`);
+  if (await page.locator('#topPauseBtn').count() !== 0) throw new Error(`${name}: obsolete header pause button visible`);
   if ((await page.locator('#emergencyTimer').textContent())?.trim() !== 'READY') throw new Error(`${name}: Insel-Notruf must start READY`);
 
   await page.locator('#startBtn').click();
