@@ -1,4 +1,4 @@
-/* Word Guardians v1.7.1 — compact mobile flow + guardian drag/drop */
+/* Word Guardians v1.9.6 — compact mobile flow + guardian drag/drop */
 .dock .card{position:relative;touch-action:none;-webkit-user-select:none;user-select:none}
 .dock .card.wgDragSource{outline:2px solid #ffe18a;box-shadow:0 0 0 2px #ffe18a2b,0 0 18px #55d5c855!important}
 .cell.wgDropReady{outline:2px solid #62e9df!important;outline-offset:-2px;background:#62e9df18!important}
@@ -11,12 +11,12 @@ body.wgDraggingGuardian{cursor:grabbing}
 @media(max-width:600px){
   .app{padding:max(4px,env(safe-area-inset-top)) 4px calc(6px + env(safe-area-inset-bottom))!important}
   .wrap{max-width:100%!important}
-  .question{margin:4px 0!important;padding:6px!important;border-radius:13px!important}
-  .question small{font-size:.38rem!important}
-  .question strong{margin-top:1px!important;font-size:clamp(.98rem,4.8vw,1.18rem)!important;line-height:1.05!important}
-  .answers{gap:4px!important;margin-top:5px!important}
-  .answer{min-height:39px!important;border-radius:10px!important;font-size:.78rem!important}
-  .feedback{min-height:14px!important;margin-top:3px!important;font-size:.52rem!important;line-height:1.15!important}
+  .question{margin:5px 0!important;padding:9px 9px 8px!important;border-radius:14px!important}
+  .question small{font-size:.43rem!important;letter-spacing:.03em!important}
+  .question strong{margin-top:2px!important;font-size:clamp(1.16rem,5.8vw,1.42rem)!important;line-height:1.08!important}
+  .answers{gap:5px!important;margin-top:8px!important}
+  .answer{min-height:49px!important;padding:7px 5px!important;border-radius:11px!important;font-size:.90rem!important;line-height:1.08!important}
+  .feedback{min-height:16px!important;margin-top:4px!important;font-size:.58rem!important;line-height:1.2!important}
   .tools{gap:5px!important;margin-top:5px!important}
   .tool{min-height:40px!important;padding:5px 4px!important;border-radius:11px!important;font-size:.56rem!important}
 
@@ -34,19 +34,22 @@ body.wgDraggingGuardian{cursor:grabbing}
 
   .energy{margin-top:4px!important;padding:5px 6px!important;border-radius:11px!important;font-size:.54rem!important}
   .track{height:7px!important}
-  .dock{gap:3px!important;margin-top:4px!important}
-  .card{min-height:54px!important;padding:2px 1px!important;border-radius:10px!important}
-  .card .premiumGuardian{width:37px!important;height:37px!important;margin:0 auto!important}
-  .card b{font-size:.39rem!important;line-height:1!important}
-  .card small{font-size:.28rem!important;line-height:1!important;margin-top:1px!important}
+  .dock{gap:4px!important;margin-top:6px!important}
+  .card{min-height:72px!important;padding:5px 3px 4px!important;border-radius:12px!important}
+  .card .premiumGuardian{width:51px!important;height:51px!important;margin:0 auto 2px!important}
+  .card b{font-size:.49rem!important;line-height:1.05!important}
+  .card small{font-size:.34rem!important;line-height:1.12!important;margin-top:2px!important}
   .wgGuardianDragGhost{width:56px;height:56px;border-radius:16px}
   .wgGuardianDragGhost img{max-width:48px;max-height:48px}
 }
 
 @media(max-width:390px){
+  .question{padding:8px!important}
+  .question strong{font-size:clamp(1.10rem,5.6vw,1.34rem)!important}
+  .answer{min-height:47px!important;font-size:.86rem!important}
   .lane{min-height:63px!important}
-  .card{min-height:51px!important}
-  .card .premiumGuardian{width:34px!important;height:34px!important}
-  .card b{font-size:.36rem!important}
-  .card small{font-size:.26rem!important}
+  .card{min-height:68px!important;padding:4px 2px!important}
+  .card .premiumGuardian{width:47px!important;height:47px!important}
+  .card b{font-size:.46rem!important}
+  .card small{font-size:.32rem!important}
 }
