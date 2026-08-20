@@ -10,7 +10,7 @@ const assetUrls = [
   'assets/bosses/boss-01-pirat-kai.png','assets/bosses/boss-02-kapitaen-brax.png','assets/bosses/boss-03-blackfinn.png','assets/bosses/boss-04-alt-kapitaen-roderick.png','assets/bosses/boss-05-piratenbaron-vargas.png','assets/bosses/boss-06-kapitaen-ironhook.png','assets/bosses/boss-07-admiral-thorne.png','assets/bosses/boss-08-kartenmeister-corvin.png','assets/bosses/boss-09-schattenfuerst-azrak.png','assets/bosses/boss-10-piratenkoenig-varkos.png',
   'assets/guardians/guardian-01-wortkoralle.png','assets/guardians/guardian-02-steinmuschel.png','assets/guardians/guardian-03-minzqualle.png','assets/guardians/guardian-04-gezeitenstern.png','assets/guardians/guardian-05-blitzkoralle.png','assets/guardians/guardian-06-ankerkrabbe.png',
   'assets/ui/ui-01-muschel-schatztruhe.png','assets/ui/ui-02-boss-rahmen.png',
-  'assets/patches/boss-overlay-v131.css','assets/patches/boss-overlay-v131.js','assets/patches/lane-rescue-v140.css','assets/patches/lane-rescue-v140.js','assets/patches/emergency-v150.css','assets/patches/emergency-v150.js','assets/patches/top-pause-v160.css','assets/patches/top-pause-v160.js'
+  'assets/patches/boss-overlay-v131.css','assets/patches/boss-overlay-v131.js','assets/patches/lane-rescue-v140.css','assets/patches/lane-rescue-v140.js','assets/patches/emergency-v150.css','assets/patches/emergency-v150.js','assets/patches/top-pause-v160.css','assets/patches/top-pause-v160.js','assets/patches/compact-dnd-v171.css','assets/patches/compact-dnd-v171.js'
 ];
 
 async function waitHttp(url, attempts=36) {
@@ -33,6 +33,22 @@ async function answerCorrect(page) {
   await page.waitForTimeout(380);
 }
 
+async function dragGuardian(page, cardSelector, cellSelector, pointerType='mouse') {
+  await page.evaluate(({cardSelector,cellSelector,pointerType})=>{
+    const card=document.querySelector(cardSelector),cell=document.querySelector(cellSelector);
+    if(!card||!cell)throw new Error('drag target missing');
+    const a=card.getBoundingClientRect(),b=cell.getBoundingClientRect();
+    const start={x:a.left+a.width/2,y:a.top+a.height/2};
+    const end={x:b.left+b.width/2,y:b.top+b.height/2};
+    const init=(type,x,y)=>new PointerEvent(type,{bubbles:true,cancelable:true,pointerId:77,pointerType,button:0,buttons:type==='pointerup'?0:1,clientX:x,clientY:y});
+    card.dispatchEvent(init('pointerdown',start.x,start.y));
+    document.dispatchEvent(init('pointermove',(start.x+end.x)/2,(start.y+end.y)/2));
+    document.dispatchEvent(init('pointermove',end.x,end.y));
+    document.dispatchEvent(init('pointerup',end.x,end.y));
+  },{cardSelector,cellSelector,pointerType});
+  await page.waitForTimeout(120);
+}
+
 async function runProfile(name, browserType, viewport, fullGameplay=false) {
   const browser = await browserType.launch({ headless:true });
   const page = await browser.newPage({ viewport });
@@ -40,7 +56,7 @@ async function runProfile(name, browserType, viewport, fullGameplay=false) {
   page.on('pageerror', e=>pageErrors.push(String(e)));
   page.on('response', r=>{ if(r.status()>=400) failed.push(`${r.status()} ${r.url()}`); });
   await page.goto(live, { waitUntil:'networkidle', timeout:60000 });
-  if (!(await page.locator('body').innerText()).includes('v1.7.0 · MOBILE FLOW + ENDGAME')) throw new Error(`${name}: v1.7.0 version not visible`);
+  if (!(await page.locator('body').innerText()).includes('v1.7.1 · COMPACT + DRAG & DROP')) throw new Error(`${name}: v1.7.1 version not visible`);
   if (await page.locator('#bossOverlayV131').count() !== 1) throw new Error(`${name}: boss overlay layer missing`);
   if (await page.locator('#bossStage .bossVisual').evaluateAll(nodes=>nodes.some(n=>getComputedStyle(n).display!=='none'))) throw new Error(`${name}: duplicate boss portrait still visible in boss info strip`);
   if (await page.locator('#emergencyBtn').count() !== 1) throw new Error(`${name}: Insel-Notruf button missing`);
@@ -51,9 +67,14 @@ async function runProfile(name, browserType, viewport, fullGameplay=false) {
   if (viewport.width <= 600) {
     const perf = await page.evaluate(() => ({
       attachment:getComputedStyle(document.querySelector('.app')).backgroundAttachment,
-      blur:getComputedStyle(document.querySelector('.glass')).backdropFilter || getComputedStyle(document.querySelector('.glass')).webkitBackdropFilter
+      touchAction:getComputedStyle(document.querySelector('.dock .card')).touchAction
     }));
     if (perf.attachment === 'fixed') throw new Error(`${name}: mobile background still fixed`);
+    if (perf.touchAction !== 'none') throw new Error(`${name}: guardian cards not touch-drag ready`);
+    if (await page.locator('#bossStage').count()) {
+      const bossHeight=await page.locator('#bossStage').evaluate(el=>{const hidden=el.classList.contains('hidden');el.classList.remove('hidden');const h=el.getBoundingClientRect().height;if(hidden)el.classList.add('hidden');return h;});
+      if (bossHeight > 48) throw new Error(`${name}: boss strip too tall on mobile (${bossHeight}px)`);
+    }
   }
 
   await page.locator('#startBtn').click();
@@ -64,6 +85,10 @@ async function runProfile(name, browserType, viewport, fullGameplay=false) {
   if (await page.locator('.card .guardianArt').count() !== 6) throw new Error(`${name}: helper sprites != 6`);
 
   await answerCorrect(page);
+  const dragTarget='.lane:nth-of-type(4) .cell:nth-child(2)';
+  await dragGuardian(page,'.card[data-g="coral"]',dragTarget,viewport.width<=600?'touch':'mouse');
+  if (await page.locator(dragTarget+' .guardianWrap').count() !== 1) throw new Error(`${name}: guardian drag/drop placement failed`);
+
   if (fullGameplay) {
     await page.evaluate(()=>{ const p=ENEMIES[0]; S.e.push({id:S.id++,r:1,x:62,hp:999,max:999,sp:0,n:'QA Emergency Target',cl:'',asset:p.asset,rank:1,born:S.time,stun:0,hitUntil:0}); });
     await page.waitForTimeout(80);
