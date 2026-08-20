@@ -1,12 +1,12 @@
 # Automated QA Result — Word Guardians
 
-Result: FAIL
-Tested Commit: `4ec140425272f17238fce1ee1c73cf9c13e5db04`
-Date: 2026-08-20T19:33:50Z
+Result: PASS
+Tested Commit: `15c15611b70b8698b27250f247cdd302a6174500`
+Date: 2026-08-20T19:44:28Z
 Live URL: https://o-some.github.io/word-guardians/
 Build: success
 Browser install: success
-Gameplay QA: failure
+Gameplay QA: success
 
 Profiles attempted:
 - Desktop Chromium 1440×900
@@ -28,17 +28,17 @@ Assets/features checked:
 - larger onboarding and 3:00 healing milestone typography
 - 3:00 answer-healing milestone popup and scaling heal percentages
 - 2:00 answer-damage milestone and +1 percent per second up to +100 percent
-- v1.9.2 start guide, start-to-info morph and 60-second Insel-Notruf
+- v1.9.3 start guide, start-to-info morph and 60-second Insel-Notruf
 
 Note: WebKit mobile emulation is not a physical iPhone Safari device test.
 
 ## Build log
 ```
 
-> word-guardians@1.9.2 build
+> word-guardians@1.9.3 build
 > node scripts/build.mjs
 
-Word Guardians build complete · v1.9.2 readable milestones + answer damage scaling
+Word Guardians build complete · v1.9.3 readable milestones + answer damage scaling
 ```
 
 ## Browser install log (tail)
@@ -138,16 +138,10 @@ LAYOUT_REGRESSION_V191_PASS
 PASS desktop-chromium · larger 3:00 healing popup + scaled healing
 PASS iphone-like-webkit · larger 3:00 healing popup + scaled healing
 HEALING_V192_PASS
-PASS desktop-chromium · v1.9.2 onboarding + readable guide + 60s Notruf
-PASS iphone-like-webkit · v1.9.2 onboarding + readable guide + 60s Notruf
-ONBOARDING_V192_PASS
-file:///home/runner/work/word-guardians/word-guardians/tests/damage-v190.mjs:76
-  if(Math.abs(hp-974)>.05)throw new Error(`${name}: +30% answer damage wrong, target HP ${hp}`);
-                                ^
-
-Error: desktop-chromium: +30% answer damage wrong, target HP 980
-    at run (file:///home/runner/work/word-guardians/word-guardians/tests/damage-v190.mjs:76:33)
-    at async file:///home/runner/work/word-guardians/word-guardians/tests/damage-v190.mjs:99:1
-
-Node.js v22.23.2
+PASS desktop-chromium · v1.9.3 onboarding + readable guide + 60s Notruf
+PASS iphone-like-webkit · v1.9.3 onboarding + readable guide + 60s Notruf
+ONBOARDING_V193_PASS
+PASS desktop-chromium · 2:00 damage popup + 1%/sec scaling + 2x cap
+PASS iphone-like-webkit · 2:00 damage popup + 1%/sec scaling + 2x cap
+DAMAGE_V190_PASS
 ```
