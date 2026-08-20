@@ -58,9 +58,10 @@ async function run(name,browserType,viewport){
     const sizes=await page.evaluate(()=>({
       title:parseFloat(getComputedStyle(document.querySelector('.wgDamageCopy h2')).fontSize),
       copy:parseFloat(getComputedStyle(document.querySelector('.wgDamageCopy p')).fontSize),
-      scale:parseFloat(getComputedStyle(document.querySelector('.wgDamageScale span')).fontSize)
+      scale:parseFloat(getComputedStyle(document.querySelector('.wgDamageScale span')).fontSize),
+      button:parseFloat(getComputedStyle(document.querySelector('#wgDamageContinue')).fontSize)
     }));
-    if(sizes.title<17||sizes.copy<10.5||sizes.scale<9.5)throw new Error(`${name}: damage popup text too small: ${JSON.stringify(sizes)}`);
+    if(sizes.title<21||sizes.copy<13||sizes.scale<11.5||sizes.button<14)throw new Error(`${name}: damage popup text too small: ${JSON.stringify(sizes)}`);
   }
   await page.locator('#wgDamageContinue').click();
   await page.locator('.wgDamageMilestone').waitFor({state:'detached'});
@@ -91,11 +92,11 @@ async function run(name,browserType,viewport){
 
   if(errors.length)throw new Error(`${name}: JS errors: ${errors.join(' | ')}`);
   await browser.close();
-  console.log(`PASS ${name} · 2:00 damage popup + 1%/sec scaling + 2x cap`);
+  console.log(`PASS ${name} · v1.9.5 larger 2:00 damage popup + 1%/sec scaling + 2x cap`);
 }
 
 await waitHttp(new URL('assets/patches/answer-damage-v190.js',live));
 await waitHttp(new URL('assets/patches/answer-damage-v190.css',live));
 await run('desktop-chromium',chromium,{width:1440,height:900});
 await run('iphone-like-webkit',webkit,{width:390,height:844});
-console.log('DAMAGE_V190_PASS');
+console.log('DAMAGE_V195_PASS');
