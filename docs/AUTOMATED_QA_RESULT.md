@@ -1,12 +1,12 @@
 # Automated QA Result — Word Guardians
 
-Result: FAIL
-Tested Commit: `e1b48b76a66462bb99ef1a525a9a455689cf9228`
-Date: 2026-08-20T18:19:27Z
+Result: PASS
+Tested Commit: `0d1ea01d0c1c3ba16dc24efd2699ea15a30a1f7d`
+Date: 2026-08-20T18:22:31Z
 Live URL: https://o-some.github.io/word-guardians/
 Build: success
 Browser install: success
-Gameplay QA: failure
+Gameplay QA: success
 
 Profiles attempted:
 - Desktop Chromium 1440×900
@@ -132,13 +132,7 @@ ALL_QA_PASS
 PASS desktop-chromium · embedded energy · readable boss HP · visible lane sprites
 PASS iphone-like-webkit · embedded energy · readable boss HP · visible lane sprites
 LAYOUT_REGRESSION_V177_PASS
-file:///home/runner/work/word-guardians/word-guardians/tests/healing-v178.mjs:75
-  if(Math.abs(hp[0]-50.4)>.02||Math.abs(hp[1]-156.8)>.02)throw new Error(`${name}: 6% healing wrong: ${hp.join(',')}`);
-                                                               ^
-
-Error: desktop-chromium: 6% healing wrong: 45,140
-    at run (file:///home/runner/work/word-guardians/word-guardians/tests/healing-v178.mjs:75:64)
-    at async file:///home/runner/work/word-guardians/word-guardians/tests/healing-v178.mjs:94:1
-
-Node.js v22.23.2
+PASS desktop-chromium · 3:00 healing popup + scaled healing
+PASS iphone-like-webkit · 3:00 healing popup + scaled healing
+HEALING_V178_PASS
 ```
