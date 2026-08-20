@@ -7,14 +7,16 @@
 
   function ensureUi(){
     const version=document.querySelector('.version');
-    if(version)version.textContent='v1.5.0 · INSEL-NOTRUF · 4×8';
+    if(version)version.textContent='v1.6.0 · TOP PAUSE + NOTRUF · 4×8';
     if(ability.mounted)return;
-    const energy=document.querySelector('.energy');
-    if(!energy)return;
+    const bossStage=$('bossStage');
+    const board=$('boardBox');
+    const anchor=bossStage||board;
+    if(!anchor)return;
     const wrap=document.createElement('div');
-    wrap.className='emergencyWrap';
+    wrap.className='emergencyWrap emergencyPreBoard';
     wrap.innerHTML=`<div id="emergencyTimer" class="emergencyTimer ready">READY</div><button id="emergencyBtn" class="emergencyBtn glass ready" type="button" style="--charge:100%">${iconSvg()}<span class="emergencyCopy"><b>INSEL-NOTRUF</b><small>100 % Schaden an allen aktuellen Gegnern</small></span><span class="emergencyCharge"><i></i></span></button>`;
-    energy.insertAdjacentElement('afterend',wrap);
+    anchor.insertAdjacentElement('beforebegin',wrap);
     $('emergencyBtn').addEventListener('click',fire);
     const guide=$('guide');
     if(guide&&!guide.querySelector('[data-emergency-info]')){
