@@ -7,4 +7,4 @@
 .topPauseBtn.exhausted{opacity:.36;filter:grayscale(1);box-shadow:inset 0 1px #ffffff0c}
 body.wgFullPause .bossFloatingV131,body.wgFullPause .guardianArt,body.wgFullPause .baseChest,body.wgFullPause .rescueRockCore,body.wgFullPause .wordWave,body.wgFullPause .emergencyWave{animation-play-state:paused!important}
 body.wgFullPause .shot{visibility:hidden}
-@media(max-width:520px){.topPauseBtn{min-width:48px;width:48px;height:48px;padding:3px}.topPauseBtn .pauseIcon{font-size:.9rem}.topPauseBtn small{font-size:.25rem}.topPauseBtn b{font-size:.52rem}.hud{gap:3px}.pill{min-width:41px;padding-left:4px;padding-right:4px}}
+@media(max-width:520px){.top{grid-template-columns:minmax(0,1fr) auto}.topPauseBtn{min-width:46px;width:46px;height:46px;padding:3px}.topPauseBtn .pauseIcon{font-size:.88rem}.topPauseBtn small{font-size:.23rem}.topPauseBtn b{font-size:.5rem}.hud{gap:3px}.pill{min-width:39px;padding-left:3px;padding-right:3px}.brand{min-width:0;padding:5px;gap:5px}.brand img{width:32px;height:32px}.brand b{font-size:.64rem;white-space:nowrap}.brand small{font-size:.29rem}.version{font-size:.27rem;white-space:nowrap}}
