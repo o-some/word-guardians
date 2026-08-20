@@ -42,7 +42,6 @@ async function run(name,browserType,viewport){
   ]);
   if(schedule.join(',')!=='0,3,6,10,13,30,30')throw new Error(`${name}: healing schedule wrong: ${schedule.join(',')}`);
 
-  // In a real run the minute-two damage milestone has already been acknowledged before minute three.
   await page.evaluate(()=>{S.time=119.96;S.pause=false;S.last=performance.now();});
   await page.locator('.wgDamageMilestone').waitFor({state:'visible',timeout:3000});
   await page.locator('#wgDamageContinue').click();
@@ -63,9 +62,10 @@ async function run(name,browserType,viewport){
     const sizes=await page.evaluate(()=>({
       title:parseFloat(getComputedStyle(document.querySelector('.wgHealCopy h2')).fontSize),
       copy:parseFloat(getComputedStyle(document.querySelector('.wgHealCopy p')).fontSize),
-      scale:parseFloat(getComputedStyle(document.querySelector('.wgHealScale span')).fontSize)
+      scale:parseFloat(getComputedStyle(document.querySelector('.wgHealScale span')).fontSize),
+      button:parseFloat(getComputedStyle(document.querySelector('#wgHealContinue')).fontSize)
     }));
-    if(sizes.title<17||sizes.copy<10.5||sizes.scale<9.5)throw new Error(`${name}: healing popup text still too small: ${JSON.stringify(sizes)}`);
+    if(sizes.title<21||sizes.copy<13||sizes.scale<11.5||sizes.button<14)throw new Error(`${name}: healing popup text still too small: ${JSON.stringify(sizes)}`);
   }
   await page.locator('#wgHealContinue').click();
   await page.locator('.wgHealMilestone').waitFor({state:'detached'});
@@ -100,11 +100,11 @@ async function run(name,browserType,viewport){
 
   if(errors.length)throw new Error(`${name}: JS errors: ${errors.join(' | ')}`);
   await browser.close();
-  console.log(`PASS ${name} · larger 3:00 healing popup + scaled healing`);
+  console.log(`PASS ${name} · v1.9.5 larger 3:00 healing popup + scaled healing`);
 }
 
 await waitHttp(new URL('assets/patches/answer-heal-v178.js',live));
 await waitHttp(new URL('assets/patches/answer-heal-v178.css',live));
 await run('desktop-chromium',chromium,{width:1440,height:900});
 await run('iphone-like-webkit',webkit,{width:390,height:844});
-console.log('HEALING_V192_PASS');
+console.log('HEALING_V195_PASS');
