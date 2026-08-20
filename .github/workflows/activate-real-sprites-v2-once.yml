@@ -1,0 +1,65 @@
+name: Activate Real Sprites V2 Once
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/activate-real-sprites-v2-once.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  activate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Patch Word Guardians
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 <<'PY'
+          from pathlib import Path
+          p=Path('index.html')
+          s=p.read_text()
+          s=s.replace('v1.1.0 · TULA SPRITES · 4×8','v1.2.0 · REAL PIRATES · 4×8')
+          s=s.replace('.enemy.boss .pirateArt{width:72px;height:80px;filter:drop-shadow(0 9px 7px #000b) drop-shadow(0 0 14px #ffe18aaa)}', '.enemy.boss .pirateArt{width:76px;height:88px;filter:drop-shadow(0 9px 7px #000b) drop-shadow(0 0 16px #ffe18acc)}.enemy.boss{z-index:12}.enemy.boss .name{font-size:.25rem}.enemy.hit .pirateArt{filter:brightness(1.65) drop-shadow(0 0 12px #dffcff)}')
+          old="const PIRATES=[['Pirat Kai',78,.31,'','#e9b04b'],['Kapitän Brax',96,.34,'','#d96b4d'],['Blackfinn',118,.43,'fast','#51466e'],['Alt-Kapitän Roderick',150,.27,'heavy','#9f7650'],['Piratenbaron Vargas',182,.30,'heavy','#93464b'],['Kapitän Ironhook',220,.33,'elite','#33647b'],['Admiral Thorne',260,.31,'elite heavy','#5d4a82'],['Kartenmeister Corvin',300,.37,'elite','#a85d3e'],['Schattenfürst Azrak',360,.39,'elite fast','#302b52'],['Piratenkönig Varkos',450,.29,'elite heavy','#b18535']].map((p,i)=>({n:p[0],hp:p[1],sp:p[2],cl:p[3],coat:p[4],rank:i+1}));"
+          new="""const ENEMIES=[{n:'Deckhand Niko',asset:'./assets/enemies/enemy-01-deckhand-niko.png',hp:78,sp:.31,cl:''},{n:'Hook Scout Lio',asset:'./assets/enemies/enemy-02-hook-scout-lio.png',hp:92,sp:.43,cl:'fast'},{n:'Barrel Raider Mako',asset:'./assets/enemies/enemy-03-barrel-raider-mako.png',hp:132,sp:.28,cl:'heavy'},{n:'Shield Buccaneer Taro',asset:'./assets/enemies/enemy-04-shield-buccaneer-taro.png',hp:158,sp:.26,cl:'heavy'},{n:'Wave Skater Piko',asset:'./assets/enemies/enemy-05-wave-skater-piko.png',hp:112,sp:.49,cl:'fast'},{n:'Anchor Brute Koda',asset:'./assets/enemies/enemy-06-anchor-brute-koda.png',hp:215,sp:.23,cl:'heavy elite'},{n:'Tidecaller Yara',asset:'./assets/enemies/enemy-07-tidecaller-yara.png',hp:182,sp:.34,cl:'elite'},{n:'Cannon Corsair Riven',asset:'./assets/enemies/enemy-08-cannon-corsair-riven.png',hp:198,sp:.36,cl:'elite'}];const BOSSES=[{n:'Pirat Kai',asset:'./assets/bosses/boss-01-pirat-kai.png',hp:420,sp:.24,cl:'boss'},{n:'Kapitän Brax',asset:'./assets/bosses/boss-02-kapitaen-brax.png',hp:480,sp:.24,cl:'boss'},{n:'Blackfinn',asset:'./assets/bosses/boss-03-blackfinn.png',hp:540,sp:.27,cl:'boss fast'},{n:'Alt-Kapitän Roderick',asset:'./assets/bosses/boss-04-alt-kapitaen-roderick.png',hp:610,sp:.21,cl:'boss heavy'},{n:'Piratenbaron Vargas',asset:'./assets/bosses/boss-05-piratenbaron-vargas.png',hp:680,sp:.22,cl:'boss heavy'},{n:'Kapitän Ironhook',asset:'./assets/bosses/boss-06-kapitaen-ironhook.png',hp:760,sp:.23,cl:'boss elite'},{n:'Admiral Thorne',asset:'./assets/bosses/boss-07-admiral-thorne.png',hp:835,sp:.22,cl:'boss elite heavy'},{n:'Kartenmeister Corvin',asset:'./assets/bosses/boss-08-kartenmeister-corvin.png',hp:900,sp:.25,cl:'boss elite'},{n:'Schattenfürst Azrak',asset:'./assets/bosses/boss-09-schattenfuerst-azrak.png',hp:980,sp:.27,cl:'boss elite fast'},{n:'Piratenkönig Varkos',asset:'./assets/bosses/boss-10-piratenkoenig-varkos.png',hp:1080,sp:.20,cl:'boss elite heavy'}];"""
+          if old not in s: raise SystemExit('PIRATES block missing')
+          s=s.replace(old,new)
+          old="function pirateForLevel(forceBoss=false){let idx=Math.min(9,Math.max(0,S.lvl+1+Math.floor(Math.random()*3)));if(S.lvl===1)idx=Math.floor(Math.random()*3);if(forceBoss)idx=Math.min(9,Math.max(0,S.lvl*2));return {...PIRATES[idx],boss:forceBoss}}\nfunction spawn(forceBoss=false){const p=pirateForLevel(forceBoss),scale=(1+(S.lvl-1)*.34+S.time/180)*(forceBoss?2.6:1),hp=Math.round(p.hp*scale);S.e.push({id:S.id++,r:Math.floor(Math.random()*4),x:99,hp,max:hp,sp:p.sp*(1+(S.lvl-1)*.09)*(forceBoss?.72:1),n:p.n,cl:(p.cl+' '+(forceBoss?'boss':'')).trim(),coat:p.coat,rank:p.rank,stun:0,hitUntil:0})}"
+          new="function pirateForLevel(forceBoss=false){if(forceBoss){const bossNumber=Math.max(0,Math.floor(S.qc/8)-1);return {...BOSSES[bossNumber%BOSSES.length],boss:true,rank:(bossNumber%BOSSES.length)+1}}const unlocked=Math.min(ENEMIES.length,Math.max(2,2+S.lvl));const pool=ENEMIES.slice(0,unlocked);const p=pool[Math.floor(Math.random()*pool.length)];return {...p,boss:false,rank:ENEMIES.indexOf(p)+1}}\nfunction spawn(forceBoss=false){const p=pirateForLevel(forceBoss),scale=forceBoss?(1.18+(S.lvl-1)*.25+S.time/300):(1+(S.lvl-1)*.34+S.time/180),hp=Math.round(p.hp*scale);S.e.push({id:S.id++,r:Math.floor(Math.random()*4),x:99,hp,max:hp,sp:p.sp*(1+(S.lvl-1)*.09)*(forceBoss?.78:1),n:p.n,cl:p.cl,asset:p.asset,rank:p.rank,born:S.time,stun:0,hitUntil:0})}"
+          if old not in s: raise SystemExit('spawn block missing')
+          s=s.replace(old,new)
+          old="d.innerHTML='<div style=\"transform:translateY('+bob+'px) rotate('+tilt+'deg);'+hit+'\">'+pirateSvg(e)+'</div><span class=\"name\">'+(e.cl.includes('boss')?'BOSS · ':'')+e.n+'</span><span class=\"hp\"><i style=\"width:'+Math.max(0,e.hp/e.max*100)+'%\"></i></span>';"
+          new="const age=Math.max(0,S.time-(e.born||0)),enter=e.cl.includes('boss')?Math.min(1,.25+age/.7):1,attackPulse=Math.sin(S.time*9+e.id)*1.2;d.classList.toggle('hit',e.hitUntil>now);d.innerHTML='<div style=\"transform:translateY('+bob+'px) rotate('+(tilt+attackPulse)+'deg) scale('+enter+');'+hit+'\"><img class=\"pirateArt\" src=\"'+e.asset+'\" alt=\"'+e.n+'\"></div><span class=\"name\">'+(e.cl.includes('boss')?'BOSS · ':'')+e.n+'</span><span class=\"hp\"><i style=\"width:'+Math.max(0,e.hp/e.max*100)+'%\"></i></span>';"
+          if old not in s: raise SystemExit('render block missing')
+          s=s.replace(old,new)
+          s=s.replace('Die Wächter und Piraten sind jetzt als eigene Tula-Style-Sprites animiert. Löse Wörter, baue deine Verteidigung und halte die Piraten so lange wie möglich auf.','Die acht Piraten-Gegner sind jetzt echte Tula-Style-Sprites. In den Bossrunden treten die 10 freigestellten Original-Bosse von Pirat Kai bis Piratenkönig Varkos an.')
+          p.write_text(s)
+          q=Path('tests/qa.mjs')
+          if q.exists(): q.write_text(q.read_text().replace("includes('v1.0.0-migrated')","includes('v1.2.0')"))
+          PY
+          node --check <(python3 - <<'PY'
+          from pathlib import Path
+          s=Path('index.html').read_text();print(s[s.rfind('<script>')+8:s.rfind('</script>')])
+          PY
+          )
+          grep -q 'v1.2.0 · REAL PIRATES · 4×8' index.html
+          test "$(find assets/enemies -name 'enemy-*.png' | wc -l)" -eq 8
+          test "$(find assets/bosses -name 'boss-*.png' | wc -l)" -eq 10
+      - name: Commit activation
+        shell: bash
+        run: |
+          set -euo pipefail
+          rm -f .github/workflows/activate-real-sprites-v2-once.yml .github/workflows/activate-real-sprites-once.yml
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add -A
+          git commit -m 'Activate generated enemies and original Tula bosses'
+          git pull --rebase origin main
+          git push origin HEAD:main
