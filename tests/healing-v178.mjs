@@ -19,7 +19,7 @@ async function answerCorrect(page){
   const en=words.get(de);
   if(!en)throw new Error(`Unknown word: ${de}`);
   await page.locator('#answers').getByRole('button',{name:en,exact:true}).click();
-  await page.waitForTimeout(80);
+  await page.waitForTimeout(380);
 }
 
 async function run(name,browserType,viewport){
