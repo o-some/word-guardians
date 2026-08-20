@@ -1,8 +1,8 @@
 # Automated QA Result — Word Guardians
 
 Result: PASS
-Tested Commit: `15c15611b70b8698b27250f247cdd302a6174500`
-Date: 2026-08-20T19:44:28Z
+Tested Commit: `e1d2916344bd7b1ff90256c522e9e22cf84dfa37`
+Date: 2026-08-20T19:59:01Z
 Live URL: https://o-some.github.io/word-guardians/
 Build: success
 Browser install: success
@@ -28,17 +28,17 @@ Assets/features checked:
 - larger onboarding and 3:00 healing milestone typography
 - 3:00 answer-healing milestone popup and scaling heal percentages
 - 2:00 answer-damage milestone and +1 percent per second up to +100 percent
-- v1.9.3 start guide, start-to-info morph and 60-second Insel-Notruf
+- v1.9.4 streamlined start guide, start-to-info morph and 60-second Insel-Notruf
 
 Note: WebKit mobile emulation is not a physical iPhone Safari device test.
 
 ## Build log
 ```
 
-> word-guardians@1.9.3 build
+> word-guardians@1.9.4 build
 > node scripts/build.mjs
 
-Word Guardians build complete · v1.9.3 readable milestones + answer damage scaling
+Word Guardians build complete · v1.9.4 streamlined start screen
 ```
 
 ## Browser install log (tail)
@@ -138,9 +138,9 @@ LAYOUT_REGRESSION_V191_PASS
 PASS desktop-chromium · larger 3:00 healing popup + scaled healing
 PASS iphone-like-webkit · larger 3:00 healing popup + scaled healing
 HEALING_V192_PASS
-PASS desktop-chromium · v1.9.3 onboarding + readable guide + 60s Notruf
-PASS iphone-like-webkit · v1.9.3 onboarding + readable guide + 60s Notruf
-ONBOARDING_V193_PASS
+PASS desktop-chromium · v1.9.4 streamlined onboarding + readable guide + 60s Notruf
+PASS iphone-like-webkit · v1.9.4 streamlined onboarding + readable guide + 60s Notruf
+ONBOARDING_V194_PASS
 PASS desktop-chromium · 2:00 damage popup + 1%/sec scaling + 2x cap
 PASS iphone-like-webkit · 2:00 damage popup + 1%/sec scaling + 2x cap
 DAMAGE_V190_PASS
