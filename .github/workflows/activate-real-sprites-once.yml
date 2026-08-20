@@ -18,7 +18,7 @@ jobs:
           fetch-depth: 0
 
       - name: Patch game to use image assets
-        shell: python
+        shell: python {0}
         run: |
           from pathlib import Path
           p=Path('index.html')
