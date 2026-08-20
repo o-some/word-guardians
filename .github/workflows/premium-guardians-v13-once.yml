@@ -1,0 +1,117 @@
+name: Premium Guardians V13 Once
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/premium-guardians-v13-once.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  upgrade:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Download premium Tula helper and UI art
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p assets/guardians assets/ui
+          curl -L --fail --retry 2 'https://media.canva.com/v2/image-resize/format:PNG/height:200/quality:100/uri:ifs%3A%2F%2FM%2F2a967cf8-f21e-4902-a134-b31a4fe6a07f/watermark:F/width:200?csig=AAAAAAAAAAAAAAAAAAAAAKj6n_bLJyWWhGRVg2urASpGJIZNSnvh1tEri8Eihuom&exp=1787233864&osig=AAAAAAAAAAAAAAAAAAAAADqpOo2ZN5W2IvemC0nnSVwBL2JwpwUmtgm-LtdPK5Pg&signer=media-rpc&x-canva-quality=thumbnail' -o assets/guardians/guardian-01-wortkoralle.png
+          curl -L --fail --retry 2 'https://media.canva.com/v2/image-resize/format:PNG/height:200/quality:100/uri:ifs%3A%2F%2FM%2F320164fb-0fdd-4c29-84e2-bbb41fac3a9f/watermark:F/width:200?csig=AAAAAAAAAAAAAAAAAAAAAGXW-stErzJWLJ_8fTvLqHh3ThBFGA3st3gnIthAh8Am&exp=1787232399&osig=AAAAAAAAAAAAAAAAAAAAAB0tLKBx9fF6o-Ul2awtRyGm1xMqhq4hjIu6DSOWg7uq&signer=media-rpc&x-canva-quality=thumbnail' -o assets/guardians/guardian-02-steinmuschel.png
+          curl -L --fail --retry 2 'https://media.canva.com/v2/image-resize/format:PNG/height:200/quality:100/uri:ifs%3A%2F%2FM%2F3efe32a6-99bd-42d6-b1d4-42b282754bf0/watermark:F/width:200?csig=AAAAAAAAAAAAAAAAAAAAAPSwn71olKwYTmUV7kfif0K4ii3Rn6Jvlm79RjSqpYnq&exp=1787232374&osig=AAAAAAAAAAAAAAAAAAAAAOK2R4zmw2aiGzhFFQ-oVCKlASCL5CJGITord6tg4oqp&signer=media-rpc&x-canva-quality=thumbnail' -o assets/guardians/guardian-03-minzqualle.png
+          curl -L --fail --retry 2 'https://media.canva.com/v2/image-resize/format:PNG/height:200/quality:100/uri:ifs%3A%2F%2FM%2F8a05d5c9-01fa-4199-a09a-c18ea658c0de/watermark:F/width:200?csig=AAAAAAAAAAAAAAAAAAAAAH-3ITS88aPtcZiW7-O0ATALL5z5QqPs_MyXhrplUv-8&exp=1787234023&osig=AAAAAAAAAAAAAAAAAAAAAK3xuAEgjfwSuJArrvyy_aM8i9W0jr_TIUg9e5cW8iGU&signer=media-rpc&x-canva-quality=thumbnail' -o assets/guardians/guardian-04-gezeitenstern.png
+          curl -L --fail --retry 2 'https://media.canva.com/v2/image-resize/format:PNG/height:200/quality:100/uri:ifs%3A%2F%2FM%2F59702165-82e2-4d46-b8f3-6f34bc27b8f0/watermark:F/width:200?csig=AAAAAAAAAAAAAAAAAAAAALhghUO0aGaarcQ77XxhC-s8tgO-7ZIbyrjcOFQIl95v&exp=1787233354&osig=AAAAAAAAAAAAAAAAAAAAAG7ugXXVQZH6Rn-s5VvhpfD45vBlltVJAnOFt9L2oVjA&signer=media-rpc&x-canva-quality=thumbnail' -o assets/guardians/guardian-05-blitzkoralle.png
+          curl -L --fail --retry 2 'https://media.canva.com/v2/image-resize/format:PNG/height:200/quality:100/uri:ifs%3A%2F%2FM%2F8757d8bc-8d42-481b-83f9-30fd39669bfd/watermark:F/width:200?csig=AAAAAAAAAAAAAAAAAAAAAON4THy9wrBq8Aay6t5qX6IfCjaeV2Lf4iH1efL_Qz0e&exp=1787232476&osig=AAAAAAAAAAAAAAAAAAAAAA2HiyiNHm4aqQ8EIXORGnAx_AECXPR1_C-H0OlnbNto&signer=media-rpc&x-canva-quality=thumbnail' -o assets/guardians/guardian-06-ankerkrabbe.png
+          curl -L --fail --retry 2 'https://media.canva.com/v2/image-resize/format:PNG/height:200/quality:100/uri:ifs%3A%2F%2FM%2F6adc523a-bacd-47c0-a108-5de0b4c18783/watermark:F/width:200?csig=AAAAAAAAAAAAAAAAAAAAACwWDQNhQlDDGBt2ZPrF_DDfUEgfQPK59rykfmo35Hou&exp=1787232224&osig=AAAAAAAAAAAAAAAAAAAAANoAn74Ayw3b7DGTHaxwDif7yP5qu1VA1Ys3-jP_ZETD&signer=media-rpc&x-canva-quality=thumbnail' -o assets/ui/ui-01-muschel-schatztruhe.png
+          curl -L --fail --retry 2 'https://media.canva.com/v2/image-resize/format:PNG/height:200/quality:100/uri:ifs%3A%2F%2FM%2F9d9e054a-ab13-47f4-9e4f-a188bd3fd011/watermark:F/width:200?csig=AAAAAAAAAAAAAAAAAAAAAGap3ar8iXeFO3Oj8GDVBX4qtH_fJugPCcHQ_XXHwM7w&exp=1787233098&osig=AAAAAAAAAAAAAAAAAAAAAHuEvas3hs2GvFOclcJu81sLbOFdmZPp4L547NYTLzBv&signer=media-rpc&x-canva-quality=thumbnail' -o assets/ui/ui-02-boss-rahmen.png
+          test "$(find assets/guardians -name 'guardian-*.png' | wc -l)" -eq 6
+          test "$(find assets/ui -name 'ui-*.png' | wc -l)" -ge 2
+          for f in assets/guardians/*.png assets/ui/ui-*.png; do test -s "$f"; file "$f" | grep -qi PNG; done
+
+      - name: Patch game UI and boss presentation
+        shell: python
+        run: |
+          from pathlib import Path
+          import re
+          p=Path('index.html')
+          s=p.read_text()
+          s=s.replace('v1.2.0 · REAL PIRATES · 4×8','v1.3.0 · PREMIUM GUARDIANS · 4×8')
+          premium_css=r'''
+.premiumGuardian{object-fit:contain;overflow:visible;filter:drop-shadow(0 6px 7px #001522aa) drop-shadow(0 0 5px #77e9df38)}
+.guardianWrap .premiumGuardian{width:58px;height:58px}.card .premiumGuardian{width:55px;height:55px;margin:0 auto 1px}.gitem .premiumGuardian{width:46px;height:46px;vertical-align:middle;margin-right:7px}
+.baseChest{width:54px!important;height:54px!important;object-fit:contain;filter:drop-shadow(0 5px 7px #001522aa) drop-shadow(0 0 8px #ffe18a55);animation:chestPulse 2.1s ease-in-out infinite}.cell.home{background:radial-gradient(circle at 50% 55%,#ffe18a24,transparent 62%),#ffffff08}
+.bossStage{position:relative;margin:7px 0;border:1px solid #efc766b8;border-radius:20px;min-height:132px;padding:10px 14px 10px 142px;background:linear-gradient(110deg,#041d35f2,#063f59e8 58%,#052941f2);box-shadow:inset 0 1px #ffffff16,0 12px 28px #0008;overflow:visible;display:flex;flex-direction:column;justify-content:center;isolation:isolate}.bossStage.hidden{display:none!important}.bossVisual{position:absolute;left:8px;top:50%;width:126px;height:126px;transform:translateY(-50%);z-index:2}.bossFrameDecor{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;filter:drop-shadow(0 7px 9px #0009)}.bossPortrait{position:absolute;left:50%;top:44%;transform:translate(-50%,-50%);max-width:74px;max-height:78px;object-fit:contain;filter:drop-shadow(0 7px 6px #000a) drop-shadow(0 0 10px #ffe18a77);animation:bossFloat 1.45s ease-in-out infinite}.bossEyebrow{font-size:.45rem;letter-spacing:.13em;color:#ffdb78;font-weight:950}.bossName{font:900 clamp(1rem,3vw,1.35rem) Georgia;color:#fff1bf;margin:2px 0}.bossLane{font-size:.58rem;color:#aee9e5;margin-bottom:7px}.bossHpTrack{height:14px;border-radius:99px;background:#101f2b;border:1px solid #f0c86799;overflow:hidden;box-shadow:inset 0 2px 5px #0008}.bossHpTrack i{display:block;height:100%;background:linear-gradient(90deg,#ff594f,#ff914d 58%,#ffd36b);box-shadow:0 0 12px #ff7b55;transition:width .16s linear}.bossHpText{font-size:.52rem;color:#ffe8ac;font-weight:900;margin-top:4px}.bossHint{font-size:.48rem;color:#bde8e6;margin-top:3px}
+@keyframes chestPulse{0%,100%{transform:translateY(1px) scale(.98)}50%{transform:translateY(-3px) scale(1.045);filter:drop-shadow(0 6px 8px #001522aa) drop-shadow(0 0 12px #ffe18a88)}}@keyframes bossFloat{0%,100%{transform:translate(-50%,-48%) rotate(-1deg)}50%{transform:translate(-50%,-54%) rotate(1deg)}}
+@media(max-width:520px){.guardianWrap .premiumGuardian{width:44px;height:44px}.card .premiumGuardian{width:44px;height:44px}.card{min-height:88px}.baseChest{width:43px!important;height:43px!important}.bossStage{min-height:105px;padding:8px 9px 8px 104px;border-radius:16px}.bossVisual{left:3px;width:98px;height:98px}.bossPortrait{max-width:56px;max-height:60px}.bossName{font-size:.92rem}.bossHpTrack{height:11px}.bossHint{display:none}}
+'''
+          s=s.replace('</style>',premium_css+'</style>')
+
+          new_guardian=r'''const GUARDIAN_ASSETS={coral:'./assets/guardians/guardian-01-wortkoralle.png',shell:'./assets/guardians/guardian-02-steinmuschel.png',jelly:'./assets/guardians/guardian-03-minzqualle.png',star:'./assets/guardians/guardian-04-gezeitenstern.png',bolt:'./assets/guardians/guardian-05-blitzkoralle.png',crab:'./assets/guardians/guardian-06-ankerkrabbe.png'};
+function guardianArt(type){return `<img class="guardianArt premiumGuardian guardian-${type}" src="${GUARDIAN_ASSETS[type]}" alt="${G[type].name}">`}
+function reset()'''
+          s,n=re.subn(r'function guardianSvg\(type\)\{.*?\}\nfunction reset\(\)',new_guardian,s,flags=re.S)
+          if n!=1: raise SystemExit(f'guardianSvg replacement count {n}')
+          s=s.replace('guardianSvg(','guardianArt(')
+          old="if(c===0){b.innerHTML='<img src=\"./assets/creative/tula_neutral_front.webp\" alt=\"Tula\">';b.disabled=true}"
+          new="if(c===0){b.innerHTML='<img class=\"baseChest\" src=\"./assets/ui/ui-01-muschel-schatztruhe.png\" alt=\"Muschel-Depot\" title=\"Muschel-Depot\">';b.disabled=true}"
+          if old not in s: raise SystemExit('base Tula cell pattern missing')
+          s=s.replace(old,new)
+
+          boss_html='''<section id="bossStage" class="bossStage hidden" aria-live="polite"><div class="bossVisual"><img class="bossFrameDecor" src="./assets/ui/ui-02-boss-rahmen.png" alt=""><img id="bossPortrait" class="bossPortrait" alt="Boss"></div><div class="bossEyebrow">⚔ BOSS-ANGRIFF</div><div id="bossName" class="bossName">Pirat Kai</div><div id="bossLane" class="bossLane">greift Spur 1 an</div><div class="bossHpTrack"><i id="bossHpFill" style="width:100%"></i></div><div id="bossHpText" class="bossHpText">0 / 0 HP</div><div class="bossHint">Löse Wörter: Deine Wortwelle trifft den Boss besonders wirkungsvoll.</div></section>'''
+          marker='<section class="boardBox" id="boardBox">'
+          if marker not in s: raise SystemExit('board marker missing')
+          s=s.replace(marker,boss_html+marker,1)
+          s=s.replace('Die acht Piraten-Gegner sind jetzt echte Tula-Style-Sprites. In den Bossrunden treten die 10 freigestellten Original-Bosse von Pirat Kai bis Piratenkönig Varkos an.','Die sechs Wächter haben jetzt Premium-Tula-Sprites. Bosse erscheinen in einer eigenen Boss-Arena mit großer HP-Leiste – und links schützt dein Muschel-Depot jede Spur.')
+
+          old_lane="$$('.lane').forEach((lane,r)=>{lane.querySelectorAll('.enemy').forEach(n=>n.remove());S.e.filter(e=>e.r===r).forEach(e=>{"
+          boss_render="""const activeBoss=S.e.find(e=>e.cl.includes('boss')&&e.hp>0);const bossStage=$('bossStage');if(activeBoss){bossStage.classList.remove('hidden');$('bossPortrait').src=activeBoss.asset;$('bossPortrait').alt=activeBoss.n;$('bossName').textContent=activeBoss.n;$('bossLane').textContent='greift Spur '+(activeBoss.r+1)+' an · noch '+Math.max(0,Math.round(activeBoss.x))+' % Distanz';$('bossHpFill').style.width=Math.max(0,activeBoss.hp/activeBoss.max*100)+'%';$('bossHpText').textContent=Math.max(0,Math.ceil(activeBoss.hp))+' / '+activeBoss.max+' HP'}else bossStage.classList.add('hidden');$$('.lane').forEach((lane,r)=>{lane.querySelectorAll('.enemy').forEach(n=>n.remove());S.e.filter(e=>e.r===r&&!e.cl.includes('boss')).forEach(e=>{"""
+          if old_lane not in s: raise SystemExit('lane render pattern missing')
+          s=s.replace(old_lane,boss_render,1)
+          p.write_text(s)
+
+          q=Path('tests/qa.mjs')
+          t=q.read_text()
+          t=t.replace("v1.2.0 · REAL PIRATES","v1.3.0 · PREMIUM GUARDIANS")
+          t=t.replace("  'assets/bosses/boss-10-piratenkoenig-varkos.png'\n];","  'assets/bosses/boss-10-piratenkoenig-varkos.png',\n  'assets/guardians/guardian-01-wortkoralle.png',\n  'assets/guardians/guardian-02-steinmuschel.png',\n  'assets/guardians/guardian-03-minzqualle.png',\n  'assets/guardians/guardian-04-gezeitenstern.png',\n  'assets/guardians/guardian-05-blitzkoralle.png',\n  'assets/guardians/guardian-06-ankerkrabbe.png',\n  'assets/ui/ui-01-muschel-schatztruhe.png',\n  'assets/ui/ui-02-boss-rahmen.png'\n];")
+          t=t.replace("if (await page.locator('.card .guardianArt').count() !== 6) throw new Error(`${name}: helper sprites != 6`);","if (await page.locator('.card .guardianArt').count() !== 6) throw new Error(`${name}: helper sprites != 6`);\n  if (await page.locator('.baseChest').count() !== 4) throw new Error(`${name}: shell depot count != 4`);")
+          t=t.replace("    await answerCorrect(page);\n  if (fullGameplay) {","    await answerCorrect(page);\n  if (fullGameplay) {")
+          anchor="    await page.locator('#resumeBtn').click();\n\n"
+          extra="    await page.locator('#resumeBtn').click();\n\n    await page.evaluate(()=>{ spawn(true); render(); });\n    await page.locator('#bossStage').waitFor({state:'visible'});\n    const bossHpText=await page.locator('#bossHpText').textContent();\n    if (!bossHpText || !bossHpText.includes('HP')) throw new Error(`${name}: boss HP panel missing`);\n    await page.evaluate(()=>{ for(const e of S.e) if(e.cl.includes('boss')) e.hp=0; S.e=S.e.filter(e=>e.hp>0); render(); });\n\n"
+          if anchor in t: t=t.replace(anchor,extra,1)
+          q.write_text(t)
+
+          m=Path('docs/ASSET_MANIFEST.md')
+          if m.exists():
+              txt=m.read_text()
+              if '## Premium-Helfer und Boss-UI — v1.3' not in txt:
+                  txt += '''\n\n## Premium-Helfer und Boss-UI — v1.3\n\n- `assets/guardians/guardian-01-wortkoralle.png`\n- `assets/guardians/guardian-02-steinmuschel.png`\n- `assets/guardians/guardian-03-minzqualle.png`\n- `assets/guardians/guardian-04-gezeitenstern.png`\n- `assets/guardians/guardian-05-blitzkoralle.png`\n- `assets/guardians/guardian-06-ankerkrabbe.png`\n- `assets/ui/ui-01-muschel-schatztruhe.png`\n- `assets/ui/ui-02-boss-rahmen.png`\n\nDie sechs neuen Wächter-Sprites und die zwei UI-Assets wurden speziell für Word Guardians im Tula's-Island-Look erzeugt. Die Schatztruhe ersetzt die rein dekorative Tula-Figur in der linken Basiszelle. Bosse werden nicht mehr in der Lane beschnitten, sondern separat in der Boss-Arena mit dynamischer HP-Leiste dargestellt.\n'''
+                  m.write_text(txt)
+
+      - name: Validate build and syntax
+        shell: bash
+        run: |
+          set -euo pipefail
+          npm run build
+          grep -q 'v1.3.0 · PREMIUM GUARDIANS · 4×8' index.html
+          grep -q 'id="bossStage"' index.html
+          grep -q 'ui-01-muschel-schatztruhe.png' index.html
+          grep -q 'guardian-06-ankerkrabbe.png' index.html
+
+      - name: Commit premium upgrade
+        shell: bash
+        run: |
+          set -euo pipefail
+          rm -f .github/workflows/premium-guardians-v13-once.yml
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add -A
+          git commit -m 'Upgrade Word Guardians with premium helpers and external boss stage'
+          git pull --rebase origin main
+          git push origin HEAD:main
