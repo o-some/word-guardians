@@ -1,7 +1,7 @@
 (()=>{
   'use strict';
 
-  const VERSION='v1.9.2 · DAMAGE SCALE + READABLE UI · 4×8';
+  const VERSION='v1.9.3 · DAMAGE SCALE + READABLE UI · 4×8';
   const state={mode:null,id:null,card:null,startX:0,startY:0,active:false,ghost:null,hot:null,suppressClick:false};
   const qsa=s=>[...document.querySelectorAll(s)];
 
