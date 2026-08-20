@@ -19,6 +19,14 @@
     return typeof S!=='undefined'&&S&&Array.isArray(S.e)&&S.e.some(e=>e&&e.hp>0&&typeof e.cl==='string'&&e.cl.includes('boss'));
   }
 
+  function moveEnergyAboveBoss(){
+    const stage=$('bossStage');
+    const energy=document.querySelector('.energy');
+    if(!stage||!energy||!stage.parentNode)return;
+    if(energy.nextElementSibling===stage)return;
+    stage.parentNode.insertBefore(energy,stage);
+  }
+
   function reorderDock(){
     const dock=$('dock');
     if(!dock)return;
@@ -31,6 +39,7 @@
   }
 
   function sync(){
+    moveEnergyAboveBoss();
     const stage=$('bossStage');
     if(stage){
       const idle=ensureIdleContent(stage);
