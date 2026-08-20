@@ -4,13 +4,26 @@ await rm('dist', { recursive: true, force: true });
 await mkdir('dist', { recursive: true });
 
 const source = await readFile('index.html', 'utf8');
-const cssTag = '<link rel="stylesheet" href="./assets/patches/boss-overlay-v131.css">';
-const jsTag = '<script src="./assets/patches/boss-overlay-v131.js"></script>';
+const cssTags = [
+  '<link rel="stylesheet" href="./assets/patches/boss-overlay-v131.css">',
+  '<link rel="stylesheet" href="./assets/patches/lane-rescue-v140.css">'
+];
+const jsTags = [
+  '<script src="./assets/patches/boss-overlay-v131.js"></script>',
+  '<script src="./assets/patches/lane-rescue-v140.js"></script>'
+];
+
 let built = source;
-if (!built.includes('boss-overlay-v131.css')) built = built.replace('</head>', `${cssTag}</head>`);
-if (!built.includes('boss-overlay-v131.js')) built = built.replace('</body>', `${jsTag}</body>`);
+for (const tag of cssTags) {
+  const href = tag.match(/href="([^"]+)"/)?.[1];
+  if (href && !built.includes(href)) built = built.replace('</head>', `${tag}</head>`);
+}
+for (const tag of jsTags) {
+  const src = tag.match(/src="([^"]+)"/)?.[1];
+  if (src && !built.includes(src)) built = built.replace('</body>', `${tag}</body>`);
+}
 
 await writeFile('dist/index.html', built);
 await writeFile('dist/404.html', built);
 await cp('assets', 'dist/assets', { recursive: true });
-console.log('Word Guardians build complete · boss overlay glow v1.3.1 injected');
+console.log('Word Guardians build complete · boss overlay v1.3.1 + lane rescue rock v1.4.0 injected');
