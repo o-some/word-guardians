@@ -19,7 +19,7 @@ async function run(name,browserType,viewport){
   await page.goto(live,{waitUntil:'networkidle',timeout:60000});
 
   const version=(await page.locator('.version').textContent()||'').trim();
-  if(!version.startsWith('v1.9.4'))throw new Error(`${name}: expected visible v1.9.4, got ${version}`);
+  if(!version.startsWith('v1.9.5'))throw new Error(`${name}: expected visible v1.9.5, got ${version}`);
 
   const intro=page.locator('#intro');
   await intro.waitFor({state:'visible'});
@@ -32,13 +32,25 @@ async function run(name,browserType,viewport){
   }
   if(await page.locator('#intro .wgEmergencyDemo').count()!==1)throw new Error(`${name}: emergency button preview missing on start screen`);
 
+  const expectedSprites=[
+    './assets/guardians/guardian-01-wortkoralle.png',
+    './assets/guardians/guardian-05-blitzkoralle.png',
+    './assets/guardians/guardian-03-minzqualle.png',
+    './assets/guardians/guardian-02-steinmuschel.png',
+    './assets/guardians/guardian-04-gezeitenstern.png',
+    './assets/guardians/guardian-06-ankerkrabbe.png'
+  ];
+  const spriteSources=await page.locator('#intro .wgGuideHelperSprite').evaluateAll(nodes=>nodes.map(n=>n.getAttribute('src')));
+  if(spriteSources.join('|')!==expectedSprites.join('|'))throw new Error(`${name}: start screen does not use the premium guardian sprites: ${spriteSources.join('|')}`);
+
   if(viewport.width<=600){
     const sizes=await page.evaluate(()=>({
       rule:parseFloat(getComputedStyle(document.querySelector('#intro .wgGuideRule span')).fontSize),
       helper:parseFloat(getComputedStyle(document.querySelector('#intro .wgGuideHelper small')).fontSize),
-      emergency:parseFloat(getComputedStyle(document.querySelector('#intro .wgGuideEmergency p')).fontSize)
+      emergency:parseFloat(getComputedStyle(document.querySelector('#intro .wgGuideEmergency p')).fontSize),
+      sprite:document.querySelector('#intro .wgGuideHelperSprite')?.getBoundingClientRect().width||0
     }));
-    if(sizes.rule<7.5||sizes.helper<6||sizes.emergency<8.5)throw new Error(`${name}: onboarding text still too small: ${JSON.stringify(sizes)}`);
+    if(sizes.rule<9.5||sizes.helper<8.8||sizes.emergency<10.8||sizes.sprite<38)throw new Error(`${name}: start guide readability/sprite size regressed: ${JSON.stringify(sizes)}`);
   }
 
   const readyState=await page.locator('#emergencyBtn').evaluate(el=>({ready:el.classList.contains('ready'),animation:getComputedStyle(el).animationName}));
@@ -60,6 +72,17 @@ async function run(name,browserType,viewport){
   }
   await page.locator('#infoClose').click();
 
+  if(viewport.width<=600){
+    await page.locator('#pauseBtn').click();
+    await page.locator('#pauseOv').waitFor({state:'visible'});
+    const modalSizes=await page.evaluate(()=>({
+      title:parseFloat(getComputedStyle(document.querySelector('#pauseOv .modal h2')).fontSize),
+      button:parseFloat(getComputedStyle(document.querySelector('#pauseOv .modal button')).fontSize)
+    }));
+    if(modalSizes.title<24||modalSizes.button<14.5)throw new Error(`${name}: standard overlay typography still too small: ${JSON.stringify(modalSizes)}`);
+    await page.locator('#resumeBtn').click();
+  }
+
   await page.evaluate(()=>{
     const p=ENEMIES[0];
     S.e.push({id:S.id++,r:1,x:65,hp:100,max:100,sp:0,n:'QA Notruf Target',cl:'',asset:p.asset,rank:1,born:S.time,stun:0,hitUntil:0});
@@ -73,11 +96,11 @@ async function run(name,browserType,viewport){
 
   if(errors.length)throw new Error(`${name}: JS errors: ${errors.join(' | ')}`);
   await browser.close();
-  console.log(`PASS ${name} · v1.9.4 streamlined onboarding + readable guide + 60s Notruf`);
+  console.log(`PASS ${name} · v1.9.5 larger overlays + premium start sprites + 60s Notruf`);
 }
 
 await waitHttp(new URL('assets/patches/onboarding-v180.js',live));
 await waitHttp(new URL('assets/patches/onboarding-v180.css',live));
 await run('desktop-chromium',chromium,{width:1440,height:900});
 await run('iphone-like-webkit',webkit,{width:390,height:844});
-console.log('ONBOARDING_V194_PASS');
+console.log('ONBOARDING_V195_PASS');
