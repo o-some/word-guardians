@@ -34,4 +34,4 @@ for (const tag of jsTags) {
 await writeFile('dist/index.html', built);
 await writeFile('dist/404.html', built);
 await cp('assets', 'dist/assets', { recursive: true });
-console.log('Word Guardians build complete · v1.7.4 persistent boss idle slot · deploy');
+console.log('Word Guardians build complete · v1.7.6 energy above boss + unclipped lane sprites');
