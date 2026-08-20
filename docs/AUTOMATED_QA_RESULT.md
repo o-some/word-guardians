@@ -1,8 +1,8 @@
 # Automated QA Result — Word Guardians
 
 Result: FAIL
-Tested Commit: `916bbdecd95adc364a18fd888a79b6a236cebbf1`
-Date: 2026-08-20T19:20:02Z
+Tested Commit: `e65703f631f9048e896e3e23d70dff862c6490d2`
+Date: 2026-08-20T19:26:02Z
 Live URL: https://o-some.github.io/word-guardians/
 Build: success
 Browser install: success
@@ -28,17 +28,17 @@ Assets/features checked:
 - larger onboarding and 3:00 healing milestone typography
 - 3:00 answer-healing milestone popup and scaling heal percentages
 - 2:00 answer-damage milestone and +1 percent per second up to +100 percent
-- v1.9.0 start guide, start-to-info morph and 60-second Insel-Notruf
+- v1.9.1 start guide, start-to-info morph and 60-second Insel-Notruf
 
 Note: WebKit mobile emulation is not a physical iPhone Safari device test.
 
 ## Build log
 ```
 
-> word-guardians@1.9.0 build
+> word-guardians@1.9.1 build
 > node scripts/build.mjs
 
-Word Guardians build complete · v1.9.0 readable milestones + answer damage scaling
+Word Guardians build complete · v1.9.1 readable milestones + answer damage scaling
 ```
 
 ## Browser install log (tail)
@@ -132,16 +132,21 @@ PASS desktop-webkit
 PASS android-like-chromium
 PASS iphone-like-webkit
 ALL_QA_PASS
-file:///home/runner/work/word-guardians/word-guardians/tests/layout-regression-v176.mjs:51
-  if(enemyMetrics.width<=0||enemyMetrics.height<=0)throw new Error(`${name}: regular enemy sprite has no visible box`);
-                                                         ^
+PASS desktop-chromium · embedded energy · readable boss HP · visible lane sprites
+PASS iphone-like-webkit · embedded energy · readable boss HP · visible lane sprites
+LAYOUT_REGRESSION_V191_PASS
+node:internal/modules/run_main:123
+    triggerUncaughtException(
+    ^
 
-Error: desktop-chromium: regular enemy sprite has no visible box
-    at run (file:///home/runner/work/word-guardians/word-guardians/tests/layout-regression-v176.mjs:51:58)
-    at runNextTicks (node:internal/process/task_queues:64:5)
-    at process.processImmediate (node:internal/timers:452:9)
-    at process.callbackTrampoline (node:internal/async_hooks:130:17)
-    at async file:///home/runner/work/word-guardians/word-guardians/tests/layout-regression-v176.mjs:73:1
+locator.waitFor: Timeout 3000ms exceeded.
+Call log:
+  - waiting for locator('.wgHealMilestone') to be visible
+
+    at run (/home/runner/work/word-guardians/word-guardians/tests/healing-v178.mjs:46:42)
+    at async file:///home/runner/work/word-guardians/word-guardians/tests/healing-v178.mjs:102:1 {
+  name: 'TimeoutError'
+}
 
 Node.js v22.23.2
 ```
