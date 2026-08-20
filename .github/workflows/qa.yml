@@ -1,5 +1,5 @@
 name: Migration QA
-# Real enemy + original boss sprite regression run for v1.2.0.
+# Final stable regression run for v1.2.0 real enemies + original bosses.
 
 on:
   push:
