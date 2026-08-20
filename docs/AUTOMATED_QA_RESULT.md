@@ -1,12 +1,12 @@
 # Automated QA Result — Word Guardians
 
-Result: PASS
-Tested Commit: `2abd2f751c13d38b32733c2ef07660e6c4f8e6d8`
-Date: 2026-08-20T17:57:50Z
+Result: FAIL
+Tested Commit: `51196e00e467370037c94e34d6145b455e2a6a7f`
+Date: 2026-08-20T18:16:05Z
 Live URL: https://o-some.github.io/word-guardians/
 Build: success
 Browser install: success
-Gameplay QA: success
+Gameplay QA: failure
 
 Profiles attempted:
 - Desktop Chromium 1440×900
@@ -25,6 +25,7 @@ Assets/features checked:
 - premium endscreen additions
 - energy bar directly above the boss slot
 - regular enemy sprites may paint outside their lane without changing lane logic
+- 3:00 answer-healing milestone popup and scaling heal percentages
 
 Note: WebKit mobile emulation is not a physical iPhone Safari device test.
 
@@ -34,7 +35,7 @@ Note: WebKit mobile emulation is not a physical iPhone Safari device test.
 > word-guardians@1.0.0-migrated build
 > node scripts/build.mjs
 
-Word Guardians build complete · v1.7.6 energy above boss + unclipped lane sprites
+Word Guardians build complete · three-minute answer healing milestone
 ```
 
 ## Browser install log (tail)
@@ -123,12 +124,20 @@ Webkit 26.0 (playwright build v2203) downloaded to /home/runner/.cache/ms-playwr
 
 ## Gameplay QA log
 ```
-PASS desktop-chromium
-PASS desktop-webkit
-PASS android-like-chromium
-PASS iphone-like-webkit
-ALL_QA_PASS
-PASS desktop-chromium · embedded energy · readable boss HP · visible lane sprites
-PASS iphone-like-webkit · embedded energy · readable boss HP · visible lane sprites
-LAYOUT_REGRESSION_V177_PASS
+node:internal/modules/run_main:123
+    triggerUncaughtException(
+    ^
+
+locator.click: Error: strict mode violation: locator('.answer').filter({ hasText: 'rain' }) resolved to 2 elements:
+    1) <button class="answer">train</button> aka getByRole('button', { name: 'train' })
+    2) <button class="answer">rain</button> aka getByRole('button', { name: 'rain', exact: true })
+
+Call log:
+  - waiting for locator('.answer').filter({ hasText: 'rain' })
+
+    at answerCorrect (/home/runner/work/word-guardians/word-guardians/tests/qa.mjs:32:50)
+    at async runProfile (/home/runner/work/word-guardians/word-guardians/tests/qa.mjs:145:28)
+    at async file:///home/runner/work/word-guardians/word-guardians/tests/qa.mjs:170:1
+
+Node.js v22.23.2
 ```
