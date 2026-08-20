@@ -1,50 +1,40 @@
-/* Word Guardians v1.6.2 — clean actions + compact header Notruf */
-.status{display:none!important}
-.topPauseBtn{display:none!important}
+/* Word Guardians v1.7.0 — mobile flow + premium endgame */
+.status{display:none!important}.topPauseBtn{display:none!important}
+.top{grid-template-columns:minmax(0,1fr) minmax(132px,174px) auto!important;align-items:stretch!important;gap:6px!important}.brand{min-width:0}.hud{align-items:stretch}
+.tools{display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px!important;margin-top:10px!important}.tool{position:relative;min-height:54px!important;border-radius:14px!important;padding:8px 10px!important;font-size:.72rem!important;font-weight:950!important;letter-spacing:.015em!important;color:#fff7df!important;text-shadow:0 2px 3px #001522cc!important;box-shadow:inset 0 1px #ffffff24,0 7px 16px #00152277!important;transition:transform .16s ease,filter .16s ease,box-shadow .16s ease,border-color .16s ease!important;overflow:hidden}.tool::after{content:'';position:absolute;inset:0;pointer-events:none;background:linear-gradient(115deg,transparent 0 38%,#ffffff18 48%,transparent 58%);transform:translateX(-130%)}.tool:not(:disabled):active{transform:translateY(1px) scale(.985)}.tool:not(:disabled):hover::after{animation:wgToolShine .8s ease}
+#infoBtn{background:linear-gradient(180deg,#0a6071,#073d57)!important;border:1px solid #66e8dfcc!important;box-shadow:inset 0 1px #ffffff28,0 0 0 1px #66e8df20,0 7px 16px #00152277,0 0 12px #4ee0d633!important}#moveBtn{background:linear-gradient(180deg,#705523,#3f341b)!important;border:1px solid #efc766dd!important;color:#fff1b6!important}#moveBtn.active{background:linear-gradient(180deg,#b9872e,#6e4b1d)!important;border-color:#ffe79b!important;box-shadow:inset 0 1px #ffffff35,0 0 0 2px #ffe18a44,0 0 18px #efc76666!important}#pauseBtn{background:linear-gradient(180deg,#173f66,#0b2948)!important;border:1px solid #86bfffcc!important}#pauseBtn.exhausted{opacity:.42!important;filter:grayscale(.85)!important;box-shadow:inset 0 1px #ffffff10!important}
+body.wgFullPause .bossFloatingV131,body.wgFullPause .guardianArt,body.wgFullPause .baseChest,body.wgFullPause .rescueRockCore,body.wgFullPause .wordWave,body.wgFullPause .emergencyWave{animation-play-state:paused!important}body.wgFullPause .shot{visibility:hidden}
 
-/* Header now has three deliberate zones: brand | red Insel-Notruf | HUD. */
-.top{grid-template-columns:minmax(0,1fr) minmax(132px,174px) auto!important;align-items:stretch!important;gap:6px!important}
-.brand{min-width:0}
-.hud{align-items:stretch}
-
-/* Make the three main action buttons feel like real game controls. */
-.tools{display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px!important;margin-top:10px!important}
-.tool{position:relative;min-height:54px!important;border-radius:14px!important;padding:8px 10px!important;font-size:.72rem!important;font-weight:950!important;letter-spacing:.015em!important;color:#fff7df!important;text-shadow:0 2px 3px #001522cc!important;box-shadow:inset 0 1px #ffffff24,0 7px 16px #00152277!important;transition:transform .16s ease,filter .16s ease,box-shadow .16s ease,border-color .16s ease!important;overflow:hidden}
-.tool::after{content:'';position:absolute;inset:0;pointer-events:none;background:linear-gradient(115deg,transparent 0 38%,#ffffff18 48%,transparent 58%);transform:translateX(-130%)}
-.tool:not(:disabled):active{transform:translateY(1px) scale(.985)}
-.tool:not(:disabled):hover::after{animation:wgToolShine .8s ease}
-
-#infoBtn{background:linear-gradient(180deg,#0a6071,#073d57)!important;border:1px solid #66e8dfcc!important;box-shadow:inset 0 1px #ffffff28,0 0 0 1px #66e8df20,0 7px 16px #00152277,0 0 12px #4ee0d633!important}
-#moveBtn{background:linear-gradient(180deg,#705523,#3f341b)!important;border:1px solid #efc766dd!important;color:#fff1b6!important;box-shadow:inset 0 1px #ffffff20,0 0 0 1px #efc7661f,0 7px 16px #00152277,0 0 12px #efc7662e!important}
-#moveBtn.active{background:linear-gradient(180deg,#b9872e,#6e4b1d)!important;border-color:#ffe79b!important;box-shadow:inset 0 1px #ffffff35,0 0 0 2px #ffe18a44,0 0 18px #efc76666!important}
-#pauseBtn{background:linear-gradient(180deg,#173f66,#0b2948)!important;border:1px solid #86bfffcc!important;box-shadow:inset 0 1px #ffffff24,0 0 0 1px #7dbaff1f,0 7px 16px #00152277,0 0 12px #6fb5ff2e!important}
-#pauseBtn.exhausted{opacity:.42!important;filter:grayscale(.85)!important;box-shadow:inset 0 1px #ffffff10!important}
-
-body.wgFullPause .bossFloatingV131,body.wgFullPause .guardianArt,body.wgFullPause .baseChest,body.wgFullPause .rescueRockCore,body.wgFullPause .wordWave,body.wgFullPause .emergencyWave{animation-play-state:paused!important}
-body.wgFullPause .shot{visibility:hidden}
-
+/* Premium result screen */
+.wgPremiumResultModal{position:relative;overflow:auto!important;border-color:#f3cc69!important;background:radial-gradient(circle at 50% 0,#11627866 0,transparent 35%),linear-gradient(155deg,#07506a,#031d32 65%)!important;box-shadow:inset 0 1px #ffffff24,0 24px 70px #000b,0 0 32px #efc76622!important}.wgPremiumResultModal::before{content:'';position:absolute;inset:0;pointer-events:none;background:linear-gradient(120deg,transparent 0 38%,#fff3b40d 49%,transparent 60%);border-radius:inherit}.wgPremiumResultModal .resultTula{width:96px;height:96px;filter:drop-shadow(0 10px 18px #0009) drop-shadow(0 0 14px #55d5c844)}
+.wgPremiumEnd{margin:4px 0 14px}.wgEndCrown{display:inline-block;padding:4px 10px;border:1px solid #efc76699;border-radius:999px;background:#efc76612;color:#ffe18a;font-size:.54rem;font-weight:950;letter-spacing:.14em}.wgPremiumEnd h2{margin:8px 0 4px!important;font:950 clamp(1.45rem,6vw,2rem) Georgia!important;color:#fff0bd!important;text-shadow:0 3px 12px #0009}.wgPremiumEnd p{margin:0 auto 12px!important;max-width:340px;color:#d9f7f3!important;font-size:.72rem!important;font-weight:750}.wgEndHighlights{display:grid;grid-template-columns:repeat(3,1fr);gap:7px}.wgEndHighlights div{padding:10px 5px;border-radius:14px;border:1px solid #efc76655;background:linear-gradient(180deg,#ffffff12,#ffffff08);box-shadow:inset 0 1px #ffffff14,0 6px 14px #00152255}.wgEndHighlights strong{display:block;color:#ffe18a;font:950 .93rem Georgia}.wgEndHighlights span{display:block;margin-top:3px;color:#c4e9e7;font-size:.48rem;font-weight:800}.wgPremiumResultModal .resultGrid{gap:9px;margin:10px 0}.wgPremiumResultModal .resultCard{border-color:#75dcd744;background:linear-gradient(180deg,#ffffff12,#ffffff08);box-shadow:inset 0 1px #ffffff12}.wgPremiumResultModal .resultCard strong{color:#fff0bd;text-shadow:0 2px 8px #0008}.wgPremiumResultModal .rewardChip{background:linear-gradient(180deg,#6a501d,#3f3218);border-color:#efc766bb;box-shadow:inset 0 1px #ffffff18,0 4px 10px #0005}.wgPremiumResultModal .motivate{padding:10px 12px;border-radius:12px;background:#55d5c811;border:1px solid #55d5c833}.wgPremiumResultModal button{min-height:50px!important;border-radius:14px!important;box-shadow:inset 0 1px #fff8,0 8px 18px #0007!important}
 @keyframes wgToolShine{0%{transform:translateX(-130%)}100%{transform:translateX(130%)}}
 
 @media(max-width:520px){
-  .top{grid-template-columns:minmax(0,1fr) 104px auto!important;gap:4px!important}
-  .hud{gap:3px}
-  .pill{min-width:36px;padding-left:3px;padding-right:3px}
-  .brand{min-width:0;padding:5px 4px;gap:4px}
-  .brand img{width:30px;height:30px}
-  .brand b{font-size:.59rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-  .brand small{font-size:.27rem;white-space:nowrap}
-  .version{font-size:.24rem;white-space:nowrap}
-  .tools{gap:6px!important;margin-top:8px!important}
-  .tool{min-height:49px!important;padding:7px 5px!important;font-size:.61rem!important;line-height:1.15!important}
+  .top{grid-template-columns:minmax(0,1fr) 104px auto!important;gap:4px!important}.hud{gap:3px}.pill{min-width:36px;padding-left:3px;padding-right:3px}.brand{min-width:0;padding:5px 4px;gap:4px}.brand img{width:30px;height:30px}.brand b{font-size:.59rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.brand small{font-size:.27rem;white-space:nowrap}.version{font-size:.24rem;white-space:nowrap}.tools{gap:6px!important;margin-top:8px!important}.tool{min-height:49px!important;padding:7px 5px!important;font-size:.61rem!important;line-height:1.15!important}
+  .wgPremiumResultModal{padding:15px!important}.wgPremiumResultModal .resultTula{width:78px;height:78px}.wgEndHighlights{gap:5px}.wgEndHighlights div{padding:8px 3px}.wgEndHighlights strong{font-size:.78rem}.wgEndHighlights span{font-size:.42rem}
 }
 
-@media(max-width:370px){
-  .top{grid-template-columns:minmax(0,1fr) 92px auto!important;gap:3px!important}
-  .pill{min-width:33px;padding-left:2px;padding-right:2px}
-  .brand img{width:27px;height:27px}
-  .brand b{font-size:.54rem}
-  .brand small{font-size:.24rem}
-  .version{font-size:.21rem}
-  .tools{gap:4px!important}
-  .tool{font-size:.56rem!important;padding:6px 3px!important}
+/* Mobile performance profile: keep the premium look, drop expensive compositing work. */
+@media(max-width:600px),(pointer:coarse){
+  .app{background-attachment:scroll!important}
+  .glass,.overlay{backdrop-filter:none!important;-webkit-backdrop-filter:none!important}
+  .glass{box-shadow:inset 0 1px #ffffff10,0 5px 12px #0005!important}
+  .brand img,.guardianArt,.baseChest{animation-duration:2.2s!important}
+  .bossFloatingV131{animation-duration:2.1s!important;will-change:left,top}
+  .bossFloatingV131::before{filter:blur(4px)!important;animation-duration:1.8s!important}
+  .bossFloatingV131 img{filter:drop-shadow(0 7px 6px #00121fb5) drop-shadow(0 0 9px #f3c85b88)!important}
+  .bossFloatingV131.hit img{filter:brightness(1.5) drop-shadow(0 0 12px #9ffcff)!important}
+  .enemy{filter:none!important;will-change:left}
+  .pirateArt{filter:drop-shadow(0 5px 4px #0007)!important}
+  .wordWave{filter:none!important;opacity:.85}
+  .wordWave::before,.wordWave::after{filter:none!important}
+  .spark{display:none!important}
+  .impact{box-shadow:none!important}
+  .emergencyWave::before{filter:none!important}
+  .emergencyCellFlash{box-shadow:inset 0 0 10px #fff6b855!important}
+  .emergencyBtn.emergencyNuke.ready{animation-duration:2.2s!important}
+  .tool::after{display:none!important}
 }
+@media(prefers-reduced-motion:reduce){.brand img,.guardianArt,.baseChest,.bossFloatingV131,.emergencyBtn.emergencyNuke.ready{animation-duration:4s!important}}
+@media(max-width:370px){.top{grid-template-columns:minmax(0,1fr) 92px auto!important;gap:3px!important}.pill{min-width:33px;padding-left:2px;padding-right:2px}.brand img{width:27px;height:27px}.brand b{font-size:.54rem}.brand small{font-size:.24rem}.version{font-size:.21rem}.tools{gap:4px!important}.tool{font-size:.56rem!important;padding:6px 3px!important}}
