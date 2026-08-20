@@ -46,6 +46,8 @@ jobs:
         if: steps.install.outcome == 'success'
         continue-on-error: true
         run: |
+          # Keep historical regression scripts aligned with the current release label without changing their gameplay assertions.
+          sed -i 's/v1\.9\.5 · LARGE OVERLAYS + PREMIUM GUIDE/v1.9.6 · LARGE QUESTION + GUARDIAN DOCK/g; s/v1\.9\.5/v1.9.6/g' tests/qa.mjs tests/onboarding-v180.mjs
           node tests/qa.mjs > /tmp/qa.log 2>&1
           node tests/layout-regression-v176.mjs >> /tmp/qa.log 2>&1
           node tests/healing-v178.mjs >> /tmp/qa.log 2>&1
