@@ -29,7 +29,7 @@ async function run(name,browserType,viewport){
   page.on('pageerror',e=>errors.push(String(e)));
   await page.goto(live,{waitUntil:'networkidle',timeout:60000});
   await page.locator('#startBtn').click();
-  await page.locator('#intro').waitFor({state:'hidden'});
+  await page.locator('#intro').waitFor({state:'hidden',timeout:2500});
 
   const schedule=await page.evaluate(()=>[
     WGAnswerHeal.healPercentForTime(179.9),
@@ -52,6 +52,14 @@ async function run(name,browserType,viewport){
   const popupText=(await page.locator('.wgHealMilestone').innerText()).toUpperCase();
   for(const expected of ['DEINE WÖRTER HEILEN JETZT','3:00','3 %','3:30','6 %','4:00','10 %','30 %']){
     if(!popupText.includes(expected))throw new Error(`${name}: popup missing ${expected}`);
+  }
+  if(viewport.width<=600){
+    const sizes=await page.evaluate(()=>({
+      title:parseFloat(getComputedStyle(document.querySelector('.wgHealCopy h2')).fontSize),
+      copy:parseFloat(getComputedStyle(document.querySelector('.wgHealCopy p')).fontSize),
+      scale:parseFloat(getComputedStyle(document.querySelector('.wgHealScale span')).fontSize)
+    }));
+    if(sizes.title<17||sizes.copy<10.5||sizes.scale<9.5)throw new Error(`${name}: healing popup text still too small: ${JSON.stringify(sizes)}`);
   }
   await page.locator('#wgHealContinue').click();
   await page.locator('.wgHealMilestone').waitFor({state:'detached'});
@@ -86,11 +94,11 @@ async function run(name,browserType,viewport){
 
   if(errors.length)throw new Error(`${name}: JS errors: ${errors.join(' | ')}`);
   await browser.close();
-  console.log(`PASS ${name} · 3:00 healing popup + scaled healing`);
+  console.log(`PASS ${name} · larger 3:00 healing popup + scaled healing`);
 }
 
 await waitHttp(new URL('assets/patches/answer-heal-v178.js',live));
 await waitHttp(new URL('assets/patches/answer-heal-v178.css',live));
 await run('desktop-chromium',chromium,{width:1440,height:900});
 await run('iphone-like-webkit',webkit,{width:390,height:844});
-console.log('HEALING_V178_PASS');
+console.log('HEALING_V190_PASS');
