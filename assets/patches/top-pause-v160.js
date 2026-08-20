@@ -4,14 +4,13 @@
 
   function updateUi(){
     const version=document.querySelector('.version');
-    if(version)version.textContent='v1.6.1 · CLEAN ACTIONS · 4×8';
+    if(version)version.textContent='v1.6.2 · HEADER NOTRUF · 4×8';
 
     const lower=$('pauseBtn');
     const paused=typeof S!=='undefined'&&S&&S.pause;
     const ended=typeof S!=='undefined'&&S&&S.end;
     document.body.classList.toggle('wgFullPause',!!paused&&!ended);
 
-    // Defensive cleanup in case an older cached patch created the header pause button.
     const obsoleteTop=$('topPauseBtn');
     if(obsoleteTop)obsoleteTop.remove();
 
