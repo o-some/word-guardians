@@ -1,10 +1,41 @@
-/* Word Guardians v1.6.0 — limited top pause control */
-.topPauseBtn{position:relative;min-width:54px;height:54px;border-radius:14px;padding:4px 6px;display:grid;grid-template-rows:auto auto;place-items:center;border:1px solid #efc76699;background:linear-gradient(180deg,#073a53,#04283e);box-shadow:inset 0 1px #ffffff18,0 7px 16px #0007;cursor:pointer}
-.topPauseBtn .pauseIcon{font-size:1rem;line-height:1;color:#fff0b4;text-shadow:0 0 9px #75ebe5aa}
-.topPauseBtn small{font-size:.29rem;font-weight:950;letter-spacing:.08em;color:#bfe5e3;line-height:1}
-.topPauseBtn b{font-size:.58rem;line-height:1;color:#ffe18a;margin-top:1px}
-.topPauseBtn:not(:disabled):active{transform:translateY(1px) scale(.98)}
-.topPauseBtn.exhausted{opacity:.36;filter:grayscale(1);box-shadow:inset 0 1px #ffffff0c}
+/* Word Guardians v1.6.1 — clean actions + limited pause */
+/* Requested cleanup: remove the thin phase/combo row and any duplicate header pause control. */
+.status{display:none!important}
+.topPauseBtn{display:none!important}
+
+/* Make the three main action buttons feel like real game controls. */
+.tools{display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px!important;margin-top:10px!important}
+.tool{position:relative;min-height:54px!important;border-radius:14px!important;padding:8px 10px!important;font-size:.72rem!important;font-weight:950!important;letter-spacing:.015em!important;color:#fff7df!important;text-shadow:0 2px 3px #001522cc!important;box-shadow:inset 0 1px #ffffff24,0 7px 16px #00152277!important;transition:transform .16s ease,filter .16s ease,box-shadow .16s ease,border-color .16s ease!important;overflow:hidden}
+.tool::after{content:'';position:absolute;inset:0;pointer-events:none;background:linear-gradient(115deg,transparent 0 38%,#ffffff18 48%,transparent 58%);transform:translateX(-130%)}
+.tool:not(:disabled):active{transform:translateY(1px) scale(.985)}
+.tool:not(:disabled):hover::after{animation:wgToolShine .8s ease}
+
+#infoBtn{background:linear-gradient(180deg,#0a6071,#073d57)!important;border:1px solid #66e8dfcc!important;box-shadow:inset 0 1px #ffffff28,0 0 0 1px #66e8df20,0 7px 16px #00152277,0 0 12px #4ee0d633!important}
+#moveBtn{background:linear-gradient(180deg,#705523,#3f341b)!important;border:1px solid #efc766dd!important;color:#fff1b6!important;box-shadow:inset 0 1px #ffffff20,0 0 0 1px #efc7661f,0 7px 16px #00152277,0 0 12px #efc7662e!important}
+#moveBtn.active{background:linear-gradient(180deg,#b9872e,#6e4b1d)!important;border-color:#ffe79b!important;box-shadow:inset 0 1px #ffffff35,0 0 0 2px #ffe18a44,0 0 18px #efc76666!important}
+#pauseBtn{background:linear-gradient(180deg,#173f66,#0b2948)!important;border:1px solid #86bfffcc!important;box-shadow:inset 0 1px #ffffff24,0 0 0 1px #7dbaff1f,0 7px 16px #00152277,0 0 12px #6fb5ff2e!important}
+#pauseBtn.exhausted{opacity:.42!important;filter:grayscale(.85)!important;box-shadow:inset 0 1px #ffffff10!important}
+
+/* Full pause really freezes the animated battlefield. */
 body.wgFullPause .bossFloatingV131,body.wgFullPause .guardianArt,body.wgFullPause .baseChest,body.wgFullPause .rescueRockCore,body.wgFullPause .wordWave,body.wgFullPause .emergencyWave{animation-play-state:paused!important}
 body.wgFullPause .shot{visibility:hidden}
-@media(max-width:520px){.top{grid-template-columns:minmax(0,1fr) auto}.topPauseBtn{min-width:46px;width:46px;height:46px;padding:3px}.topPauseBtn .pauseIcon{font-size:.88rem}.topPauseBtn small{font-size:.23rem}.topPauseBtn b{font-size:.5rem}.hud{gap:3px}.pill{min-width:39px;padding-left:3px;padding-right:3px}.brand{min-width:0;padding:5px;gap:5px}.brand img{width:32px;height:32px}.brand b{font-size:.64rem;white-space:nowrap}.brand small{font-size:.29rem}.version{font-size:.27rem;white-space:nowrap}}
+
+@keyframes wgToolShine{0%{transform:translateX(-130%)}100%{transform:translateX(130%)}}
+
+@media(max-width:520px){
+  .top{grid-template-columns:minmax(0,1fr) auto}
+  .hud{gap:3px}
+  .pill{min-width:39px;padding-left:3px;padding-right:3px}
+  .brand{min-width:0;padding:5px;gap:5px}
+  .brand img{width:32px;height:32px}
+  .brand b{font-size:.64rem;white-space:nowrap}
+  .brand small{font-size:.29rem}
+  .version{font-size:.27rem;white-space:nowrap}
+  .tools{gap:6px!important;margin-top:8px!important}
+  .tool{min-height:49px!important;padding:7px 5px!important;font-size:.61rem!important;line-height:1.15!important}
+}
+
+@media(max-width:360px){
+  .tools{gap:4px!important}
+  .tool{font-size:.56rem!important;padding:6px 3px!important}
+}
