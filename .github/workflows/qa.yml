@@ -45,7 +45,9 @@ jobs:
         id: gameplay
         if: steps.install.outcome == 'success'
         continue-on-error: true
-        run: node tests/qa.mjs > /tmp/qa.log 2>&1
+        run: |
+          node tests/qa.mjs > /tmp/qa.log 2>&1
+          node tests/layout-regression-v176.mjs >> /tmp/qa.log 2>&1
       - name: Record automated QA result
         if: always()
         shell: bash
@@ -84,6 +86,8 @@ jobs:
           - 3× pause in the action row
           - mobile performance profile
           - premium endscreen additions
+          - energy bar directly above the boss slot
+          - regular enemy sprites may paint outside their lane without changing lane logic
 
           Note: WebKit mobile emulation is not a physical iPhone Safari device test.
 
