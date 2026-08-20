@@ -38,4 +38,4 @@ for (const tag of jsTags) {
 await writeFile('dist/index.html', built);
 await writeFile('dist/404.html', built);
 await cp('assets', 'dist/assets', { recursive: true });
-console.log('Word Guardians build complete · v1.8.0 onboarding + 60s Insel-Notruf');
+console.log('Word Guardians build complete · v1.8.1 onboarding + 60s Insel-Notruf');
