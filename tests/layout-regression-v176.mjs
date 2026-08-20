@@ -17,7 +17,7 @@ async function run(name,browserType,viewport){
   page.on('pageerror',e=>pageErrors.push(String(e)));
   await page.goto(live,{waitUntil:'networkidle',timeout:60000});
   await page.locator('#startBtn').click();
-  await page.locator('#intro').waitFor({state:'hidden'});
+  await page.locator('#intro').waitFor({state:'hidden',timeout:2500});
   await page.waitForTimeout(250);
 
   const layout=await page.evaluate(()=>{
@@ -47,8 +47,10 @@ async function run(name,browserType,viewport){
   });
   await page.waitForTimeout(160);
   if(await page.locator('.lane').nth(0).locator('.enemy').count()<1)throw new Error(`${name}: regular enemy did not render in its lane`);
-  const enemyMetrics=await page.locator('.lane').nth(0).locator('.enemy').first().evaluate(el=>{const r=el.getBoundingClientRect();return {width:r.width,height:r.height,z:getComputedStyle(el).zIndex};});
-  if(enemyMetrics.width<=0||enemyMetrics.height<=0)throw new Error(`${name}: regular enemy sprite has no visible box`);
+  const art=page.locator('.lane').nth(0).locator('.enemy .pirateArt').first();
+  if(await art.count()!==1)throw new Error(`${name}: regular enemy sprite image missing`);
+  const enemyMetrics=await art.evaluate(el=>{const r=el.getBoundingClientRect();return {width:r.width,height:r.height,display:getComputedStyle(el).display,visibility:getComputedStyle(el).visibility};});
+  if(enemyMetrics.width<=0||enemyMetrics.height<=0||enemyMetrics.display==='none'||enemyMetrics.visibility==='hidden')throw new Error(`${name}: regular enemy sprite is not visibly painted: ${JSON.stringify(enemyMetrics)}`);
 
   if(await page.locator('#bossStage .wgBossActiveHead:not(.hidden) img').count()!==1)throw new Error(`${name}: active boss portrait missing`);
   if(await page.locator('#bossStage .wgBossIdleContent:not(.hidden)').count()!==0)throw new Error(`${name}: idle skull must disappear during boss fight`);
@@ -72,4 +74,4 @@ async function run(name,browserType,viewport){
 await waitHttp(live);
 await run('desktop-chromium',chromium,{width:1440,height:900});
 await run('iphone-like-webkit',webkit,{width:390,height:844});
-console.log('LAYOUT_REGRESSION_V177_PASS');
+console.log('LAYOUT_REGRESSION_V191_PASS');
