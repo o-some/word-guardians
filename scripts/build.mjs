@@ -40,4 +40,4 @@ for (const tag of jsTags) {
 await writeFile('dist/index.html', built);
 await writeFile('dist/404.html', built);
 await cp('assets', 'dist/assets', { recursive: true });
-console.log('Word Guardians build complete · v1.9.5 larger overlays + premium start sprites');
+console.log('Word Guardians build complete · v1.9.6 larger mobile question + guardian dock');
