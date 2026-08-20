@@ -1,0 +1,3 @@
+Word Guardians v1.7.1 deploy retry marker
+Requested: 2026-08-20
+Purpose: retrigger GitHub Pages and QA without changing gameplay logic.
