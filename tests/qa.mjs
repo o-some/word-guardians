@@ -10,7 +10,7 @@ const assetUrls = [
   'assets/bosses/boss-01-pirat-kai.png','assets/bosses/boss-02-kapitaen-brax.png','assets/bosses/boss-03-blackfinn.png','assets/bosses/boss-04-alt-kapitaen-roderick.png','assets/bosses/boss-05-piratenbaron-vargas.png','assets/bosses/boss-06-kapitaen-ironhook.png','assets/bosses/boss-07-admiral-thorne.png','assets/bosses/boss-08-kartenmeister-corvin.png','assets/bosses/boss-09-schattenfuerst-azrak.png','assets/bosses/boss-10-piratenkoenig-varkos.png',
   'assets/guardians/guardian-01-wortkoralle.png','assets/guardians/guardian-02-steinmuschel.png','assets/guardians/guardian-03-minzqualle.png','assets/guardians/guardian-04-gezeitenstern.png','assets/guardians/guardian-05-blitzkoralle.png','assets/guardians/guardian-06-ankerkrabbe.png',
   'assets/ui/ui-01-muschel-schatztruhe.png','assets/ui/ui-02-boss-rahmen.png',
-  'assets/patches/boss-overlay-v131.css','assets/patches/boss-overlay-v131.js','assets/patches/lane-rescue-v140.css','assets/patches/lane-rescue-v140.js','assets/patches/emergency-v150.css','assets/patches/emergency-v150.js','assets/patches/top-pause-v160.css','assets/patches/top-pause-v160.js','assets/patches/compact-dnd-v171.css','assets/patches/compact-dnd-v171.js'
+  'assets/patches/boss-overlay-v131.css','assets/patches/boss-overlay-v131.js','assets/patches/lane-rescue-v140.css','assets/patches/lane-rescue-v140.js','assets/patches/emergency-v150.css','assets/patches/emergency-v150.js','assets/patches/top-pause-v160.css','assets/patches/top-pause-v160.js','assets/patches/compact-dnd-v171.css','assets/patches/compact-dnd-v171.js','assets/patches/boss-idle-slot-v174.css','assets/patches/boss-idle-slot-v174.js'
 ];
 
 async function waitHttp(url, attempts=36) {
@@ -49,6 +49,15 @@ async function dragGuardian(page, cardSelector, cellSelector, pointerType='mouse
   await page.waitForTimeout(160);
 }
 
+async function assertIdleBossSlot(page,name) {
+  if (await page.locator('#bossStage').count() !== 1) throw new Error(`${name}: boss stage missing`);
+  if (!(await page.locator('#bossStage').isVisible())) throw new Error(`${name}: boss stage should stay visible while idle`);
+  if (!(await page.locator('#bossStage').evaluate(el=>el.classList.contains('wgBossIdle')))) throw new Error(`${name}: boss stage idle class missing`);
+  const idleText=(await page.locator('#bossStage').innerText()).toUpperCase();
+  if(!idleText.includes('KEIN BOSS IN SICHT')) throw new Error(`${name}: idle boss copy missing`);
+  if(await page.locator('#bossStage .wgBossIdleMark').count()!==1) throw new Error(`${name}: idle pirate skull missing`);
+}
+
 async function runProfile(name, browserType, viewport, fullGameplay=false) {
   const browser = await browserType.launch({ headless:true });
   const page = await browser.newPage({ viewport });
@@ -56,12 +65,13 @@ async function runProfile(name, browserType, viewport, fullGameplay=false) {
   page.on('pageerror', e=>pageErrors.push(String(e)));
   page.on('response', r=>{ if(r.status()>=400) failed.push(`${r.status()} ${r.url()}`); });
   await page.goto(live, { waitUntil:'networkidle', timeout:60000 });
-  const expectedVersion='v1.7.2 · STABLE DND';
-  if (!(await page.locator('body').innerText()).includes(expectedVersion)) throw new Error(`${name}: v1.7.2 version not visible`);
+  const expectedVersion='v1.7.3 · TOUCH DND FIX';
+  if (!(await page.locator('body').innerText()).includes(expectedVersion)) throw new Error(`${name}: v1.7.3 version not visible`);
   await page.waitForTimeout(1300);
   if (!(await page.locator('body').innerText()).includes(expectedVersion)) throw new Error(`${name}: version display is still fluctuating`);
   if (await page.locator('#bossOverlayV131').count() !== 1) throw new Error(`${name}: boss overlay layer missing`);
   if (await page.locator('#bossStage .bossVisual').evaluateAll(nodes=>nodes.some(n=>getComputedStyle(n).display!=='none'))) throw new Error(`${name}: duplicate boss portrait still visible in boss info strip`);
+  await assertIdleBossSlot(page,name);
   if (await page.locator('#emergencyBtn').count() !== 1) throw new Error(`${name}: Insel-Notruf button missing`);
   if (await page.locator('.top #emergencyHeaderSlot #emergencyBtn').count() !== 1) throw new Error(`${name}: Insel-Notruf not mounted in header between brand and HUD`);
   if (await page.locator('#topPauseBtn').count() !== 0) throw new Error(`${name}: obsolete header pause button visible`);
@@ -75,13 +85,14 @@ async function runProfile(name, browserType, viewport, fullGameplay=false) {
     if (perf.attachment === 'fixed') throw new Error(`${name}: mobile background still fixed`);
     if (perf.touchAction !== 'none') throw new Error(`${name}: guardian cards not touch-drag ready`);
     if (await page.locator('#bossStage').count()) {
-      const bossHeight=await page.locator('#bossStage').evaluate(el=>{const hidden=el.classList.contains('hidden');el.classList.remove('hidden');const h=el.getBoundingClientRect().height;if(hidden)el.classList.add('hidden');return h;});
+      const bossHeight=await page.locator('#bossStage').evaluate(el=>el.getBoundingClientRect().height);
       if (bossHeight > 48) throw new Error(`${name}: boss strip too tall on mobile (${bossHeight}px)`);
     }
   }
 
   await page.locator('#startBtn').click();
   await page.locator('#intro').waitFor({ state:'hidden' });
+  await assertIdleBossSlot(page,name);
   if (await page.locator('.lane').count() !== 4) throw new Error(`${name}: lane count != 4`);
   if (await page.locator('.cell').count() !== 32) throw new Error(`${name}: cell count != 32`);
   if (await page.locator('.answer').count() !== 3) throw new Error(`${name}: answers != 3`);
@@ -137,6 +148,7 @@ async function runProfile(name, browserType, viewport, fullGameplay=false) {
     if (await page.locator('.pirateArt').count() < 1) throw new Error(`${name}: regular pirate image sprite not rendered`);
     const bossOverlayCount = await page.locator('#bossOverlayV131 .bossFloatingV131 img').count();
     if (bossOverlayCount < 1) throw new Error(`${name}: glowing boss overlay sprite not rendered after boss milestones`);
+    if (await page.locator('#bossStage').evaluate(el=>el.classList.contains('wgBossIdle'))) throw new Error(`${name}: boss stage stayed idle while boss is active`);
 
     await page.evaluate(()=>{ gameOver(); });
     await page.locator('#endOv').waitFor({ state:'visible' });
