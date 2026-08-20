@@ -1,7 +1,7 @@
 (()=>{
   'use strict';
 
-  const VERSION='v1.7.3 · TOUCH DND FIX · 4×8';
+  const VERSION='v1.8.0 · ONBOARDING + NOTRUF 60 · 4×8';
   const state={mode:null,id:null,card:null,startX:0,startY:0,active:false,ghost:null,hot:null,suppressClick:false};
   const qsa=s=>[...document.querySelectorAll(s)];
 
@@ -104,7 +104,6 @@
     }else cleanup();
   }
 
-  // Pointer Events: mouse, pen and modern mobile browsers.
   document.addEventListener('pointerdown',event=>{
     const card=event.target.closest?.('.dock .card');
     if(!card||event.button!==0)return;
@@ -120,7 +119,6 @@
   },{passive:false});
   document.addEventListener('pointercancel',event=>{if(state.mode==='pointer'&&event.pointerId===state.id)cleanup();},{passive:true});
 
-  // Fallback for iOS/WebViews that expose Touch Events instead of usable Pointer Events.
   document.addEventListener('touchstart',event=>{
     if(state.card)return;
     const card=event.target.closest?.('.dock .card');
