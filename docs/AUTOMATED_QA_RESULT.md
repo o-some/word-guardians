@@ -1,8 +1,8 @@
 # Automated QA Result — Word Guardians
 
 Result: PASS
-Tested Commit: `e1d2916344bd7b1ff90256c522e9e22cf84dfa37`
-Date: 2026-08-20T19:59:01Z
+Tested Commit: `32a1a29fcc67c30a2b777adfcf6279b590e06fa0`
+Date: 2026-08-20T20:24:12Z
 Live URL: https://o-some.github.io/word-guardians/
 Build: success
 Browser install: success
@@ -25,20 +25,21 @@ Assets/features checked:
 - premium endscreen additions
 - energy bar between answers and action buttons
 - regular enemy sprites may paint outside their lane without changing lane logic
-- larger onboarding and 3:00 healing milestone typography
-- 3:00 answer-healing milestone popup and scaling heal percentages
-- 2:00 answer-damage milestone and +1 percent per second up to +100 percent
-- v1.9.4 streamlined start guide, start-to-info morph and 60-second Insel-Notruf
+- larger typography across standard overlay windows
+- larger 3:00 healing milestone popup and scaling heal percentages
+- larger 2:00 answer-damage milestone and +1 percent per second up to +100 percent
+- premium guardian sprites on the streamlined v1.9.5 start guide
+- start-to-info morph and 60-second Insel-Notruf
 
 Note: WebKit mobile emulation is not a physical iPhone Safari device test.
 
 ## Build log
 ```
 
-> word-guardians@1.9.4 build
+> word-guardians@1.9.5 build
 > node scripts/build.mjs
 
-Word Guardians build complete · v1.9.4 streamlined start screen
+Word Guardians build complete · v1.9.5 larger overlays + premium start sprites
 ```
 
 ## Browser install log (tail)
@@ -135,13 +136,13 @@ ALL_QA_PASS
 PASS desktop-chromium · embedded energy · readable boss HP · visible lane sprites
 PASS iphone-like-webkit · embedded energy · readable boss HP · visible lane sprites
 LAYOUT_REGRESSION_V191_PASS
-PASS desktop-chromium · larger 3:00 healing popup + scaled healing
-PASS iphone-like-webkit · larger 3:00 healing popup + scaled healing
-HEALING_V192_PASS
-PASS desktop-chromium · v1.9.4 streamlined onboarding + readable guide + 60s Notruf
-PASS iphone-like-webkit · v1.9.4 streamlined onboarding + readable guide + 60s Notruf
-ONBOARDING_V194_PASS
-PASS desktop-chromium · 2:00 damage popup + 1%/sec scaling + 2x cap
-PASS iphone-like-webkit · 2:00 damage popup + 1%/sec scaling + 2x cap
-DAMAGE_V190_PASS
+PASS desktop-chromium · v1.9.5 larger 3:00 healing popup + scaled healing
+PASS iphone-like-webkit · v1.9.5 larger 3:00 healing popup + scaled healing
+HEALING_V195_PASS
+PASS desktop-chromium · v1.9.5 larger overlays + premium start sprites + 60s Notruf
+PASS iphone-like-webkit · v1.9.5 larger overlays + premium start sprites + 60s Notruf
+ONBOARDING_V195_PASS
+PASS desktop-chromium · v1.9.5 larger 2:00 damage popup + 1%/sec scaling + 2x cap
+PASS iphone-like-webkit · v1.9.5 larger 2:00 damage popup + 1%/sec scaling + 2x cap
+DAMAGE_V195_PASS
 ```
