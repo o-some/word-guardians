@@ -50,6 +50,7 @@ jobs:
           node tests/layout-regression-v176.mjs >> /tmp/qa.log 2>&1
           node tests/healing-v178.mjs >> /tmp/qa.log 2>&1
           node tests/onboarding-v180.mjs >> /tmp/qa.log 2>&1
+          node tests/damage-v190.mjs >> /tmp/qa.log 2>&1
       - name: Record automated QA result
         if: always()
         shell: bash
@@ -90,8 +91,10 @@ jobs:
           - premium endscreen additions
           - energy bar between answers and action buttons
           - regular enemy sprites may paint outside their lane without changing lane logic
+          - larger onboarding and 3:00 healing milestone typography
           - 3:00 answer-healing milestone popup and scaling heal percentages
-          - v1.8.1 start guide, start-to-info morph and 60-second Insel-Notruf
+          - 2:00 answer-damage milestone and +1 percent per second up to +100 percent
+          - v1.9.0 start guide, start-to-info morph and 60-second Insel-Notruf
 
           Note: WebKit mobile emulation is not a physical iPhone Safari device test.
 
