@@ -9,7 +9,6 @@
   function iconSvg(){return `<svg class="emergencyIcon" viewBox="0 0 96 96" aria-hidden="true"><defs><radialGradient id="alarmCore" cx="40%" cy="30%" r="70%"><stop offset="0" stop-color="#ff9b8f"/><stop offset=".34" stop-color="#e62f36"/><stop offset="1" stop-color="#6f0b12"/></radialGradient><linearGradient id="alarmGold" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fff0a8"/><stop offset=".46" stop-color="#e8bd59"/><stop offset="1" stop-color="#8a5a1d"/></linearGradient></defs><circle cx="48" cy="48" r="43" fill="#061b2b" stroke="url(#alarmGold)" stroke-width="5"/><circle cx="48" cy="48" r="35" fill="url(#alarmCore)" stroke="#ff6c6c" stroke-width="2"/><path d="M48 24 70 65H26Z" fill="#fff1d0" stroke="#6a1116" stroke-width="3"/><path d="M48 36v15" stroke="#9d1118" stroke-width="6" stroke-linecap="round"/><circle cx="48" cy="59" r="3.5" fill="#9d1118"/><path d="M18 48h-8M86 48h-8M48 18V10M48 86v-8" stroke="#ffcf67" stroke-width="4" stroke-linecap="round" opacity=".85"/></svg>`}
 
   function ensureUi(){
-    const version=document.querySelector('.version');if(version)version.textContent='v1.7.0 · MOBILE FLOW + ENDGAME · 4×8';
     const top=document.querySelector('.top'),hud=document.querySelector('.hud');if(!top||!hud)return;
     let slot=$('emergencyHeaderSlot');if(!slot){slot=document.createElement('div');slot.id='emergencyHeaderSlot';slot.className='emergencyHeaderSlot';top.insertBefore(slot,hud);}
     if(ability.mounted){const wrap=document.querySelector('.emergencyWrap');if(wrap&&wrap.parentElement!==slot)slot.appendChild(wrap);return;}
