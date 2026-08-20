@@ -5,45 +5,12 @@ const words = new Map([
   ['Apfel','apple'],['Wasser','water'],['Haus','house'],['Fenster','window'],['Schule','school'],['Buch','book'],['Flughafen','airport'],['Zug','train'],['Strand','beach'],['Wald','forest'],['Sonne','sun'],['Freund','friend'],['laufen','run'],['essen','eat'],['trinken','drink'],['Familie','family'],['Straße','street'],['Stadt','city'],['Arzt','doctor'],['Meer','sea'],['Insel','island'],['Schiff','ship'],['Hotel','hotel'],['Brücke','bridge'],['Telefon','phone'],['Koffer','suitcase'],['Markt','market'],['schnell','fast'],['langsam','slow'],['Küche','kitchen'],['Garten','garden'],['Regen','rain'],['Wolke','cloud'],['glücklich','happy'],['müde','tired'],['arbeiten','work'],['spielen','play'],['fragen','ask'],['antworten','answer'],['lernen','learn']
 ]);
 const assetUrls = [
-  'assets/creative/world_harbor.webp',
-  'assets/creative/mode_words_discover.webp',
-  'assets/creative/tula_profile.webp',
-  'assets/creative/tula_neutral_front.webp',
-  'assets/creative/tula_happy.webp',
-  'assets/enemies/enemy-01-deckhand-niko.png',
-  'assets/enemies/enemy-02-hook-scout-lio.png',
-  'assets/enemies/enemy-03-barrel-raider-mako.png',
-  'assets/enemies/enemy-04-shield-buccaneer-taro.png',
-  'assets/enemies/enemy-05-wave-skater-piko.png',
-  'assets/enemies/enemy-06-anchor-brute-koda.png',
-  'assets/enemies/enemy-07-tidecaller-yara.png',
-  'assets/enemies/enemy-08-cannon-corsair-riven.png',
-  'assets/bosses/boss-01-pirat-kai.png',
-  'assets/bosses/boss-02-kapitaen-brax.png',
-  'assets/bosses/boss-03-blackfinn.png',
-  'assets/bosses/boss-04-alt-kapitaen-roderick.png',
-  'assets/bosses/boss-05-piratenbaron-vargas.png',
-  'assets/bosses/boss-06-kapitaen-ironhook.png',
-  'assets/bosses/boss-07-admiral-thorne.png',
-  'assets/bosses/boss-08-kartenmeister-corvin.png',
-  'assets/bosses/boss-09-schattenfuerst-azrak.png',
-  'assets/bosses/boss-10-piratenkoenig-varkos.png',
-  'assets/guardians/guardian-01-wortkoralle.png',
-  'assets/guardians/guardian-02-steinmuschel.png',
-  'assets/guardians/guardian-03-minzqualle.png',
-  'assets/guardians/guardian-04-gezeitenstern.png',
-  'assets/guardians/guardian-05-blitzkoralle.png',
-  'assets/guardians/guardian-06-ankerkrabbe.png',
-  'assets/ui/ui-01-muschel-schatztruhe.png',
-  'assets/ui/ui-02-boss-rahmen.png',
-  'assets/patches/boss-overlay-v131.css',
-  'assets/patches/boss-overlay-v131.js',
-  'assets/patches/lane-rescue-v140.css',
-  'assets/patches/lane-rescue-v140.js',
-  'assets/patches/emergency-v150.css',
-  'assets/patches/emergency-v150.js',
-  'assets/patches/top-pause-v160.css',
-  'assets/patches/top-pause-v160.js'
+  'assets/creative/world_harbor.webp','assets/creative/mode_words_discover.webp','assets/creative/tula_profile.webp','assets/creative/tula_neutral_front.webp','assets/creative/tula_happy.webp',
+  'assets/enemies/enemy-01-deckhand-niko.png','assets/enemies/enemy-02-hook-scout-lio.png','assets/enemies/enemy-03-barrel-raider-mako.png','assets/enemies/enemy-04-shield-buccaneer-taro.png','assets/enemies/enemy-05-wave-skater-piko.png','assets/enemies/enemy-06-anchor-brute-koda.png','assets/enemies/enemy-07-tidecaller-yara.png','assets/enemies/enemy-08-cannon-corsair-riven.png',
+  'assets/bosses/boss-01-pirat-kai.png','assets/bosses/boss-02-kapitaen-brax.png','assets/bosses/boss-03-blackfinn.png','assets/bosses/boss-04-alt-kapitaen-roderick.png','assets/bosses/boss-05-piratenbaron-vargas.png','assets/bosses/boss-06-kapitaen-ironhook.png','assets/bosses/boss-07-admiral-thorne.png','assets/bosses/boss-08-kartenmeister-corvin.png','assets/bosses/boss-09-schattenfuerst-azrak.png','assets/bosses/boss-10-piratenkoenig-varkos.png',
+  'assets/guardians/guardian-01-wortkoralle.png','assets/guardians/guardian-02-steinmuschel.png','assets/guardians/guardian-03-minzqualle.png','assets/guardians/guardian-04-gezeitenstern.png','assets/guardians/guardian-05-blitzkoralle.png','assets/guardians/guardian-06-ankerkrabbe.png',
+  'assets/ui/ui-01-muschel-schatztruhe.png','assets/ui/ui-02-boss-rahmen.png',
+  'assets/patches/boss-overlay-v131.css','assets/patches/boss-overlay-v131.js','assets/patches/lane-rescue-v140.css','assets/patches/lane-rescue-v140.js','assets/patches/emergency-v150.css','assets/patches/emergency-v150.js','assets/patches/top-pause-v160.css','assets/patches/top-pause-v160.js'
 ];
 
 async function waitHttp(url, attempts=36) {
@@ -73,13 +40,21 @@ async function runProfile(name, browserType, viewport, fullGameplay=false) {
   page.on('pageerror', e=>pageErrors.push(String(e)));
   page.on('response', r=>{ if(r.status()>=400) failed.push(`${r.status()} ${r.url()}`); });
   await page.goto(live, { waitUntil:'networkidle', timeout:60000 });
-  if (!(await page.locator('body').innerText()).includes('v1.6.2 · HEADER NOTRUF')) throw new Error(`${name}: v1.6.2 header Notruf version not visible`);
+  if (!(await page.locator('body').innerText()).includes('v1.7.0 · MOBILE FLOW + ENDGAME')) throw new Error(`${name}: v1.7.0 version not visible`);
   if (await page.locator('#bossOverlayV131').count() !== 1) throw new Error(`${name}: boss overlay layer missing`);
   if (await page.locator('#bossStage .bossVisual').evaluateAll(nodes=>nodes.some(n=>getComputedStyle(n).display!=='none'))) throw new Error(`${name}: duplicate boss portrait still visible in boss info strip`);
   if (await page.locator('#emergencyBtn').count() !== 1) throw new Error(`${name}: Insel-Notruf button missing`);
   if (await page.locator('.top #emergencyHeaderSlot #emergencyBtn').count() !== 1) throw new Error(`${name}: Insel-Notruf not mounted in header between brand and HUD`);
   if (await page.locator('#topPauseBtn').count() !== 0) throw new Error(`${name}: obsolete header pause button visible`);
   if ((await page.locator('#emergencyTimer').textContent())?.trim() !== 'READY') throw new Error(`${name}: Insel-Notruf must start READY`);
+
+  if (viewport.width <= 600) {
+    const perf = await page.evaluate(() => ({
+      attachment:getComputedStyle(document.querySelector('.app')).backgroundAttachment,
+      blur:getComputedStyle(document.querySelector('.glass')).backdropFilter || getComputedStyle(document.querySelector('.glass')).webkitBackdropFilter
+    }));
+    if (perf.attachment === 'fixed') throw new Error(`${name}: mobile background still fixed`);
+  }
 
   await page.locator('#startBtn').click();
   await page.locator('#intro').waitFor({ state:'hidden' });
@@ -93,11 +68,12 @@ async function runProfile(name, browserType, viewport, fullGameplay=false) {
     await page.evaluate(()=>{ const p=ENEMIES[0]; S.e.push({id:S.id++,r:1,x:62,hp:999,max:999,sp:0,n:'QA Emergency Target',cl:'',asset:p.asset,rank:1,born:S.time,stun:0,hitUntil:0}); });
     await page.waitForTimeout(80);
     await page.locator('#emergencyBtn').click();
-    await page.waitForTimeout(100);
+    await page.waitForTimeout(120);
     if ((await page.locator('#emergencyTimer').textContent())?.trim() === 'READY') throw new Error(`${name}: Insel-Notruf cooldown did not start`);
     if (!(await page.locator('#emergencyBtn').isDisabled())) throw new Error(`${name}: Insel-Notruf should be disabled during cooldown`);
     if (await page.locator('.emergencyWave').count() < 1) throw new Error(`${name}: Insel-Notruf field animation missing`);
     if (!(await page.evaluate(()=>S.e.every(e=>e.hp<=0)))) throw new Error(`${name}: Insel-Notruf did not deal 100 percent damage`);
+    if ((await page.evaluate(()=>window.WGRunStats?.emergencyUses||0)) < 1) throw new Error(`${name}: emergency use stat not tracked`);
 
     await page.locator('.card[data-g="coral"]').click();
     await page.locator('.lane').nth(0).locator('.cell').nth(1).click();
@@ -134,10 +110,12 @@ async function runProfile(name, browserType, viewport, fullGameplay=false) {
 
     await page.evaluate(()=>{ gameOver(); });
     await page.locator('#endOv').waitFor({ state:'visible' });
+    await page.waitForTimeout(350);
     const resultText = await page.locator('#endOv').innerText();
-    for (const expected of ['WÖRTER','DURCHGEHALTEN','GEFAHRENSTUFE','BESTE COMBO','XP','MUSCHELN']) {
+    for (const expected of ['WÖRTER','DURCHGEHALTEN','GEFAHRENSTUFE','BESTE COMBO','XP','MUSCHELN','BOSSE BESIEGT','LINIEN GERETTET','NOTRUFE']) {
       if (!resultText.toUpperCase().includes(expected)) throw new Error(`${name}: result missing ${expected}`);
     }
+    if (await page.locator('[data-wg-premium-end]').count() !== 1) throw new Error(`${name}: premium endscreen block missing`);
     await page.locator('#againBtn').click();
   }
   if (pageErrors.length) throw new Error(`${name}: JS errors: ${pageErrors.join(' | ')}`);
