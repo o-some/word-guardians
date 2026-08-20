@@ -6,16 +6,21 @@
   let morphing=false;
 
   const helperRows=[
-    ['🌊','Wortkoralle','Fernangriff mit Wasserperlen.'],
-    ['⚡','Blitzkoralle','Schnellfeuer mit vielen kleinen Treffern.'],
-    ['🪼','Minzqualle','Verlangsamt Piraten auf ihrer Spur.'],
-    ['🪨','Steinmuschel','Defensiver Tank mit sehr vielen HP.'],
-    ['⭐','Gezeitenstern','Stößt Piraten ein Stück zurück.'],
-    ['🦀','Ankerkrabbe','Blockiert und betäubt Piraten kurz.']
+    ['🌊','./assets/guardians/guardian-01-wortkoralle.png','Wortkoralle','Fernangriff mit Wasserperlen.'],
+    ['⚡','./assets/guardians/guardian-05-blitzkoralle.png','Blitzkoralle','Schnellfeuer mit vielen kleinen Treffern.'],
+    ['🪼','./assets/guardians/guardian-03-minzqualle.png','Minzqualle','Verlangsamt Piraten auf ihrer Spur.'],
+    ['🪨','./assets/guardians/guardian-02-steinmuschel.png','Steinmuschel','Defensiver Tank mit sehr vielen HP.'],
+    ['⭐','./assets/guardians/guardian-04-gezeitenstern.png','Gezeitenstern','Stößt Piraten ein Stück zurück.'],
+    ['🦀','./assets/guardians/guardian-06-ankerkrabbe.png','Ankerkrabbe','Blockiert und betäubt Piraten kurz.']
   ];
 
   function guideMarkup(compact=false){
-    const helpers=helperRows.map(([icon,name,text])=>`<div class="wgGuideHelper"><span>${icon}</span><b>${name}</b><small>${text}</small></div>`).join('');
+    const helpers=helperRows.map(([icon,asset,name,text])=>{
+      const visual=compact
+        ? `<img class="wgGuideHelperSprite" src="${asset}" alt="" aria-hidden="true">`
+        : `<span>${icon}</span>`;
+      return `<div class="wgGuideHelper">${visual}<b>${name}</b><small>${text}</small></div>`;
+    }).join('');
     const progression=compact?'':`
         <div class="wgGuideRule"><b>💥 Ab Minute 2 wird deine Wortwelle stärker</b><span>Ab 2:00 steigt der Schaden richtiger Antworten jede Sekunde um 1 % deines Grundschadens. Nach 100 Sekunden ist bei +100 % das Maximum erreicht: doppelter Schaden.</span></div>
         <div class="wgGuideRule"><b>✚ Ab Minute 3 heilen richtige Antworten</b><span>3:00 = 3 %, 3:30 = 6 %, 4:00 = 10 %. Danach steigt die Heilung alle 30 Sekunden um 3 % bis maximal 30 % der maximalen HP.</span></div>`;
