@@ -1,0 +1,148 @@
+name: Lane Rescue Rock V140 Once
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/lane-rescue-rock-v140-once.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Patch one-time lane rescue rock
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 <<'PY'
+          from pathlib import Path
+          import re
+
+          p=Path('index.html')
+          s=p.read_text()
+
+          # Visible version marker.
+          s=re.sub(r'v1\.3\.\d+ · [^<]+? · 4×8', 'v1.4.0 · LANE RESCUE ROCK · 4×8', s, count=1)
+
+          css=r'''
+/* v1.4.0 — one free lane reset per lane */
+.cell.home{overflow:visible}
+.cell.home::after{content:'1×';position:absolute;right:4px;top:4px;width:20px;height:20px;border-radius:50%;display:grid;place-items:center;font:900 .42rem/1 Inter,sans-serif;color:#fff2bd;background:radial-gradient(circle at 34% 28%,#b7ddd3 0 7%,#70867d 10% 38%,#384942 66%,#182723 100%);border:1px solid #efc766;box-shadow:0 0 0 2px #041d35aa,0 0 10px #ffe18a88;z-index:8;transition:.2s ease}.cell.home.rescueUsed::after{content:'✓';opacity:.34;filter:grayscale(.8);box-shadow:none}.lane.rescueActive{box-shadow:inset 0 0 22px #ffe18a66,0 0 15px #69eee955;border-color:#ffe18acc}
+.rescueRock{position:absolute;left:3%;top:50%;width:76px;height:72px;z-index:65;pointer-events:none;transform:translate(-50%,-50%);filter:drop-shadow(0 9px 6px #001522aa)}
+.rescueRock::before{content:'';position:absolute;right:45%;top:17px;width:115px;height:38px;border-radius:50%;background:linear-gradient(90deg,transparent,#d9fff54f 25%,#74e6dc64 65%,#ffe18a45);filter:blur(7px);opacity:.9;transform:translateX(-8px);z-index:-2}
+.rescueRock::after{content:'';position:absolute;left:15px;right:10px;bottom:4px;height:12px;border-radius:50%;background:#00152288;filter:blur(4px);z-index:-2}
+.rescueRockCore{position:absolute;left:7px;top:5px;width:62px;height:62px;border-radius:48% 52% 46% 54% / 55% 43% 57% 45%;background:radial-gradient(circle at 29% 24%,#d9f6e9 0 4%,transparent 5%),radial-gradient(circle at 68% 67%,#162a29 0 9%,transparent 10%),linear-gradient(126deg,transparent 0 43%,#e8c75b 44% 47%,#4fe4da 48% 50%,transparent 51%),radial-gradient(circle at 34% 29%,#8da097 0 10%,#62746c 31%,#40524d 58%,#223633 78%,#142625 100%);border:2px solid #d9b65c;box-shadow:inset 5px 5px 11px #d8eee15c,inset -7px -8px 12px #0a181a99,0 0 10px #ffe18a9a,0 0 20px #48e1d155;transform-origin:50% 50%;overflow:hidden}
+.rescueRockCore::before{content:'';position:absolute;left:17px;top:8px;width:26px;height:34px;background:linear-gradient(138deg,transparent 0 38%,#f4d876 39% 43%,transparent 44% 55%,#72eee3 56% 59%,transparent 60%);opacity:.8;transform:rotate(7deg)}
+.rescueRockCore::after{content:'';position:absolute;left:10px;top:13px;width:13px;height:8px;border-radius:50%;background:#d8fff67a;filter:blur(1px)}
+.rescueImpactText{position:absolute;left:50%;top:-7px;transform:translateX(-50%);white-space:nowrap;font:950 .36rem/1 Inter,sans-serif;color:#fff0aa;text-shadow:0 2px 4px #001522,0 0 8px #ffe18a;letter-spacing:.06em}
+@media(max-width:520px){.rescueRock{width:62px;height:60px}.rescueRockCore{width:52px;height:52px;left:5px;top:4px}.rescueRock::before{width:88px;height:30px;top:14px}.cell.home::after{width:17px;height:17px;font-size:.34rem;right:2px;top:2px}.rescueImpactText{font-size:.31rem}}
+'''
+          s=s.replace('</style>',css+'</style>')
+
+          # Add rescue state exactly once.
+          if 'laneRescueUsed' not in s:
+              old='lastBossQ:-1}'
+              if old not in s:
+                  raise SystemExit('reset state marker missing')
+              s=s.replace(old,'lastBossQ:-1,laneRescueUsed:[false,false,false,false],rescueRocks:[]}',1)
+
+          rescue_js=r'''
+function laneRescueActive(r){return S.rescueRocks.some(k=>k.active&&k.r===r)}
+function triggerLaneRescue(r,escapedEnemy){
+  if(S.laneRescueUsed[r])return false;
+  S.laneRescueUsed[r]=true;
+  if(escapedEnemy)escapedEnemy.hp=0;
+  const lane=$$('.lane')[r];
+  if(!lane)return false;
+  const home=lane.querySelector('.home');if(home)home.classList.add('rescueUsed');
+  lane.classList.add('rescueActive');
+  const el=document.createElement('div');el.className='rescueRock';el.innerHTML='<span class="rescueImpactText">GRATIS-RESET!</span><span class="rescueRockCore"></span>';lane.appendChild(el);
+  S.rescueRocks.push({id:S.id++,r,x:3,rot:0,active:true,el});
+  $('fb').textContent='🪨 Linien-Retter! Spur '+(r+1)+' wird einmal kostenlos komplett geräumt.';
+  return true;
+}
+function updateRescueRocks(dt){
+  for(const rock of S.rescueRocks){
+    if(!rock.active)continue;
+    rock.x+=dt*72;rock.rot+=dt*760;
+    if(rock.el&&rock.el.isConnected){rock.el.style.left=rock.x+'%';const core=rock.el.querySelector('.rescueRockCore');if(core)core.style.transform='rotate('+rock.rot+'deg)'}
+    for(const e of S.e){if(e.hp>0&&e.r===rock.r&&e.x<=rock.x+5){e.hp=0;e.hitUntil=performance.now()+240}}
+    if(rock.x>=108){rock.active=false;const lane=$$('.lane')[rock.r];if(lane)lane.classList.remove('rescueActive');if(rock.el){rock.el.style.opacity='0';setTimeout(()=>rock.el&&rock.el.remove(),180)}}
+  }
+  S.rescueRocks=S.rescueRocks.filter(k=>k.active||k.x<109)
+}
+'''
+          if 'function laneRescueActive' not in s:
+              marker='function tick(now){'
+              if marker not in s: raise SystemExit('tick marker missing')
+              s=s.replace(marker,rescue_js+marker,1)
+
+          # First breach on each lane is free and starts the rock. During its run, no second life can be lost on that lane.
+          old="if(e.x<=4){e.hp=0;S.life--;if(S.life<=0)gameOver()}"
+          new="if(e.x<=4){if(laneRescueActive(e.r)){e.hp=0;continue}if(triggerLaneRescue(e.r,e)){continue}e.hp=0;S.life--;if(S.life<=0)gameOver()}"
+          if old not in s:
+              raise SystemExit('breach logic marker missing')
+          s=s.replace(old,new,1)
+
+          # Advance rescue rocks once per active gameplay tick, after enemy movement and before dead entities are filtered.
+          old2='}S.g=S.g.filter(g=>g.hp>0);S.e=S.e.filter(e=>e.hp>0);'
+          new2='}updateRescueRocks(dt);S.g=S.g.filter(g=>g.hp>0);S.e=S.e.filter(e=>e.hp>0);'
+          if old2 not in s:
+              raise SystemExit('filter marker missing')
+          s=s.replace(old2,new2,1)
+
+          # Explain the gift in the helper/info dialog.
+          guide_marker='🌊 <b>Richtiges Wort</b> – blaue Wortwelle, Energie und Schaden an allen Piraten.</div>'
+          if guide_marker in s and 'Linien-Retter' not in s[s.find('function buildDock'):s.find('function buildBoard')]:
+              s=s.replace(guide_marker,guide_marker+'<div class="gitem">🪨 <b>Linien-Retter</b> – jede Spur besitzt genau 1 kostenlosen Reset. Beim ersten Durchbruch rollt ein Felsen über die ganze Spur und besiegt alle Gegner dort. Danach kostet der nächste Durchbruch wieder ein Leben.</div>',1)
+
+          # Small intro hint.
+          s=s.replace('Premium-Wächter, Muschel-Depots und eine eigene Boss-Arena: Löse Wörter und halte die Piraten auf.','Premium-Wächter, Muschel-Depots und 1 kostenloser Linien-Retter pro Spur: Beim ersten Durchbruch räumt ein riesiger Felsen die komplette Reihe frei.')
+
+          # New visible version must exist.
+          if 'v1.4.0 · LANE RESCUE ROCK · 4×8' not in s:
+              raise SystemExit('version replacement failed')
+          p.write_text(s)
+
+          # QA: update visible marker and add one-time rescue regression test.
+          q=Path('tests/qa.mjs')
+          if q.exists():
+              t=q.read_text()
+              t=re.sub(r"v1\.3\.\d+ · [^']+",'v1.4.0 · LANE RESCUE ROCK',t,count=1)
+              anchor="await answerCorrect(page);\n  if (fullGameplay) {"
+              test="""await answerCorrect(page);\n  if (fullGameplay) {\n    const lifeBeforeRescue = await page.locator('#life').textContent();\n    await page.evaluate(()=>{const p=ENEMIES[0];S.e.push({id:S.id++,r:0,x:3,hp:80,max:80,sp:0,n:'QA Breacher',cl:'',asset:p.asset,rank:1,born:S.time,stun:0,hitUntil:0})});\n    await page.waitForTimeout(160);\n    if ((await page.locator('#life').textContent()) !== lifeBeforeRescue) throw new Error(`${name}: first lane breach consumed a life instead of rescue`);\n    if (!(await page.locator('.lane').nth(0).locator('.home').evaluate(el=>el.classList.contains('rescueUsed')))) throw new Error(`${name}: lane rescue was not marked used`);\n    if (await page.locator('.lane').nth(0).locator('.rescueRock').count() < 1) throw new Error(`${name}: rescue rock animation not rendered`);\n    await page.waitForTimeout(1650);\n    const heartsBeforeSecond = (await page.locator('#life').textContent()||'').length;\n    await page.evaluate(()=>{const p=ENEMIES[0];S.e.push({id:S.id++,r:0,x:3,hp:80,max:80,sp:0,n:'QA Second Breacher',cl:'',asset:p.asset,rank:1,born:S.time,stun:0,hitUntil:0})});\n    await page.waitForTimeout(160);\n    const heartsAfterSecond = (await page.locator('#life').textContent()||'').length;\n    if (heartsAfterSecond !== heartsBeforeSecond-1) throw new Error(`${name}: second breach on used lane did not cost exactly one life`);"""
+              if anchor in t:
+                  t=t.replace(anchor,test,1)
+              q.write_text(t)
+          PY
+
+          python3 - <<'PY' > /tmp/game.js
+          from pathlib import Path
+          s=Path('index.html').read_text();print(s[s.rfind('<script>')+8:s.rfind('</script>')])
+          PY
+          node --check /tmp/game.js
+          npm run build
+          grep -q 'v1.4.0 · LANE RESCUE ROCK · 4×8' index.html
+          grep -q 'function triggerLaneRescue' index.html
+          grep -q 'function updateRescueRocks' index.html
+          grep -q 'rescueRockCore' index.html
+
+      - name: Commit lane rescue feature
+        shell: bash
+        run: |
+          set -euo pipefail
+          rm -f .github/workflows/lane-rescue-rock-v140-once.yml
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add index.html tests/qa.mjs .github/workflows/lane-rescue-rock-v140-once.yml
+          git commit -m 'Add one free boulder lane reset per lane'
+          git pull --rebase origin main
+          git push origin HEAD:main
