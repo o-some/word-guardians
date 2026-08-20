@@ -19,7 +19,7 @@ async function run(name,browserType,viewport){
   await page.goto(live,{waitUntil:'networkidle',timeout:60000});
 
   const version=(await page.locator('.version').textContent()||'').trim();
-  if(!version.startsWith('v1.9.0'))throw new Error(`${name}: expected visible v1.9.0, got ${version}`);
+  if(!version.startsWith('v1.9.1'))throw new Error(`${name}: expected visible v1.9.1, got ${version}`);
 
   const intro=page.locator('#intro');
   await intro.waitFor({state:'visible'});
@@ -70,11 +70,11 @@ async function run(name,browserType,viewport){
 
   if(errors.length)throw new Error(`${name}: JS errors: ${errors.join(' | ')}`);
   await browser.close();
-  console.log(`PASS ${name} · v1.9.0 onboarding + readable guide + 60s Notruf`);
+  console.log(`PASS ${name} · v1.9.1 onboarding + readable guide + 60s Notruf`);
 }
 
 await waitHttp(new URL('assets/patches/onboarding-v180.js',live));
 await waitHttp(new URL('assets/patches/onboarding-v180.css',live));
 await run('desktop-chromium',chromium,{width:1440,height:900});
 await run('iphone-like-webkit',webkit,{width:390,height:844});
-console.log('ONBOARDING_V190_PASS');
+console.log('ONBOARDING_V191_PASS');
