@@ -1,0 +1,10 @@
+/* Word Guardians v1.6.0 — limited top pause control */
+.topPauseBtn{position:relative;min-width:54px;height:54px;border-radius:14px;padding:4px 6px;display:grid;grid-template-rows:auto auto;place-items:center;border:1px solid #efc76699;background:linear-gradient(180deg,#073a53,#04283e);box-shadow:inset 0 1px #ffffff18,0 7px 16px #0007;cursor:pointer}
+.topPauseBtn .pauseIcon{font-size:1rem;line-height:1;color:#fff0b4;text-shadow:0 0 9px #75ebe5aa}
+.topPauseBtn small{font-size:.29rem;font-weight:950;letter-spacing:.08em;color:#bfe5e3;line-height:1}
+.topPauseBtn b{font-size:.58rem;line-height:1;color:#ffe18a;margin-top:1px}
+.topPauseBtn:not(:disabled):active{transform:translateY(1px) scale(.98)}
+.topPauseBtn.exhausted{opacity:.36;filter:grayscale(1);box-shadow:inset 0 1px #ffffff0c}
+body.wgFullPause .bossFloatingV131,body.wgFullPause .guardianArt,body.wgFullPause .baseChest,body.wgFullPause .rescueRockCore,body.wgFullPause .wordWave,body.wgFullPause .emergencyWave{animation-play-state:paused!important}
+body.wgFullPause .shot{visibility:hidden}
+@media(max-width:520px){.topPauseBtn{min-width:48px;width:48px;height:48px;padding:3px}.topPauseBtn .pauseIcon{font-size:.9rem}.topPauseBtn small{font-size:.25rem}.topPauseBtn b{font-size:.52rem}.hud{gap:3px}.pill{min-width:41px;padding-left:4px;padding-right:4px}}
