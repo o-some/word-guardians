@@ -19,13 +19,16 @@ async function run(name,browserType,viewport){
   await page.goto(live,{waitUntil:'networkidle',timeout:60000});
 
   const version=(await page.locator('.version').textContent()||'').trim();
-  if(!version.startsWith('v1.9.3'))throw new Error(`${name}: expected visible v1.9.3, got ${version}`);
+  if(!version.startsWith('v1.9.4'))throw new Error(`${name}: expected visible v1.9.4, got ${version}`);
 
   const intro=page.locator('#intro');
   await intro.waitFor({state:'visible'});
   const introText=(await intro.innerText()).toUpperCase();
-  for(const expected of ['INSEL-NOTRUF','60 SEK','AB MINUTE 2','100 %','AB MINUTE 3','WORTKORALLE','BLITZKORALLE','MINZQUALLE','STEINMUSCHEL','GEZEITENSTERN','ANKERKRABBE']){
+  for(const expected of ['INSEL-NOTRUF','60 SEK','WÖRTER SIND DEINE STÄRKSTE WAFFE','HELFER PLATZIEREN','WORTKORALLE','BLITZKORALLE','MINZQUALLE','STEINMUSCHEL','GEZEITENSTERN','ANKERKRABBE']){
     if(!introText.includes(expected))throw new Error(`${name}: start guide missing ${expected}`);
+  }
+  for(const removed of ['AB MINUTE 2','AB MINUTE 3','3:00 = 3 %','+100 % DAS MAXIMUM']){
+    if(introText.includes(removed))throw new Error(`${name}: progression rule should not be on start screen: ${removed}`);
   }
   if(await page.locator('#intro .wgEmergencyDemo').count()!==1)throw new Error(`${name}: emergency button preview missing on start screen`);
 
@@ -70,11 +73,11 @@ async function run(name,browserType,viewport){
 
   if(errors.length)throw new Error(`${name}: JS errors: ${errors.join(' | ')}`);
   await browser.close();
-  console.log(`PASS ${name} · v1.9.3 onboarding + readable guide + 60s Notruf`);
+  console.log(`PASS ${name} · v1.9.4 streamlined onboarding + readable guide + 60s Notruf`);
 }
 
 await waitHttp(new URL('assets/patches/onboarding-v180.js',live));
 await waitHttp(new URL('assets/patches/onboarding-v180.css',live));
 await run('desktop-chromium',chromium,{width:1440,height:900});
 await run('iphone-like-webkit',webkit,{width:390,height:844});
-console.log('ONBOARDING_V193_PASS');
+console.log('ONBOARDING_V194_PASS');
