@@ -1,0 +1,99 @@
+name: Boss Overlay Glow V131 Once
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/boss-overlay-glow-v131-once.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Patch boss presentation
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 <<'PY'
+          from pathlib import Path
+          import re
+
+          p=Path('index.html')
+          s=p.read_text()
+          s=s.replace('v1.3.0 · PREMIUM GUARDIANS · 4×8','v1.3.1 · BOSS OVERLAY + GLOW · 4×8')
+
+          css=r'''
+/* v1.3.1 — boss remains lane-bound logically, but renders above all lanes */
+.boardBox{overflow:visible!important;isolation:isolate}
+.bossStage{min-height:72px!important;padding:10px 14px!important;margin:7px 0!important;display:block!important;background:linear-gradient(100deg,#041d35f5,#06475fe9 58%,#052941f4)!important;box-shadow:inset 0 1px #ffffff16,0 10px 24px #0007!important}
+.bossStage .bossEyebrow{font-size:.43rem;letter-spacing:.13em;color:#ffdc7d;font-weight:950}
+.bossStage .bossName{font:900 clamp(.98rem,3vw,1.28rem) Georgia;color:#fff1bf;margin:1px 0}
+.bossStage .bossLane{font-size:.53rem;color:#bfe8e6;margin-bottom:5px}
+.bossStage .bossHpTrack{height:13px;margin-top:4px}
+.bossStage .bossHpText{font-size:.52rem;font-weight:900;color:#ffe7a6;margin-top:3px}
+.bossStage .bossHint{font-size:.47rem;color:#bde8e6;margin-top:2px}
+.bossOverlay{position:absolute;inset:0;z-index:80;pointer-events:none;overflow:visible}
+.bossFloating{--bossScale:1;position:absolute;width:142px;height:142px;transform:translate(-50%,-50%) scale(var(--bossScale));transform-origin:50% 68%;display:grid;place-items:center;pointer-events:none;z-index:85;animation:bossOverlayHover 1.55s ease-in-out infinite}
+.bossFloating::before{content:"";position:absolute;inset:13%;border-radius:50%;background:radial-gradient(circle,#fff6bf88 0 8%,#ffe17a55 20%,#41e6dd38 44%,transparent 72%);filter:blur(7px);transform:scale(1.15);animation:bossGlowPulse 1.25s ease-in-out infinite;z-index:-2}
+.bossFloating::after{content:"";position:absolute;left:17%;right:17%;bottom:13%;height:18%;border-radius:50%;background:#0015228a;filter:blur(7px);z-index:-1}
+.bossFloating img{display:block;max-width:124px;max-height:132px;object-fit:contain;filter:drop-shadow(0 10px 8px #00121fc7) drop-shadow(0 0 8px #fff1a0cc) drop-shadow(0 0 17px #f3c85b99) drop-shadow(0 0 27px #48e1d177);transition:filter .15s ease}
+.bossFloating.hit img{filter:brightness(1.75) saturate(1.18) drop-shadow(0 0 8px #fff) drop-shadow(0 0 18px #9ffcff) drop-shadow(0 0 31px #ffe36faa)}
+@keyframes bossOverlayHover{0%,100%{translate:0 3px;rotate:-.7deg}50%{translate:0 -6px;rotate:.8deg}}
+@keyframes bossGlowPulse{0%,100%{opacity:.62;transform:scale(1.02)}50%{opacity:1;transform:scale(1.24)}}
+@media(max-width:520px){.bossStage{min-height:64px!important;padding:8px 10px!important}.bossStage .bossHint{display:none}.bossFloating{width:106px;height:106px}.bossFloating img{max-width:92px;max-height:98px}}
+'''
+          s=s.replace('</style>',css+'</style>')
+
+          stage_pattern=r'<section id="bossStage" class="bossStage hidden".*?</section><section class="boardBox" id="boardBox">'
+          stage_replacement='''<section id="bossStage" class="bossStage hidden" aria-live="polite"><div class="bossEyebrow">⚔ BOSS-ANGRIFF</div><div id="bossName" class="bossName">Pirat Kai</div><div id="bossLane" class="bossLane">Spur 1 · Distanz 100 %</div><div class="bossHpTrack"><i id="bossHpFill" style="width:100%"></i></div><div id="bossHpText" class="bossHpText">0 / 0 HP</div><div id="bossHint" class="bossHint">Löse Wörter: Die Wortwelle ist deine stärkste Waffe.</div></section><section class="boardBox" id="boardBox"><div id="bossOverlay" class="bossOverlay" aria-hidden="true"></div>'''
+          s,n=re.subn(stage_pattern,stage_replacement,s,count=1,flags=re.S)
+          if n!=1:
+              raise SystemExit(f'boss stage replacement count {n}')
+
+          render_pattern=r"const activeBoss=S\.e\.find\(e=>e\.cl\.includes\('boss'\)&&e\.hp>0\);const bossStage=\$\('bossStage'\);if\(activeBoss\)\{.*?\}else bossStage\.classList\.add\('hidden'\);\$\$\('\.lane'\)\.forEach"
+          render_replacement="""const activeBosses=S.e.filter(e=>e.cl.includes('boss')&&e.hp>0).sort((a,b)=>a.x-b.x),activeBoss=activeBosses[0],bossStage=$('bossStage'),bossOverlay=$('bossOverlay');const activeBossIds=new Set(activeBosses.map(e=>String(e.id)));bossOverlay.querySelectorAll('.bossFloating').forEach(node=>{if(!activeBossIds.has(node.dataset.id))node.remove()});if(activeBoss){bossStage.classList.remove('hidden');$('bossName').textContent=activeBoss.n;$('bossLane').textContent='Spur '+(activeBoss.r+1)+' · Distanz '+Math.max(0,Math.round(activeBoss.x))+' %';$('bossHpFill').style.width=Math.max(0,activeBoss.hp/activeBoss.max*100)+'%';$('bossHpText').textContent=Math.max(0,Math.ceil(activeBoss.hp))+' / '+activeBoss.max+' HP';$('bossHint').textContent=activeBosses.length>1?activeBosses.length+' Bosse aktiv · Wortwellen treffen alle.':'Löse Wörter: Die Wortwelle ist deine stärkste Waffe.';for(const boss of activeBosses){const lane=$$('.lane')[boss.r];if(!lane)continue;let node=bossOverlay.querySelector('.bossFloating[data-id="'+boss.id+'"]');if(!node){node=document.createElement('div');node.className='bossFloating';node.dataset.id=String(boss.id);node.innerHTML='<img alt="">';bossOverlay.appendChild(node)}node.classList.toggle('hit',boss.hitUntil>now);const img=node.querySelector('img');if(img.getAttribute('src')!==boss.asset)img.src=boss.asset;img.alt=boss.n;const x=lane.offsetLeft+lane.offsetWidth*(boss.x/100),y=lane.offsetTop+lane.offsetHeight/2;node.style.left=x+'px';node.style.top=y+'px';node.style.setProperty('--bossScale',String(Math.min(1.16,1+(boss.rank||1)*.016)))}}else bossStage.classList.add('hidden');$$('.lane').forEach"""
+          s,n=re.subn(render_pattern,render_replacement,s,count=1,flags=re.S)
+          if n!=1:
+              raise SystemExit(f'boss render replacement count {n}')
+
+          s=s.replace('Die sechs Wächter haben jetzt Premium-Tula-Sprites. Bosse erscheinen in einer eigenen Boss-Arena mit großer HP-Leiste – und links schützt dein Muschel-Depot jede Spur.','Die sechs Wächter haben Premium-Tula-Sprites. Bosse bleiben ihrer Spur zugeordnet, schweben aber mit Glow sichtbar über allen Lane-Grenzen; die kompakte Bossleiste zeigt Name, Spur, Distanz und HP.')
+          p.write_text(s)
+
+          q=Path('tests/qa.mjs')
+          if q.exists():
+              t=q.read_text()
+              t=t.replace("v1.2.0 · REAL PIRATES","v1.3.1 · BOSS OVERLAY + GLOW")
+              t=t.replace("if (await page.locator('.pirateArt').count() < 1) throw new Error(`${name}: real pirate image sprite not rendered`);", "if (await page.locator('.pirateArt').count() < 1) throw new Error(`${name}: real pirate image sprite not rendered`);\n    if (await page.locator('#bossOverlay .bossFloating img').count() < 1) throw new Error(`${name}: boss overlay sprite not rendered`);\n    if (await page.locator('#bossStage #bossPortrait').count() !== 0) throw new Error(`${name}: boss portrait still duplicated in info box`);")
+              q.write_text(t)
+          PY
+
+          python3 - <<'PY' > /tmp/game.js
+          from pathlib import Path
+          s=Path('index.html').read_text()
+          print(s[s.rfind('<script>')+8:s.rfind('</script>')])
+          PY
+          node --check /tmp/game.js
+          npm run build
+          grep -q 'v1.3.1 · BOSS OVERLAY + GLOW · 4×8' index.html
+          grep -q 'id="bossOverlay"' index.html
+          grep -q 'class="bossFloating"' index.html || grep -q "bossFloating'" index.html
+
+      - name: Commit patch
+        shell: bash
+        run: |
+          set -euo pipefail
+          rm -f .github/workflows/boss-overlay-glow-v131-once.yml
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add index.html tests/qa.mjs .github/workflows/boss-overlay-glow-v131-once.yml
+          git commit -m 'Render glowing bosses above their assigned lanes'
+          git pull --rebase origin main
+          git push origin HEAD:main
