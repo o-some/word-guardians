@@ -1,8 +1,8 @@
 # Automated QA Result — Word Guardians
 
 Result: FAIL
-Tested Commit: `e65703f631f9048e896e3e23d70dff862c6490d2`
-Date: 2026-08-20T19:26:02Z
+Tested Commit: `4ec140425272f17238fce1ee1c73cf9c13e5db04`
+Date: 2026-08-20T19:33:50Z
 Live URL: https://o-some.github.io/word-guardians/
 Build: success
 Browser install: success
@@ -28,17 +28,17 @@ Assets/features checked:
 - larger onboarding and 3:00 healing milestone typography
 - 3:00 answer-healing milestone popup and scaling heal percentages
 - 2:00 answer-damage milestone and +1 percent per second up to +100 percent
-- v1.9.1 start guide, start-to-info morph and 60-second Insel-Notruf
+- v1.9.2 start guide, start-to-info morph and 60-second Insel-Notruf
 
 Note: WebKit mobile emulation is not a physical iPhone Safari device test.
 
 ## Build log
 ```
 
-> word-guardians@1.9.1 build
+> word-guardians@1.9.2 build
 > node scripts/build.mjs
 
-Word Guardians build complete · v1.9.1 readable milestones + answer damage scaling
+Word Guardians build complete · v1.9.2 readable milestones + answer damage scaling
 ```
 
 ## Browser install log (tail)
@@ -135,18 +135,19 @@ ALL_QA_PASS
 PASS desktop-chromium · embedded energy · readable boss HP · visible lane sprites
 PASS iphone-like-webkit · embedded energy · readable boss HP · visible lane sprites
 LAYOUT_REGRESSION_V191_PASS
-node:internal/modules/run_main:123
-    triggerUncaughtException(
-    ^
+PASS desktop-chromium · larger 3:00 healing popup + scaled healing
+PASS iphone-like-webkit · larger 3:00 healing popup + scaled healing
+HEALING_V192_PASS
+PASS desktop-chromium · v1.9.2 onboarding + readable guide + 60s Notruf
+PASS iphone-like-webkit · v1.9.2 onboarding + readable guide + 60s Notruf
+ONBOARDING_V192_PASS
+file:///home/runner/work/word-guardians/word-guardians/tests/damage-v190.mjs:76
+  if(Math.abs(hp-974)>.05)throw new Error(`${name}: +30% answer damage wrong, target HP ${hp}`);
+                                ^
 
-locator.waitFor: Timeout 3000ms exceeded.
-Call log:
-  - waiting for locator('.wgHealMilestone') to be visible
-
-    at run (/home/runner/work/word-guardians/word-guardians/tests/healing-v178.mjs:46:42)
-    at async file:///home/runner/work/word-guardians/word-guardians/tests/healing-v178.mjs:102:1 {
-  name: 'TimeoutError'
-}
+Error: desktop-chromium: +30% answer damage wrong, target HP 980
+    at run (file:///home/runner/work/word-guardians/word-guardians/tests/damage-v190.mjs:76:33)
+    at async file:///home/runner/work/word-guardians/word-guardians/tests/damage-v190.mjs:99:1
 
 Node.js v22.23.2
 ```
