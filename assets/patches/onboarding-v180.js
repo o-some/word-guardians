@@ -1,7 +1,6 @@
 (()=>{
   'use strict';
 
-  const VERSION='v1.8.0 · ONBOARDING + NOTRUF 60 · 4×8';
   const $=id=>document.getElementById(id);
   let passthrough=false;
   let morphing=false;
@@ -61,11 +60,6 @@
     }
   }
 
-  function setVersion(){
-    const el=document.querySelector('.version');
-    if(el&&el.textContent!==VERSION)el.textContent=VERSION;
-  }
-
   function animateToInfo(done){
     const modal=$('intro')?.querySelector('.modal');
     const info=$('infoBtn');
@@ -116,12 +110,11 @@
   }
 
   function mount(){
-    setVersion();
     prepareIntro();
     prepareInfo();
     bindStartMorph();
   }
 
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',mount,{once:true});else mount();
-  setInterval(()=>{setVersion();prepareInfo();},1200);
+  setInterval(prepareInfo,1200);
 })();
