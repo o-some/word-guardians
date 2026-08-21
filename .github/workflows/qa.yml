@@ -47,7 +47,7 @@ jobs:
         continue-on-error: true
         run: |
           # Keep historical regression scripts aligned with the current release label without changing their gameplay assertions.
-          sed -i 's/v1\.9\.5 · LARGE OVERLAYS + PREMIUM GUIDE/v1.9.7 · WAVE STABILITY/g; s/v1\.9\.6 · LARGE QUESTION + GUARDIAN DOCK/v1.9.7 · WAVE STABILITY/g; s/v1\.9\.5/v1.9.7/g; s/v1\.9\.6/v1.9.7/g' tests/qa.mjs tests/onboarding-v180.mjs tests/mobile-scale-v196.mjs
+          sed -i 's/v1\.9\.5 · LARGE OVERLAYS + PREMIUM GUIDE/v1.9.8 · PREMIUM READABILITY/g; s/v1\.9\.6 · LARGE QUESTION + GUARDIAN DOCK/v1.9.8 · PREMIUM READABILITY/g; s/v1\.9\.7 · WAVE STABILITY/v1.9.8 · PREMIUM READABILITY/g; s/v1\.9\.5/v1.9.8/g; s/v1\.9\.6/v1.9.8/g; s/v1\.9\.7/v1.9.8/g' tests/qa.mjs tests/onboarding-v180.mjs tests/mobile-scale-v196.mjs tests/wave-stability-v197.mjs
           node tests/qa.mjs > /tmp/qa.log 2>&1
           node tests/layout-regression-v176.mjs >> /tmp/qa.log 2>&1
           node tests/healing-v178.mjs >> /tmp/qa.log 2>&1
@@ -55,6 +55,7 @@ jobs:
           node tests/damage-v190.mjs >> /tmp/qa.log 2>&1
           node tests/mobile-scale-v196.mjs >> /tmp/qa.log 2>&1
           node tests/wave-stability-v197.mjs >> /tmp/qa.log 2>&1
+          node tests/readability-v198.mjs >> /tmp/qa.log 2>&1
       - name: Record automated QA result
         if: always()
         shell: bash
@@ -101,6 +102,8 @@ jobs:
           - premium guardian sprites on the streamlined start guide
           - larger v1.9.6 mobile question/answer area and six guardian cards/sprites
           - v1.9.7 correct-answer word-wave no longer changes page/game width
+          - v1.9.8 larger action-button text and maximized premium start-screen typography/sprites
+          - v1.9.8 removes the 1.000/2.000 damage example from the minute-two popup
           - start-to-info morph and 60-second Insel-Notruf
 
           Note: WebKit mobile emulation is not a physical iPhone Safari device test.
