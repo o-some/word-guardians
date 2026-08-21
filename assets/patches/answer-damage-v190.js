@@ -43,7 +43,7 @@
           <h2 id="wgDamageTitle">Deine richtigen Antworten machen jetzt mehr Schaden!</h2>
           <p>Ab jetzt steigt der Schaden deiner <b>Wortwelle</b> jede Sekunde um <b>1 % deines Grundschadens</b>.</p>
           <div class="wgDamageScale"><span><b>2:00</b> START</span><span><b>2:30</b> +30 %</span><span><b>3:00</b> +60 %</span><span><b>3:40</b> +100 %</span></div>
-          <p class="wgDamageFine">Nach 100 Sekunden ist das Maximum erreicht: <b>+100 % Schaden</b>. Eine Wortwelle mit 1.000 Grundschaden verursacht dann 2.000 Schaden.</p>
+          <p class="wgDamageFine">Nach 100 Sekunden ist das Maximum erreicht: <b>+100 % Schaden</b>.</p>
           <button type="button" id="wgDamageContinue">Weiterkämpfen</button>
         </div>
       </section>`;
