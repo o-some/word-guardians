@@ -1,0 +1,7 @@
+/* Word Guardians v1.9.7 — keep the answer word-wave from changing page/game geometry */
+html,body{max-width:100%;overflow-x:hidden}
+.app{max-width:100%;overflow-x:hidden}
+@supports (overflow:clip){
+  html,body,.app{overflow-x:clip}
+}
+.wordWave{will-change:left,transform,opacity}
