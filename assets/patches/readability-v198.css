@@ -1,0 +1,42 @@
+/* Word Guardians v1.9.8 — larger action labels + maximum premium start-screen readability */
+
+/* The three action buttons should be readable at a glance without changing their layout or behavior. */
+@media(max-width:600px){
+  .tool{min-height:42px!important;font-size:.72rem!important;line-height:1.1!important;font-weight:950!important}
+
+  /* Use the available start-screen space for larger, clearer premium typography. */
+  .wgStartModal{width:min(560px,100%)!important;padding:16px!important}
+  .wgStartModal>img{width:72px!important;height:72px!important}
+  .wgStartModal h2{font-size:1.78rem!important;line-height:1.05!important;margin:.12rem 0 .62rem!important}
+  .wgStartModal .wgGuideCore{gap:9px!important}
+  .wgStartModal .wgGuideEmergency{grid-template-columns:136px minmax(0,1fr)!important;gap:10px!important;padding:10px!important}
+  .wgStartModal .wgGuideEmergency p{font-size:.84rem!important;line-height:1.42!important}
+  .wgStartModal .wgEmergencyDemo{grid-template-columns:35px minmax(0,1fr)!important;min-height:50px!important;padding:7px 8px!important}
+  .wgStartModal .wgEmergencyDemoIcon{font-size:1.22rem!important}
+  .wgStartModal .wgEmergencyDemo b{font-size:.63rem!important}
+  .wgStartModal .wgEmergencyDemo small{font-size:.51rem!important}
+  .wgStartModal .wgGuideRule{padding:10px 11px!important}
+  .wgStartModal .wgGuideRule b{font-size:.82rem!important;line-height:1.18!important}
+  .wgStartModal .wgGuideRule span{font-size:.74rem!important;line-height:1.42!important;margin-top:5px!important}
+  .wgStartModal .wgGuideHelpers{gap:7px!important}
+  .wgStartModal .wgGuideHelper:has(.wgGuideHelperSprite){grid-template-columns:58px minmax(0,1fr)!important;min-height:68px!important;padding:6px 9px!important}
+  .wgStartModal .wgGuideHelperSprite{width:52px!important;height:52px!important}
+  .wgStartModal .wgGuideHelper b{font-size:.74rem!important;line-height:1.1!important}
+  .wgStartModal .wgGuideHelper small{font-size:.62rem!important;line-height:1.28!important}
+  .wgStartModal .wgStartRunBtn{min-height:54px!important;font-size:1.15rem!important}
+}
+
+@media(min-width:601px){
+  .tool{font-size:.68rem!important;font-weight:950!important}
+  .wgStartModal{width:min(580px,100%)!important;padding:22px!important}
+  .wgStartModal>img{width:94px!important;height:94px!important}
+  .wgStartModal h2{font-size:2rem!important;line-height:1.05!important}
+  .wgStartModal .wgGuideEmergency p{font-size:.9rem!important;line-height:1.45!important}
+  .wgStartModal .wgGuideRule b{font-size:.86rem!important}
+  .wgStartModal .wgGuideRule span{font-size:.78rem!important;line-height:1.45!important}
+  .wgStartModal .wgGuideHelper:has(.wgGuideHelperSprite){grid-template-columns:64px minmax(0,1fr)!important;min-height:74px!important}
+  .wgStartModal .wgGuideHelperSprite{width:58px!important;height:58px!important}
+  .wgStartModal .wgGuideHelper b{font-size:.78rem!important}
+  .wgStartModal .wgGuideHelper small{font-size:.66rem!important;line-height:1.3!important}
+  .wgStartModal .wgStartRunBtn{min-height:56px!important;font-size:1.18rem!important}
+}
