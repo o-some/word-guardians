@@ -1,6 +1,6 @@
 {
   "name": "word-guardians",
-  "version": "1.9.7",
+  "version": "1.9.8",
   "private": false,
   "scripts": {
     "build": "node scripts/build.mjs"
