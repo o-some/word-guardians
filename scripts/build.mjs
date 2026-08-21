@@ -13,7 +13,8 @@ const cssTags = [
   '<link rel="stylesheet" href="./assets/patches/boss-idle-slot-v174.css">',
   '<link rel="stylesheet" href="./assets/patches/answer-heal-v178.css">',
   '<link rel="stylesheet" href="./assets/patches/answer-damage-v190.css">',
-  '<link rel="stylesheet" href="./assets/patches/onboarding-v180.css">'
+  '<link rel="stylesheet" href="./assets/patches/onboarding-v180.css">',
+  '<link rel="stylesheet" href="./assets/patches/wave-stability-v197.css">'
 ];
 const jsTags = [
   '<script src="./assets/patches/boss-overlay-v131.js"></script>',
@@ -40,4 +41,4 @@ for (const tag of jsTags) {
 await writeFile('dist/index.html', built);
 await writeFile('dist/404.html', built);
 await cp('assets', 'dist/assets', { recursive: true });
-console.log('Word Guardians build complete · v1.9.6 larger mobile question + guardian dock');
+console.log('Word Guardians build complete · v1.9.7 stable correct-answer word-wave layout');
