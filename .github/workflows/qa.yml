@@ -47,13 +47,14 @@ jobs:
         continue-on-error: true
         run: |
           # Keep historical regression scripts aligned with the current release label without changing their gameplay assertions.
-          sed -i 's/v1\.9\.5 · LARGE OVERLAYS + PREMIUM GUIDE/v1.9.6 · LARGE QUESTION + GUARDIAN DOCK/g; s/v1\.9\.5/v1.9.6/g' tests/qa.mjs tests/onboarding-v180.mjs
+          sed -i 's/v1\.9\.5 · LARGE OVERLAYS + PREMIUM GUIDE/v1.9.7 · WAVE STABILITY/g; s/v1\.9\.6 · LARGE QUESTION + GUARDIAN DOCK/v1.9.7 · WAVE STABILITY/g; s/v1\.9\.5/v1.9.7/g; s/v1\.9\.6/v1.9.7/g' tests/qa.mjs tests/onboarding-v180.mjs tests/mobile-scale-v196.mjs
           node tests/qa.mjs > /tmp/qa.log 2>&1
           node tests/layout-regression-v176.mjs >> /tmp/qa.log 2>&1
           node tests/healing-v178.mjs >> /tmp/qa.log 2>&1
           node tests/onboarding-v180.mjs >> /tmp/qa.log 2>&1
           node tests/damage-v190.mjs >> /tmp/qa.log 2>&1
           node tests/mobile-scale-v196.mjs >> /tmp/qa.log 2>&1
+          node tests/wave-stability-v197.mjs >> /tmp/qa.log 2>&1
       - name: Record automated QA result
         if: always()
         shell: bash
@@ -99,6 +100,7 @@ jobs:
           - larger 2:00 answer-damage milestone and +1 percent per second up to +100 percent
           - premium guardian sprites on the streamlined start guide
           - larger v1.9.6 mobile question/answer area and six guardian cards/sprites
+          - v1.9.7 correct-answer word-wave no longer changes page/game width
           - start-to-info morph and 60-second Insel-Notruf
 
           Note: WebKit mobile emulation is not a physical iPhone Safari device test.
